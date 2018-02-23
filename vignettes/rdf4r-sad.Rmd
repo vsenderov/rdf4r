@@ -1,0 +1,47 @@
+---
+title: "Specificiation and Design of RDF4R"
+author: "Viktor Senderov"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rdf4r specification and design}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mechanism to interface with a triple store
+
+### Low-level access
+
+#### Basic triplestore access
+
+Create an object with the access options for a triple-store. If successful it also outputs to the screen the protocol version. If unsuccessful it raises an error. Uses basic HTTP authentication.
+
+```{r}
+graphdb = 
+  basic_triplestore_access(server_url = "http://graph.openbiodiv.net:7777/",
+                           repository = "obkms_i7",
+                           user = "dbuser",
+                           password = "public-access")
+```
+
+```
+# Get the protocal version
+get_protocol_version(s)
+
+# Submit a raw query via POST
+POST_query("SELECT * #...", s)
+
+# Submit a raw query via GET
+GET_query("SELECT * #...", s) 
+
+# Adds Seralized data to store
+add_data("PREFIX owl: http://#... \n http://openbiodiv.net/sample_id a owl:Thing.", s)
+```
+
+
+The basic building blocks of RDF are resource identifiers and atomic values.
