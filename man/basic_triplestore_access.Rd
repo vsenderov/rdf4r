@@ -23,8 +23,7 @@ Create an object with the access options for a triple-store. If successful it al
 }
 \examples{
 graphdb = basic_triplestore_access(server_url = "http://graph.openbiodiv.net:7777/", repository = "obkms_i7", user = "dbuser", password = "public-access")
-
-TODO TEST NO AUTHENTICATION
+graphdb2 = basic_triplestore_access(server_url = "http://graph.openbiodiv.net:7777/", repository = "obkms_i6")
 
 }
 \seealso{
