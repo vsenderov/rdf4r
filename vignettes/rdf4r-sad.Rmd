@@ -29,6 +29,9 @@ Here's an overview of the low-level access functions:
 |----------|---------|
 | [basic_triplestore_access](#connecting-to-a-triplestore) | connecting to a triplestore |
 | [api_triplestore_access](#connecting-to-a-triplestore) | connecting to a triplestore |
+| [get_protocol_version](#connecting-to-a-triplestore) | protocol version at endpoint |
+| [list_repositories](#working-with-repositories) | listing repositories at endpoint |
+
 
 ##### Connecting to a triplestore
 
@@ -37,34 +40,46 @@ In order to access the triplestore, you first need to create a `triplestore_acce
 ```{r}
 # Access with basic HTTP authentication
 graphdb = basic_triplestore_access(
-  server_url = "http://graph.openbiodiv.net:7777/",
+  server_url = "http://graph.openbiodiv.net:7777",
   user = "dbuser",
   password = "public-access"
 )
 
 # Access with no authentication
 graphdb2 = basic_triplestore_access(
-  server_url = "http://graph.openbiodiv.net:7777/"
+  server_url = "http://graph.openbiodiv.net:7777"
 )
 
 # Access with API secret key authentication
 graphdb3 = api_triplestore_access(
   server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", 
-  repository = "test",
   api_key = "s4bb1d43uc52",
   api_secret = "d7h7eg4e263ghss"
 )
+
+# Querying the protocol version for a triplestore endpoint.
+get_protocol_version(graphdb)
 ```
 
+##### Working with repositories
+
+Use `list_repositories` to see what repositories the endpoint offers. The repo id's are given in the column `$id`. You can assign repo id's to the `$repository` field of the `triplestore_access_options` object.
+
+```{r}
+list_repositories(graphdb)
+graphdb$repository = list_repositories(graphdb)$id[8]
 ```
-# Get the protocal version
-get_protocol_version(s)
 
-# Submit a raw query via POST
-POST_query("SELECT * #...", s)
+##### Submitting data and querying a repository
 
-# Submit a raw query via GET
-GET_query("SELECT * #...", s) 
+After you've [selected an endpoint](#connecting-to-a-triplestore) and [a repository](#working-with-repositories), you can add Turtle data to it via `add_data` and submit a SPARQL query via `submit_sparql`. By default results are returned as a dataframe (`as_dataframe = TRUE`). If you override this parameter to `submit_sparql` the results are returned as a raw response that must be parsed (i.e. as JSON).
+
+```{r}
+# Submit a SPARQL query
+query = "select * where {
+  ?s ?p ?o .
+  } limit 100"
+submit_sparql(query = query, access_options = graphdb)
 
 # Adds Seralized data to store
 add_data("PREFIX owl: http://#... \n http://openbiodiv.net/sample_id a owl:Thing.", s)

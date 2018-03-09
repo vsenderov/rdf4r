@@ -27,7 +27,7 @@ basic_triplestore_access = function(server_url, repository = NA, user = NA, pass
     }
   }
   server_access_options = list(
-    server_url = server_url,
+    server_url = strip_trailing_slash(server_url),
     repository = repository,
     authentication = authenticate(user, password),
     status = NA
@@ -138,7 +138,7 @@ list_repositories = function(access_options)
   title = xml2::xml_text(xml2::xml_find_all(result, xpath = "//d1:results/d1:result/d1:binding[@name = 'title']/d1:literal"))
   readable = xml2::xml_text(xml2::xml_find_all(result, xpath = "//d1:results/d1:result/d1:binding[@name = 'readable']/d1:literal"))
   writable = xml2::xml_text(xml2::xml_find_all(result, xpath = "//d1:results/d1:result/d1:binding[@name = 'writable']/d1:literal"))
-  data.frame(uri, id, title, readable, writable)
+  data.frame(uri, id, title, readable, writable, stringsAsFactors = FALSE)
 }
 
 
@@ -161,7 +161,7 @@ list_repositories = function(access_options)
 #'
 #' @examples
 #' query = "select * where {
-#' ?s ?p ? .
+#' ?s ?p ?o .
 #' } limit 100"
 #' submit_sparql(query = query, access_options = graphdb)
 #'
@@ -172,7 +172,7 @@ submit_sparql = function(query, access_options, as_dataframe = TRUE)
     httr::add_headers(Accept = "text/csv, */*;q=0.5")
   }
   result = httr::POST(
-    url = paste0(access_options$server_url, "repositories/", access_options$repository),
+    url = paste0(access_options$server_url, "/repositories/", access_options$repository),
     access_options$authentication,
     headers,
     body = list(query = query),
@@ -185,4 +185,36 @@ submit_sparql = function(query, access_options, as_dataframe = TRUE)
     return (result)
   }
 }
+
+
+
+
+
+
+
+
+
+#' Add Data to a Repository
+#'
+#' @param rdf_data character. RDF data containing the triples to be submitted.
+#' @param access_options output of \code{basic_triplestore_access} or \code{api_triplestore_access}
+#' @param data_format currently only `application/x-trig` is supported. A variant of Turtle.
+#'
+#' @return the response of the `httr::POST` against the endpoint
+#'
+#' @examples
+#' rdf_data = c("<http://test.net/mytest1> {
+#'   <http://test.net/mysubject2> <http://test.net/has-value> '5' .
+#' }")
+#' add_data(rdf_data, access_options = graphdb)
+#'
+#' @export
+add_data = function(rdf_data, access_options, data_format = "application/x-trig")
+{
+  # Undocumented BUG in GraphDB needs us to have two slashes `//`
+  endpoint = paste(access_options$server_url, "//repositories/",
+                   access_options$repository, "/statements", sep = "")
+  httr::POST(url = endpoint, httr::content_type(data_format), body = rdf_data)
+}
+
 
