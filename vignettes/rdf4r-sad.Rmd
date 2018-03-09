@@ -1,5 +1,5 @@
 ---
-title: "Specificiation and Design of RDF4R"
+title: "Specificiation and Design of `rdf4r`"
 author: "Viktor Senderov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -13,20 +13,47 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Mechanism to interface with a triple store
+`rdf4r` is an R-library designed to enable the R-practicioner to handle Resource Description Framework (RDF) data. It provides functions for:
+
+- [Interfacing with a triple store](#interface-with-a-triple-store)
+
+## Interface with a triple store
+
+Connect, run queries on, and upload data to a triple store. Functions are separated into [low-level](#low-level-access) access functions that create connections, send raw data, read queries, and [high-level](#high-level-functions) functions that let you create specific functions for your project via factory functions.
 
 ### Low-level access
 
-#### Basic triplestore access
+Here's an overview of the low-level access functions:
 
-Create an object with the access options for a triple-store. If successful it also outputs to the screen the protocol version. If unsuccessful it raises an error. Uses basic HTTP authentication.
+| Function | Purpose |
+|----------|---------|
+| [basic_triplestore_access](#connecting-to-a-triplestore) | connecting to a triplestore |
+| [api_triplestore_access](#connecting-to-a-triplestore) | connecting to a triplestore |
+
+##### Connecting to a triplestore
+
+In order to access the triplestore, you first need to create a `triplestore_access_options` objects (internally a list). This object can be created by `basic_triplestore_access` in the case of no authentication or basic HTTP authentication or by `api_triplestore_access` in the case of API secret key authentication. They will fail if the URL or the authentication is wrong. The repository information can be omitted at this stage (see [list_repositories](#working-with-repositories)). In case of success the `$status` field of the list will be set to the protocol version. The protocol version can also be queried directly with `get_protocol_version`.
 
 ```{r}
-graphdb = 
-  basic_triplestore_access(server_url = "http://graph.openbiodiv.net:7777/",
-                           repository = "obkms_i7",
-                           user = "dbuser",
-                           password = "public-access")
+# Access with basic HTTP authentication
+graphdb = basic_triplestore_access(
+  server_url = "http://graph.openbiodiv.net:7777/",
+  user = "dbuser",
+  password = "public-access"
+)
+
+# Access with no authentication
+graphdb2 = basic_triplestore_access(
+  server_url = "http://graph.openbiodiv.net:7777/"
+)
+
+# Access with API secret key authentication
+graphdb3 = api_triplestore_access(
+  server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", 
+  repository = "test",
+  api_key = "s4bb1d43uc52",
+  api_secret = "d7h7eg4e263ghss"
+)
 ```
 
 ```

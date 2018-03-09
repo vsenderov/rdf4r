@@ -16,7 +16,7 @@
 #' graphdb2 = basic_triplestore_access(server_url = "http://graph.openbiodiv.net:7777/", repository = "obkms_i6")
 #'
 #' @export
-basic_triplestore_access = function(server_url, repository, user = NA, password = NA)
+basic_triplestore_access = function(server_url, repository = NA, user = NA, password = NA)
 {
   authenticate = function(user, password) {
     if (is.na(user) || is.na(password)) {
@@ -34,7 +34,7 @@ basic_triplestore_access = function(server_url, repository, user = NA, password 
   )
 
   server_access_options$status = get_protocol_version(server_access_options)
-
+  class(server_access_options) = append(class(server_access_options), "triplestore_access_options")
   return(server_access_options)
 }
 
@@ -64,7 +64,7 @@ basic_triplestore_access = function(server_url, repository, user = NA, password 
 #' graphdb3 = api_triplestore_access(server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", repository = "test", api_key = "s4bb1d43uc52", api_secret = "d7h7eg4e263ghss")
 #'
 #' @export
-api_triplestore_access = function(server_url, repository, api_key = "", api_secret = "")
+api_triplestore_access = function(server_url, repository = NA, api_key = "", api_secret = "")
 {
   parsed_url = unlist(strsplit(server_url, "//"))
   basic_triplestore_access(

@@ -21,7 +21,7 @@ In case of error, no execution-aborting condition is set! Instead an NA is retur
 }
 \examples{
 query = "select * where {
-?s ?p ?o .
+?s ?p ? .
 } limit 100"
 submit_sparql(query = query, access_options = graphdb)
 

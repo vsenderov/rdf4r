@@ -4,7 +4,7 @@
 \alias{api_triplestore_access}
 \title{API Triplestore Access}
 \usage{
-api_triplestore_access(server_url, repository, api_key = "",
+api_triplestore_access(server_url, repository = NA, api_key = "",
   api_secret = "")
 }
 \arguments{

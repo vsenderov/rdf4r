@@ -4,7 +4,8 @@
 \alias{basic_triplestore_access}
 \title{Basic Triplestore Access}
 \usage{
-basic_triplestore_access(server_url, repository, user = NA, password = NA)
+basic_triplestore_access(server_url, repository = NA, user = NA,
+  password = NA)
 }
 \arguments{
 \item{server_url}{character. The URL of the triplestore.}
