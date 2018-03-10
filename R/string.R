@@ -102,7 +102,9 @@ get_filename_extension = function(filename)
 }
 
 
-#' Strip Trailing Slash If Present
+#' Strip Trailing Slash or Colon If Present
+#'
+#' Symbols that are stripped if present: /, :
 #'
 #' Works only on UNIX.
 #'
@@ -111,12 +113,16 @@ get_filename_extension = function(filename)
 #' @return x without the trailing slash, if present
 #'
 #' @examples
-#' strip_trailing_slash("/media/obkms/plazi-corpus-xml/")
+#' strip_trailing_symbol("/media/obkms/plazi-corpus-xml/")
+#' strip_trailing_symbol("rdfs:")
+#' strip_trailing_symbol("rdfs")
 #'
 #'
 #' @export
-strip_trailing_slash =
+strip_trailing_symbol =
 function(x) {
-  sub("/$", "", x)
+  sub("(/|:)$", "", x)
 }
+
+
 

@@ -27,10 +27,13 @@ Here's an overview of the low-level access functions:
 
 | Function | Purpose |
 |----------|---------|
-| [basic_triplestore_access](#connecting-to-a-triplestore) | connecting to a triplestore |
-| [api_triplestore_access](#connecting-to-a-triplestore) | connecting to a triplestore |
-| [get_protocol_version](#connecting-to-a-triplestore) | protocol version at endpoint |
-| [list_repositories](#working-with-repositories) | listing repositories at endpoint |
+| [basic_triplestore_access(server_url, user, password, repository)](#connecting-to-a-triplestore) | connecting to a triplestore with no or basic auth |
+| [api_triplestore_access(server_url, api_key, api_secret, repository)](#connecting-to-a-triplestore) | connecting to a triplestore with a secret key |
+| [get_protocol_version(access_options)](#connecting-to-a-triplestore) | protocol version at endpoint |
+| [list_repositories(access_options)](#working-with-repositories) | listing repositories at endpoint |
+| [submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) | executing a SPARQL query |
+| [add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) | adding statements (e.g. Turtle) to a repo |
+
 
 
 ##### Connecting to a triplestore
@@ -82,8 +85,43 @@ query = "select * where {
 submit_sparql(query = query, access_options = graphdb)
 
 # Adds Seralized data to store
-add_data("PREFIX owl: http://#... \n http://openbiodiv.net/sample_id a owl:Thing.", s)
+add_data("@prefix owl: <http://www.w3.org/2002/07/owl#>. \n <http://openbiodiv.net/sample_id> a owl:Thing.", access_options = graphdb)
 ```
+
+### High-level functions
+
+The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
+
+Here's an overview of the high-level functions:
+
+| Function | Purpose |
+|----------|---------|
+| [query_function_constructor(p_query, access_options, prefixes)](#connecting-to-a-triplestore) | returns a parameterized function executing the query on the endpoint |
+
+
+#### query_function_constructor(server_access_options, paramerized_query, prefix_list)
+```
+lookup_pquery = "SELECT *
+         WHERE {
+          ?id rdfs:label %label
+          }"
+
+openbiodiv_lookup_id = query_function_constructor(s, lookup_pquery, prefix_list)
+
+openbiodiv_lookup_id(label = "Teodor Georgiev") 
+```
+
+Here `openbiodiv_lookup_id` will execute the query 
+
+```
+"SELECT *
+ WHERE {
+       ?id rdfs:label "Teodor Georgiev"
+}
+```
+
+#### add_statements_function_constructor(server_access_options, prefix_list)
+#### clear_context_function_constuctor(server_access_options, prefix_list)
 
 
 The basic building blocks of RDF are resource identifiers and atomic values.

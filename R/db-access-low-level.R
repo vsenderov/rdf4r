@@ -214,7 +214,7 @@ add_data = function(rdf_data, access_options, data_format = "application/x-trig"
   # Undocumented BUG in GraphDB needs us to have two slashes `//`
   endpoint = paste(access_options$server_url, "//repositories/",
                    access_options$repository, "/statements", sep = "")
-  httr::POST(url = endpoint, httr::content_type(data_format), body = rdf_data)
+  httr::content(httr::POST(url = endpoint, httr::content_type(data_format), body = rdf_data), as = 'text')
 }
 
 
