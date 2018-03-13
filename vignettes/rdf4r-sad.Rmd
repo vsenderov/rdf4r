@@ -70,7 +70,7 @@ Use `list_repositories` to see what repositories the endpoint offers. The repo i
 
 ```{r}
 list_repositories(graphdb)
-graphdb$repository = list_repositories(graphdb)$id[8]
+graphdb$repository = list_repositories(graphdb)$id[7]
 ```
 
 ##### Submitting data and querying a repository
@@ -96,28 +96,34 @@ Here's an overview of the high-level functions:
 
 | Function | Purpose |
 |----------|---------|
-| [query_function_constructor(p_query, access_options, prefixes)](#connecting-to-a-triplestore) | returns a parameterized function executing the query on the endpoint |
+| [query_factory(p_query, access_options, prefixes)](#connecting-to-a-triplestore) | returns a parameterized function executing the query on the endpoint |
 
 
-#### query_function_constructor(server_access_options, paramerized_query, prefix_list)
+##### Query Factory
+
+The function `query_factory`'s purpose is to manufacture a function executing a specified SPARQL query against a specified endpoint. The SPARQL query that the function takes as an input
+
+```{r}
+p_query = "SELECT DISTINCT ?id WHERE {
+  ?id rdfs:label '%label'
+}"
+
+p_query2 = "SELECT * WHERE {
+  ?s ?p ?o
+} LIMIT 100"
+
+simple_lookup = query_factory(p_query, access_options = graphdb)
+simplest_f = query_factory(p_query2, access_options = graphdb)
+
+simplest_f()
+simple_lookup("Lyubomir Penev")
+simple_lookup(label = "Pavel Stoev")
 ```
-lookup_pquery = "SELECT *
-         WHERE {
-          ?id rdfs:label %label
-          }"
 
-openbiodiv_lookup_id = query_function_constructor(s, lookup_pquery, prefix_list)
+Note that the queries are specified in a *parameterized format*. I.e. the strings indicated by `%<something>` will get replaced by the parameters of the manufactured function. There can be a query with no parameters. If you wish to see what are the arguments of a manufactured function later (as it has no manpage), you can use `args`. E.g.:
 
-openbiodiv_lookup_id(label = "Teodor Georgiev") 
-```
-
-Here `openbiodiv_lookup_id` will execute the query 
-
-```
-"SELECT *
- WHERE {
-       ?id rdfs:label "Teodor Georgiev"
-}
+```{r}
+args(simple_lookup)
 ```
 
 #### add_statements_function_constructor(server_access_options, prefix_list)

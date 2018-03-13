@@ -9,6 +9,9 @@ pasteconstr(sep)
 \arguments{
 \item{sep}{the separator that you want}
 }
+\value{
+a pasting function
+}
 \description{
 Paste Constructor
 }

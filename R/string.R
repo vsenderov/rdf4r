@@ -20,7 +20,7 @@ last_token = function(x, split, ...) {
 
 #' Last Element of Vector
 #'
-#' @x a vector (not a list)
+#' @param x a vector (not a list)
 #'
 #' @return the last element of the vector
 #'
@@ -38,7 +38,7 @@ last = function(x) {
 
 #' Paste Constructor
 #' @param sep the separator that you want
-#' @retun a pasting function
+#' @return a pasting function
 #' @export
 pasteconstr = function(sep) {
   function(...) {
@@ -56,19 +56,20 @@ pasteconstr = function(sep) {
 #'
 #' @param ... one or more R objects, to be passed to paste0 if cond is TRUE.
 #' @param cond boolean, condition to be true.
+#' @param return_value
 #'
-#' @return string
-#' @example
+#' @return string. If condition is false returns \code{return_value}. default is NULL
+#' @examples
 #' pasteif("1", "st", cond = (3 < 2))
 #'
 #' @export
 pasteif =
-function(..., cond) {
+function(..., cond, return_value = NULL) {
   if (cond) {
     paste0(...)
   }
   else {
-    return("")
+    return(return_value)
   }
 }
 

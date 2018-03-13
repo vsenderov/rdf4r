@@ -21,7 +21,7 @@ Add Data to a Repository
 }
 \examples{
 rdf_data = c("<http://test.net/mytest1> {
-  <http://test.net/mysubject1> <http://test.net/has-value> '5' .
+  <http://test.net/mysubject2> <http://test.net/has-value> '5' .
 }")
 add_data(rdf_data, access_options = graphdb)
 

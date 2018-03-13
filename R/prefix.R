@@ -31,7 +31,7 @@ prefix_serializer_sparql = function (prefixes, reqd = names(prefixes))
   # subset the prefixes by only the required
   prefixes = prefixes[match(reqd, names(prefixes))]
   # process what happens if prefixes is empty?
-  browser()
+  #browser()
   serialization = sapply(prefixes, function (p)
   {
     i = which(prefixes == p)

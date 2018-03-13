@@ -27,7 +27,7 @@ basic_triplestore_access = function(server_url, repository = NA, user = NA, pass
     }
   }
   server_access_options = list(
-    server_url = strip_trailing_slash(server_url),
+    server_url = strip_trailing_symbol(server_url),
     repository = repository,
     authentication = authenticate(user, password),
     status = NA
