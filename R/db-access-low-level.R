@@ -149,23 +149,44 @@ list_repositories = function(access_options)
 
 
 
-#' Submits a SPARQL Query tp a Triplestore
+#' Submit a SPARQL Query to a Triplestore (READ)
 #'
-#' In case of error, no execution-aborting condition is set! Instead an NA is returned and a warning may be issued.
 #'
-#' @param query character. Properly formatted SPARQL query to be submitted to an endpoint.
-#' @param access_options object returned by \code{basic_triplestore_access} or \code{api_triplestore_access}.
-#' @param as_dataframe logical. TRUE by default. If TRUE, the results are returned as a data.frame.
+#' In case of error, no execution-aborting condition is set! Instead an NA
+#' is returned and a warning may be issued.
 #'
-#' @return data.frame or object returned by the triplestore. NA if nothing found or query could not be executed.
+#' This submits to the \code{/repositories/} endpoint, which means that only
+#' certain types (READ) of SPARQL queries are allowed. Namely SELECT,
+#' CONSTRUCT, DESCRIBE, and ASK. For UPDATE-type operations use the
+#' \code{submit_sparql_update} function.
+#'
+#' Supported operations:
+#'
+#' SELECT
+#' CONSTRUCT
+#' DESCRIBE
+#' ASK
+#'
+#'@seealso \code{submit_sparql_update}
+#'
+#'@param query character. Properly formatted SPARQL query to be submitted
+#'  to an endpoint.
+#'@param access_options object returned by \code{basic_triplestore_access}
+#'  or \code{api_triplestore_access}.
+#'@param as_dataframe logical. TRUE by default. If TRUE, the results are
+#'  returned as a data.frame.
+#'
+#'@return data.frame or object returned by the triplestore. NA if nothing
+#'  found or query could not be executed.
 #'
 #' @examples
-#' query = "select * where {
-#' ?s ?p ?o .
-#' } limit 100"
+#' query = "SELECT * WHERE {
+#'   ?s ?p ?o .
+#' } LIMIT 100"
+#'
 #' submit_sparql(query = query, access_options = graphdb)
 #'
-#' @export
+#'@export
 submit_sparql = function(query, access_options, as_dataframe = TRUE)
 {
   headers = if(as_dataframe) {
@@ -187,6 +208,54 @@ submit_sparql = function(query, access_options, as_dataframe = TRUE)
 }
 
 
+
+
+
+
+
+
+
+#' Submit a SPARQL Query to a Triplestore (UPDATE)
+#'
+#' This submits an UPDATE (in the sense of the CRUD methodology) to a
+#' SPARQL endpoint. For READ queries see \code{submit_sparql}.
+#'
+#' Here are the SPARQL operations that are supported:
+#'
+#' LOAD
+#' CLEAR
+#' DROP
+#' ADD
+#' MOVE
+#' COPY
+#' CREATE
+#' INSERT
+#' DELETE
+#'
+#' @seealso \code{submit_sparql}
+#'
+#' @param query \code{character} the SPARQL UPDATE query. See Details.
+#' @param access_options \code{triplestore_access_options} object.
+#'
+#' @return
+#'
+#' @examples
+#' drop_query = "DROP GRAPH <http::/openbiodiv.net/test123>"
+#'
+#' submit_sparql_update(drop_query, access_options = graphdb)
+#'
+#' @export
+submit_sparql_update = function(query, access_options) {
+  # Undocumented BUG in GraphDB needs us to have two slashes `//`
+  endpoint = paste(access_options$server_url, "//repositories/",
+                   access_options$repository, "/statements", sep = "")
+  httr::content(httr::POST(
+    url = endpoint,
+    #httr::content_type("application/x-www-form-urlencoded"),
+    access_options$authentication,
+    body = list(update = query)
+  ), as = 'text')
+}
 
 
 

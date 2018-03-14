@@ -34,7 +34,7 @@ Here's an overview of the low-level access functions:
 | [submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) | executing a SPARQL query |
 | [add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) | adding statements (e.g. Turtle) to a repo |
 
-
+TODO: need submit_command against the update interface
 
 ##### Connecting to a triplestore
 

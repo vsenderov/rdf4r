@@ -2,27 +2,49 @@
 % Please edit documentation in R/db-access-low-level.R
 \name{submit_sparql}
 \alias{submit_sparql}
-\title{Submits a SPARQL Query tp a Triplestore}
+\title{Submit a SPARQL Query to a Triplestore (READ)}
 \usage{
 submit_sparql(query, access_options, as_dataframe = TRUE)
 }
 \arguments{
-\item{query}{character. Properly formatted SPARQL query to be submitted to an endpoint.}
+\item{query}{character. Properly formatted SPARQL query to be submitted
+to an endpoint.}
 
-\item{access_options}{object returned by \code{basic_triplestore_access} or \code{api_triplestore_access}.}
+\item{access_options}{object returned by \code{basic_triplestore_access}
+or \code{api_triplestore_access}.}
 
-\item{as_dataframe}{logical. TRUE by default. If TRUE, the results are returned as a data.frame.}
+\item{as_dataframe}{logical. TRUE by default. If TRUE, the results are
+returned as a data.frame.}
 }
 \value{
-data.frame or object returned by the triplestore. NA if nothing found or query could not be executed.
+data.frame or object returned by the triplestore. NA if nothing
+ found or query could not be executed.
 }
 \description{
-In case of error, no execution-aborting condition is set! Instead an NA is returned and a warning may be issued.
+In case of error, no execution-aborting condition is set! Instead an NA
+is returned and a warning may be issued.
+}
+\details{
+This submits to the \code{/repositories/} endpoint, which means that only
+certain types (READ) of SPARQL queries are allowed. Namely SELECT,
+CONSTRUCT, DESCRIBE, and ASK. For UPDATE-type operations use the
+\code{submit_sparql_update} function.
+
+Supported operations:
+
+SELECT
+CONSTRUCT
+DESCRIBE
+ASK
 }
 \examples{
-query = "select * where {
-?s ?p ?o .
-} limit 100"
+query = "SELECT * WHERE {
+  ?s ?p ?o .
+} LIMIT 100"
+
 submit_sparql(query = query, access_options = graphdb)
 
+}
+\seealso{
+\code{submit_sparql_update}
 }
