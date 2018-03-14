@@ -96,10 +96,11 @@ Here's an overview of the high-level functions:
 
 | Function | Purpose |
 |----------|---------|
-| [query_factory(p_query, access_options, prefixes)](#connecting-to-a-triplestore) | returns a parameterized function executing the query on the endpoint |
+| [query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions) | returns a parameterized function executing the query on the endpoint |
+| [add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) | Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore |
 
 
-##### Query Factory
+##### Manufacturing READ and UPDATE query functions
 
 The function `query_factory`'s purpose is to manufacture a function executing a specified SPARQL query against a specified endpoint. The SPARQL query that the function takes as an input
 
@@ -112,12 +113,16 @@ p_query2 = "SELECT * WHERE {
   ?s ?p ?o
 } LIMIT 100"
 
+drop_query = "DROP GRAPH %subgraph"
+
 simple_lookup = query_factory(p_query, access_options = graphdb)
 simplest_f = query_factory(p_query2, access_options = graphdb)
+drop_g = query_factory(drop_query, submit_function = submit_sparql_update, access_options = graphdb_secret)
 
 simplest_f()
 simple_lookup("Lyubomir Penev")
 simple_lookup(label = "Pavel Stoev")
+drop_g("<http://openbiodiv.net/123>")
 ```
 
 Note that the queries are specified in a *parameterized format*. I.e. the strings indicated by `%<something>` will get replaced by the parameters of the manufactured function. There can be a query with no parameters. If you wish to see what are the arguments of a manufactured function later (as it has no manpage), you can use `args`. E.g.:
@@ -126,8 +131,16 @@ Note that the queries are specified in a *parameterized format*. I.e. the string
 args(simple_lookup)
 ```
 
-#### add_statements_function_constructor(server_access_options, prefix_list)
-#### clear_context_function_constuctor(server_access_options, prefix_list)
+##### Manufacturing add data functions
+
+```{r}
+prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")
+ttl = "openbiodiv:test_context {
+openbiodiv:test1 rdf:label 'sample lab'@en .
+}"
+add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = prefixes)
+```
+
 
 
 The basic building blocks of RDF are resource identifiers and atomic values.

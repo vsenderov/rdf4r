@@ -4,10 +4,17 @@
 \alias{query_factory}
 \title{Query Function Factory}
 \usage{
-query_factory(p_query, access_options, prefixes = NA)
+query_factory(p_query, submit_function = submit_sparql, access_options,
+  prefixes = NA)
 }
 \arguments{
-\item{p_query}{character. A parameterized SPARQL query. Parameters are given with percent sign in front}
+\item{p_query}{character. A parameterized SPARQL query. Parameters are
+given with percent sign in front}
+
+\item{submit_function}{function. The function that should be used to submit the
+query - i.e. whether to use the READ endpoint or the UPDATE endpoint.
+One of \code{submit_sparql}, or \code{submit_sparql_update}. The
+detault is \code{submit_sparql} - i.e. use the READ endpoint.}
 
 \item{access_options}{triplestore_access_options.}
 
@@ -17,7 +24,8 @@ query_factory(p_query, access_options, prefixes = NA)
 the query function (closure)
 }
 \description{
-The function `query_factory`'s purpose is to manufacture a function executing a specified SPARQL query against a specified endpoint.
+The function `query_factory`'s purpose is to manufacture a function
+executing a specified SPARQL query against a specified endpoint.
 }
 \examples{
 p_query = "SELECT DISTINCT ?id WHERE {
@@ -28,10 +36,10 @@ p_query = "SELECT DISTINCT ?id WHERE {
    ?s ?p ?o
  } LIMIT 100"
 
- drop_query = "DROP GRAPH \%subgraph"
+drop_query = "DROP GRAPH \%subgraph"
 
 simple_lookup = query_factory(p_query, access_options = graphdb)
 simplest_f = query_factory(p_query2, access_options = graphdb)
-drop_g = query_factory(drop_query, access_options = graphdb)
+drop_g = query_factory(drop_query, submit_function = submit_sparql_update, access_options = graphdb_secret)
 
 }
