@@ -148,7 +148,7 @@ The basic building blocks of RDF are resource identifiers and atomic values (lit
 
 | Function | Purpose |
 |----------|---------|
-| [lookup_identfier(lookup_string, prefixes, ...)](#working-with-identifiers-and-literals) | identifier constructor via lookup |
+| [lookup_identfier(label, prefixes, ...)](#working-with-identifiers-and-literals) | identifier constructor via lookup |
 | [identfier(id, prefix)](#working-with-identifiers-and-literals) | default identifier constructor  |
 | [literal(value, xsd_type, lang_code)](#working-with-identifiers-and-literals) | literal constructor |
 
@@ -169,4 +169,14 @@ There are two ways to create an idenfier: from an id (that we have from somewher
 
 ```{r}
 sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7", prefix = c(openbiodiv = "http://openbiodiv.net"))
+
+
+prefixes = c(
+   rdfs = "http://www.w3.org/2000/01/rdf-schema#",
+   foaf = "http://xmlns.com/foaf/0.1/",
+   openbiodiv = "http://openbiodiv.net/",
+   '_base' = "http://openbiodiv.net/"
+  )
+
+sample_id2 = lookup_identifier("Teodor Georgiev", prefixes = prefixes, f = simple_lookup)
 ```

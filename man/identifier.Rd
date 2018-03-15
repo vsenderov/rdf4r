@@ -4,12 +4,14 @@
 \alias{identifier}
 \title{Construct Identifier from ID}
 \usage{
-identifier(id, prefix)
+identifier(id, prefix = NULL)
 }
 \arguments{
 \item{id}{character(1). The part of identifier after the prefix.}
 
-\item{prefix}{named character(1). The prefix. See Examples.}
+\item{prefix}{named character. Note if multiple prefixes are supplied,
+the URI will only use the first one. If there is no prefix supplied
+QNAME and URI will essentially be the same.}
 }
 \value{
 identifier object (a type of list).
@@ -19,5 +21,7 @@ Construct Identifier from ID
 }
 \examples{
 sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7",
-  prefix = c(openbiodiv = "http://openbiodiv.net/"))
+  prefix = c(openbiodiv = "http://openbiodiv.net/", test = "http://test.com"))
+
+sample_id2 = identifier("http://www.example.com/1")
 }

@@ -52,9 +52,10 @@ pasteconstr = function(sep) {
 
 #' Paste If
 #'
-#' Pastes something only if the condition is met. Uses paste0.
+#' Pastes something only if the condition is met.
 #'
 #' @param ... one or more R objects, to be passed to paste0 if cond is TRUE.
+#' @param sep default "" - equiv. to paste0
 #' @param cond boolean, condition to be true.
 #' @param return_value
 #'
@@ -64,9 +65,9 @@ pasteconstr = function(sep) {
 #'
 #' @export
 pasteif =
-function(..., cond, return_value = NULL) {
+function(..., sep = "", cond, return_value = NULL) {
   if (cond) {
-    paste0(...)
+    paste(..., sep = sep)
   }
   else {
     return(return_value)

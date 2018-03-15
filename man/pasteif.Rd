@@ -4,10 +4,12 @@
 \alias{pasteif}
 \title{Paste If}
 \usage{
-pasteif(..., cond, return_value = NULL)
+pasteif(..., sep = "", cond, return_value = NULL)
 }
 \arguments{
 \item{...}{one or more R objects, to be passed to paste0 if cond is TRUE.}
+
+\item{sep}{default "" - equiv. to paste0}
 
 \item{cond}{boolean, condition to be true.}
 
@@ -17,7 +19,7 @@ pasteif(..., cond, return_value = NULL)
 string. If condition is false returns \code{return_value}. default is NULL
 }
 \description{
-Pastes something only if the condition is met. Uses paste0.
+Pastes something only if the condition is met.
 }
 \examples{
 pasteif("1", "st", cond = (3 < 2))

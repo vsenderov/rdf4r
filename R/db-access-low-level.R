@@ -200,7 +200,7 @@ submit_sparql = function(query, access_options, as_dataframe = TRUE)
     encode = "form"
   )
   if(as_dataframe) {
-    return (read.csv(textConnection(httr::content(result, as = "text"))))
+    return (read.csv(textConnection(httr::content(result, as = "text")), stringsAsFactors = FALSE))
   }
   else {
     return (result)
