@@ -9,6 +9,20 @@ add_data_factory(access_options, prefixes)
 \arguments{
 \item{prefixes}{}
 }
+\value{
+a function with one parameter, \code{rdf_data}
+}
 \description{
 Wraps \code{add_data} to simply submit a Turtle/Trig file to a triplestore
+}
+\examples{
+prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")
+ttl = "openbiodiv:test_context {
+openbiodiv:test1 rdf:label 'sample lab'@en .
+}"
+add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = prefixes)
+
+add_data_to_graphdb(rdf_data = ttl)
+
+
 }

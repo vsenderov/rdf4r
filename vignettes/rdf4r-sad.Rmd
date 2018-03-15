@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 `rdf4r` is an R-library designed to enable the R-practicioner to handle Resource Description Framework (RDF) data. It provides functions for:
 
 - [Interfacing with a triple store](#interface-with-a-triple-store)
+- [Creating identifiers and literals](#create-identifiers-and-literals)
 
 ## Interface with a triple store
 
@@ -141,6 +142,31 @@ openbiodiv:test1 rdf:label 'sample lab'@en .
 add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = prefixes)
 ```
 
+## Create Identifiers and Literals
 
+The basic building blocks of RDF are resource identifiers and atomic values (literals). Identifiers and literals are stored as lists with certain fields. In order to create said resources, the library offers constructor functions:
 
-The basic building blocks of RDF are resource identifiers and atomic values.
+| Function | Purpose |
+|----------|---------|
+| [lookup_identfier(lookup_string, prefixes, ...)](#working-with-identifiers-and-literals) | identifier constructor via lookup |
+| [identfier(id, prefix)](#working-with-identifiers-and-literals) | default identifier constructor  |
+| [literal(value, xsd_type, lang_code)](#working-with-identifiers-and-literals) | literal constructor |
+
+##### Working with identifiers and literals
+
+An identifier in the semantic web is something that uniquely identifies a resource. Identifiers can be represented as URI's (e.g. <http://example.com/id>), or as QNAME's (e.g. example:id). RDF4R stores identifiers as lists with the following fields:
+
+```{r}
+sample_id = list(
+  id  = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+  uri = "<http://openbiodiv.net/57d68e07-8315-4b30-9a8e-57226fd815d7>",
+  qname = "openbiodiv:id",
+  prefix = c(openbiodiv = "http://openbiodiv.net")  
+)
+```
+
+There are two ways to create an idenfier: from an id (that we have from somewhere else) with `identifier`, or via lookup in a triplestores with `lookup_identifier`:
+
+```{r}
+sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7", prefix = c(openbiodiv = "http://openbiodiv.net"))
+```

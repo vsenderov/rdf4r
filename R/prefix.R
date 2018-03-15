@@ -16,7 +16,11 @@
 #' @return prefix serialization.
 #'
 #' @examples
-#' prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")
+#' prefixes = c(
+#'   rdfs = "http://www.w3.org/2000/01/rdf-schema#",
+#'   foaf = "http://xmlns.com/foaf/0.1/",
+#'   openbiodiv = "http://openbiodiv.net/"
+#'  )
 #' prefix_serializer(prefixes, reqd = c("rdfs", "openbiodiv"))
 #' prefix_serializer(prefixes, reqd = c("rdfs", "openbiodiv"), lang = "Turtle")
 #'

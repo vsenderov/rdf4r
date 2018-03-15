@@ -127,3 +127,39 @@ function(x) {
 
 
 
+#' Strips (or Adds) Angular Brackets from a URI if Present
+#'
+#' @param partial_uri the URI to strip angular brackets from
+#' @param reverse FALSE, if true will put angular brakcets instead
+#'
+#' @return URI with stripped angular brackets around it
+#'
+#' @example
+#' partial_uri = "http://example.com"
+#' strip_angle(partial_uri)
+#' strip_angle(partial_uri, reverse = TRUE)
+#' uri = "<http://test.gov>"
+#' strip_angle(uri)
+#' strip_angle(uri, reverse = TRUE)
+#'
+#' @export
+strip_angle = function (partial_uri , reverse = FALSE) {
+  # check if angular brackets are present
+  if (grepl("^<.*>$", partial_uri)) {
+    uri = partial_uri # with brackets
+    partial_uri = (substr(uri, 2, nchar(uri) - 1)) # without brackets
+  }
+  else {
+    uri = gsub( "^(.*)$", "<\\1>", partial_uri ) # with brackets
+  }
+  # by now partial_uri has no angulars  and uri has angulars
+  if (reverse) { # i.e. add brackets
+    return (uri)
+  }
+  else {
+    return(partial_uri)
+  }
+}
+
+
+
