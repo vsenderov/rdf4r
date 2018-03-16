@@ -1,6 +1,21 @@
-#' Construct Identifier from ID
+#' Identifier Consturction
 #'
-#' @param id character(1). The part of identifier after the prefix.
+#' An identifier in the semantic web is something that uniquely identifies
+#' a resource. Identifiers can be represented as URI's (e.g.
+#' \code{<http://example.com/id>}), or as QNAME's (e.g. \code{example:id}).
+#' RDF4R stores identifiers as lists with the following fields:
+#'
+#' \code{
+#' sample_id = list(
+#'   id  = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+#'   uri = "<http://openbiodiv.net/57d68e07-8315-4b30-9a8e-57226fd815d7>",
+#'   qname = "openbiodiv:id",
+#'   prefix = c(openbiodiv = "http://openbiodiv.net")
+#' )
+#' }
+#'
+#' @param id character(1). The part of identifier after the prefix. Ror
+#'   example, a UUID.
 #' @param prefix named character. Note if multiple prefixes are supplied,
 #'   the URI will only use the first one. If there is no prefix supplied
 #'   QNAME and URI will essentially be the same.
@@ -22,7 +37,7 @@ identifier = function(id, prefix = NULL)
 
   ll = list(id = id, uri = uri, qname = qname, prefix = prefix)
   class(ll) = "identifier"
-
+?
   ll
 }
 

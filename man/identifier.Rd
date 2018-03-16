@@ -7,7 +7,8 @@
 identifier(id, prefix = NULL)
 }
 \arguments{
-\item{id}{character(1). The part of identifier after the prefix.}
+\item{id}{character(1). The part of identifier after the prefix. Ror
+example, a UUID.}
 
 \item{prefix}{named character. Note if multiple prefixes are supplied,
 the URI will only use the first one. If there is no prefix supplied
