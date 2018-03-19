@@ -2,9 +2,12 @@
 % Please edit documentation in R/identifier.R
 \name{identifier}
 \alias{identifier}
-\title{Construct Identifier from ID}
+\alias{fidentifier}
+\title{Identifier Consturction}
 \usage{
 identifier(id, prefix = NULL)
+
+fidentifier(label, ..., FUN = list(...), prefixes, def_prefix)
 }
 \arguments{
 \item{id}{character(1). The part of identifier after the prefix. Ror
@@ -13,16 +16,65 @@ example, a UUID.}
 \item{prefix}{named character. Note if multiple prefixes are supplied,
 the URI will only use the first one. If there is no prefix supplied
 QNAME and URI will essentially be the same.}
+
+\item{label}{character(1). Parameter that will be passed to the lookup
+functions. See \code{...} for details.}
+
+\item{...}{(lookup) functions that will be executed in order to
+obtain the identifier. The functions should have one argument to which
+\code{label} will be assigned during the call. As soon as we have a
+unique match the function execution halts. If there is no match, a
+URI with the base prefix (the one indiciated by "_base") and a UUID
+will be generated.}
+
+\item{FUN}{list of lookup functions to be tried. this can be omitted and
+instead the functions specified as additional arguments.}
+
+\item{prefixes}{named character. Contains the prefixes.}
+
+\item{def_prefix}{the prefix to be used if lookup fails.}
 }
 \value{
 identifier object (a type of list).
 }
 \description{
-Construct Identifier from ID
+An identifier in the semantic web is something that uniquely identifies
+a resource. Identifiers can be represented as URI's (e.g.
+\code{<http://example.com/id>}), or as QNAME's (e.g. \code{example:id}).
 }
+\details{
+RDF4R stores identifiers as lists with the following fields:
+
+\code{
+sample_id = list(
+  id  = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+  uri = "<http://openbiodiv.net/57d68e07-8315-4b30-9a8e-57226fd815d7>",
+  qname = "openbiodiv:id",
+  prefix = c(openbiodiv = "http://openbiodiv.net")
+)
+}
+}
+\section{Functions}{
+\itemize{
+\item \code{fidentifier}: Construct Identifier via Lookup Function
+}}
+
 \examples{
 sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7",
-  prefix = c(openbiodiv = "http://openbiodiv.net/", test = "http://test.com"))
+  prefix = c(openbiodiv = "http://openbiodiv.net/",
+  test = "http://test.com"))
 
 sample_id2 = identifier("http://www.example.com/1")
+
+prefixes = c(
+  rdfs = "http://www.w3.org/2000/01/rdf-schema#",
+  foaf = "http://xmlns.com/foaf/0.1/",
+  openbiodiv = "http://openbiodiv.net/"
+)
+
+sample_id3 = fidentifier("Teodor Georgiev",
+  prefixes = prefixes,
+  def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
+  simple_lookup, simple_lookup)
+
 }

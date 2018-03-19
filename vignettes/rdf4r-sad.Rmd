@@ -26,8 +26,6 @@ is the programmer's documentation, i.e. the "specs and design sheet."
 
 Connect, run queries on, and upload data to a triple store. Functions are separated into [low-level](#low-level-access) access functions that create connections, send raw data, read queries, and [high-level](#high-level-functions) functions that let you create specific functions for your project via factory functions.
 
-### Low-level access
-
 Here's an overview of the low-level access functions:
 
 | Function | Purpose |
@@ -40,6 +38,15 @@ Here's an overview of the low-level access functions:
 | [add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) | adding statements (e.g. Turtle) to a repo |
 
 TODO: need submit_command against the update interface
+
+The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
+
+Here's an overview of the high-level functions:
+
+| Function | Purpose |
+|----------|---------|
+| [query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions) | returns a parameterized function executing the query on the endpoint |
+| [add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) | Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore |
 
 ##### Connecting to a triplestore
 
@@ -93,18 +100,6 @@ submit_sparql(query = query, access_options = graphdb)
 add_data("@prefix owl: <http://www.w3.org/2002/07/owl#>. \n <http://openbiodiv.net/sample_id> a owl:Thing.", access_options = graphdb)
 ```
 
-### High-level functions
-
-The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
-
-Here's an overview of the high-level functions:
-
-| Function | Purpose |
-|----------|---------|
-| [query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions) | returns a parameterized function executing the query on the endpoint |
-| [add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) | Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore |
-
-
 ##### Manufacturing READ and UPDATE query functions
 
 The function `query_factory`'s purpose is to manufacture a function executing a specified SPARQL query against a specified endpoint. The SPARQL query that the function takes as an input
@@ -146,6 +141,13 @@ openbiodiv:test1 rdf:label 'sample lab'@en .
 add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = prefixes)
 ```
 
+
+
+
+
+
+
+
 ## Generating RDF
 
 The basic building blocks of RDF are resource identifiers and atomic values
@@ -153,10 +155,10 @@ The basic building blocks of RDF are resource identifiers and atomic values
 fields.
 
 1. [identifier(id, prefix = NULL)](#identifier-consturction) 
-2. [identifier_fun(label, fun = list(...), prefixes, def_prefix, ...)](#identifier-consturction)
-3. [identifier_fun_factory(fun = list(...), prefixes, def_prefix, ...)](#identifier-construction)
+2. [fidentifier(label, fun = list(...), prefixes, def_prefix, ...)](#identifier-consturction)
+3. [identifier_factory(fun = list(...), prefixes, def_prefix, ...)](#manufacturing-identifier-constructors)
 
-##### Identifier Consturction
+##### Identifier ConsturctionFUN = list(...),
 
 An identifier in the semantic web is something that uniquely identifies a
 resource. Identifiers can be represented as URI's (e.g.
@@ -172,14 +174,21 @@ sample_id = list(
 )
 ```
 
-`identifier` is the basic constructor function
+`identifier` is the basic constructor function. It takes a prefix and a
+unique part and returns the list. If multiple prefixes are supplied,
+`identifier` will only use the first one. If multiple id's are supplied 
+the function will error.
+
+`fidentifier` is a constructor function that takes a lookup function, or a
+list of lookup functions, a label (to be supplied to the lookup function)
+and returns the unique identifier it found via the lookup functions. If it
+fails, it calls `identifier`.
 
 
-, or via lookup in a triplestores with `lookup_identifier`:
 
 ```{r}
-sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7", prefix = c(openbiodiv = "http://openbiodiv.net"))
-
+sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7",
+                       prefix = c(openbiodiv = "http://openbiodiv.net"))
 
 prefixes = c(
    rdfs = "http://www.w3.org/2000/01/rdf-schema#",
@@ -188,5 +197,20 @@ prefixes = c(
    '_base' = "http://openbiodiv.net/"
   )
 
-sample_id2 = lookup_identifier("Teodor Georgiev", prefixes = prefixes, f = simple_lookup)
+sample_id2 = fidentifier("Teodor Georgiev", prefixes = prefixes, f = simple_lookup)
+```
+
+##### Manufacturing Identifier Constructors
+
+`identifier_factory` returns a function with just one argument, `label`,
+that wraps around an `findentifier` call.
+
+```{r}
+openbiodiv_id = identifier_factory(simple_lookup,
+   prefixes = prefixes,
+   def_prefix = c(openbiodiv = "http://openbiodiv.net/"))
+
+ openbiodiv_id("Teodor Georgiev")
+ openbiodiv_id("Pavel Stoev")
+
 ```
