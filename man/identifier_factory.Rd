@@ -8,18 +8,17 @@ identifier_factory(..., FUN = list(...), prefixes, def_prefix)
 }
 \arguments{
 \item{...}{(lookup) functions that will be executed in order to
-obtain the identifier. The functions should have one argument to which
-\code{label} will be assigned during the call. As soon as we have a
-unique match the function execution halts. If there is no match, a
-URI with the base prefix (the one indiciated by "_base") and a UUID
-will be generated.}
+ obtain the identifier. The functions should have one argument to which
+ \code{label} will be assigned during the call. As soon as we have a
+ unique match the function execution halts. If there is no match, a
+ URI with the base prefix (the one indiciated by "_base") and a UUID
+ will be generated.
+@param FUN list of lookup functions to be tried. this can be omitted and
+ instead the functions specified as additional arguments.}
 
-\item{FUN}{list of lookup functions to be tried. this can be omitted and
-instead the functions specified as additional arguments.}
+\item{prefixes}{Named \code{character}. Contains the prefixes.}
 
-\item{prefixes}{named character. Contains the prefixes.}
-
-\item{def_prefix}{the prefix to be used if lookup fails.}
+\item{def_prefix}{The prefix to be used if lookup fails.}
 }
 \value{
 an identifier constructor function with one parameter

@@ -6,37 +6,38 @@
 #'
 #' RDF4R stores identifiers as lists with the following fields:
 #'
-#' \code{
-#' sample_id = list(
+#' \code{sample_id = list(
 #'   id  = "57d68e07-8315-4b30-9a8e-57226fd815d7",
 #'   uri = "<http://openbiodiv.net/57d68e07-8315-4b30-9a8e-57226fd815d7>",
 #'   qname = "openbiodiv:id",
 #'   prefix = c(openbiodiv = "http://openbiodiv.net")
-#' )
-#' }
+#' )}
 #'
-#' @param id character(1). The part of identifier after the prefix. Ror
-#'   example, a UUID.
-#' @param prefix named character. Note if multiple prefixes are supplied,
-#'   the URI will only use the first one. If there is no prefix supplied
-#'   QNAME and URI will essentially be the same.
+#' @describeIn identifier constructs an unique identifier from a local id and a prefix.
 #'
-#' @return identifier object (a type of list).
+#' @param id \code{character} Local ID. E.g., a UUID. The part of
+#'   identifier after the prefix.
+#' @param prefix Named \code{character}. The first one will be used. If
+#'   there is no prefix supplied QNAME and URI will essentially be the
+#'   same.
+#'
+#' @return \code{identifier} object (a type of list).
+#'
 #' @export
-#'
-#' @examples
-#' sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7",
-#'   prefix = c(openbiodiv = "http://openbiodiv.net/",
-#'   test = "http://test.com"))
-#'
-#' sample_id2 = identifier("http://www.example.com/1")
-identifier = function(id, prefix = NULL)
+identifier = function(id, prefix = NA)
 {
-  stopifnot(length(id) == 1)
-  id = id
-  uri = strip_angle(paste0(prefix[1], id), reverse = TRUE)
-  qname = pasteif(names(prefix)[1], id, sep = ":", cond = !is.null(prefix), return_value = uri)
-  prefix = prefix[1]
+  if (length(id) != 1 && length(prefix) != 1) {
+    warning("Arguments to `identifier` not of length 1. Using first positions.")
+  }
+
+  id = strip_angle(id[1])
+  prefix = strip_angle(prefix[1])
+  uri = strip_angle(
+    pasteif(prefix[1], id, cond = !is.na(prefix), return_value = id),
+    reverse = TRUE
+  )
+  qname =
+    pasteif(names(prefix)[1], id, sep = ":", cond = !is.na(prefix), return_value = uri)
 
   ll = list(id = id, uri = uri, qname = qname, prefix = prefix)
   class(ll) = "identifier"
@@ -52,33 +53,22 @@ identifier = function(id, prefix = NULL)
 
 
 
-#' @describeIn identifier Construct Identifier via Lookup Function
+#' @describeIn identifier construct identifier via a lookup function.
 #'
-#' @param label character(1). Parameter that will be passed to the lookup
+#' @param label \code{character(1)} Parameter that will be passed to the lookup
 #'   functions. See \code{...} for details.
-#' @param prefixes named character. Contains the prefixes.
-#' @param def_prefix the prefix to be used if lookup fails.
-#' @param FUN list of lookup functions to be tried. this can be omitted and
-#'   instead the functions specified as additional arguments.
 #' @param ... (lookup) functions that will be executed in order to
 #'   obtain the identifier. The functions should have one argument to which
 #'   \code{label} will be assigned during the call. As soon as we have a
 #'   unique match the function execution halts. If there is no match, a
 #'   URI with the base prefix (the one indiciated by "_base") and a UUID
 #'   will be generated.
+#'  @param FUN list of lookup functions to be tried. this can be omitted and
+#'   instead the functions specified as additional arguments.
+#' @param prefixes Named \code{character}. Contains the prefixes.
+#' @param def_prefix The prefix to be used if lookup fails.
 #'
 #' @examples
-#'
-#' prefixes = c(
-#'   rdfs = "http://www.w3.org/2000/01/rdf-schema#",
-#'   foaf = "http://xmlns.com/foaf/0.1/",
-#'   openbiodiv = "http://openbiodiv.net/"
-#' )
-#'
-#' sample_id3 = fidentifier("Teodor Georgiev",
-#'   prefixes = prefixes,
-#'   def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
-#'   simple_lookup, simple_lookup)
 #'
 #' @export
 fidentifier = function(label, ...,  FUN = list(...), prefixes, def_prefix )

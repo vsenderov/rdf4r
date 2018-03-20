@@ -28,25 +28,27 @@ Connect, run queries on, and upload data to a triple store. Functions are separa
 
 Here's an overview of the low-level access functions:
 
-| Function | Purpose |
-|----------|---------|
-| [basic_triplestore_access(server_url, user, password, repository)](#connecting-to-a-triplestore) | connecting to a triplestore with no or basic auth |
-| [api_triplestore_access(server_url, api_key, api_secret, repository)](#connecting-to-a-triplestore) | connecting to a triplestore with a secret key |
-| [get_protocol_version(access_options)](#connecting-to-a-triplestore) | protocol version at endpoint |
-| [list_repositories(access_options)](#working-with-repositories) | listing repositories at endpoint |
-| [submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) | executing a SPARQL query |
-| [add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) | adding statements (e.g. Turtle) to a repo |
+[basic_triplestore_access(server_url, user, password, repository)](#connecting-to-a-triplestore) : connecting to a triplestore with no or basic auth 
 
-TODO: need submit_command against the update interface
+[api_triplestore_access(server_url, api_key, api_secret, repository)](#connecting-to-a-triplestore) : connecting to a triplestore with a secret key 
+
+[get_protocol_version(access_options)](#connecting-to-a-triplestore) : protocol version at endpoint
+
+[list_repositories(access_options)](#working-with-repositories) : listing repositories at endpoint
+
+[submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) : executing a SPARQL query 
+
+[add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) : adding statements (e.g. Turtle) to a repo 
+
+submit_sparql_update(query, access_options): against the update interface
 
 The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
 
 Here's an overview of the high-level functions:
 
-| Function | Purpose |
-|----------|---------|
-| [query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions) | returns a parameterized function executing the query on the endpoint |
-| [add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) | Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore |
+[query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions): returns a parameterized function executing the query on the endpoint
+
+[add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) : Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore 
 
 ##### Connecting to a triplestore
 
@@ -104,7 +106,7 @@ add_data("@prefix owl: <http://www.w3.org/2002/07/owl#>. \n <http://openbiodiv.n
 
 The function `query_factory`'s purpose is to manufacture a function executing a specified SPARQL query against a specified endpoint. The SPARQL query that the function takes as an input
 
-```{r}
+```{r query_factory, results = "hide"}
 p_query = "SELECT DISTINCT ?id WHERE {
   ?id rdfs:label '%label'
 }"
@@ -119,10 +121,10 @@ simple_lookup = query_factory(p_query, access_options = graphdb)
 simplest_f = query_factory(p_query2, access_options = graphdb)
 drop_g = query_factory(drop_query, submit_function = submit_sparql_update, access_options = graphdb_secret)
 
-simplest_f()
+#simplest_f()
 simple_lookup("Lyubomir Penev")
-simple_lookup(label = "Pavel Stoev")
-drop_g("<http://openbiodiv.net/123>")
+#simple_lookup(label = "Pavel Stoev")
+#drop_g("<http://openbiodiv.net/123>")
 ```
 
 Note that the queries are specified in a *parameterized format*. I.e. the strings indicated by `%<something>` will get replaced by the parameters of the manufactured function. There can be a query with no parameters. If you wish to see what are the arguments of a manufactured function later (as it has no manpage), you can use `args`. E.g.:
@@ -151,53 +153,64 @@ add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = pref
 ## Generating RDF
 
 The basic building blocks of RDF are resource identifiers and atomic values
-(literals). Identifiers and literals are stored as lists with certain
+(literals). Identifiers and literals are stored as lists with certain 
 fields.
 
-1. [identifier(id, prefix = NULL)](#identifier-consturction) 
-2. [fidentifier(label, fun = list(...), prefixes, def_prefix, ...)](#identifier-consturction)
-3. [identifier_factory(fun = list(...), prefixes, def_prefix, ...)](#manufacturing-identifier-constructors)
+[identifier(id, prefix = NA)](#identifier-consturction): constructs an 
+  unique identifier from a local id and a prefix.
 
-##### Identifier ConsturctionFUN = list(...),
+[fidentifier(label, fun = list(...), prefixes, def_prefix, ...)](#identifier-consturction): construct identifier via a lookup function.
+
+[identifier_factory(fun = list(...), prefixes, def_prefix, ...)](#manufacturing-identifier-constructors)
+
+[literal(text_value, xsd_type, lang)](#literals) constructor
+
+
+##### Identifier Consturction
 
 An identifier in the semantic web is something that uniquely identifies a
 resource. Identifiers can be represented as URI's (e.g.
-<http://example.com/id>), or as QNAME's (e.g. example:id). RDF4R stores
-identifiers as lists with the following fields:
+<http://example.com/id>), or as QNAME's (e.g. example:id). To consturct
+an identifier, you can use one of the two constructor functions:
 
-```{r}
-sample_id = list(
-  id  = "57d68e07-8315-4b30-9a8e-57226fd815d7",
-  uri = "<http://openbiodiv.net/57d68e07-8315-4b30-9a8e-57226fd815d7>",
-  qname = "openbiodiv:id",
-  prefix = c(openbiodiv = "http://openbiodiv.net")  
-)
-```
-
-`identifier` is the basic constructor function. It takes a prefix and a
-unique part and returns the list. If multiple prefixes are supplied,
-`identifier` will only use the first one. If multiple id's are supplied 
-the function will error.
+`identifier` is the basic constructor function. It takes a prefix and a 
+local part and returns the object. If multiple prefixes or ids are
+supplied, `identifier` will only use the first one.
 
 `fidentifier` is a constructor function that takes a lookup function, or a
 list of lookup functions, a label (to be supplied to the lookup function)
 and returns the unique identifier it found via the lookup functions. If it
-fails, it calls `identifier`.
-
-
+fails, it calls `identifier` with a default prefix and a UUID.
 
 ```{r}
-sample_id = identifier("57d68e07-8315-4b30-9a8e-57226fd815d7",
-                       prefix = c(openbiodiv = "http://openbiodiv.net"))
+sample_id = identifier(
+   id = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+   prefix = c(openbiodiv = "http://openbiodiv.net/")
+)
 
-prefixes = c(
+sample_id
+```
+
+```{r}
+sample_id2 = identifier("http://www.example.com/1")
+
+sample_id2
+```
+
+```{r}
+ prefixes = c(
    rdfs = "http://www.w3.org/2000/01/rdf-schema#",
    foaf = "http://xmlns.com/foaf/0.1/",
-   openbiodiv = "http://openbiodiv.net/",
-   '_base' = "http://openbiodiv.net/"
-  )
+   openbiodiv = "http://openbiodiv.net/"
+ )
 
-sample_id2 = fidentifier("Teodor Georgiev", prefixes = prefixes, f = simple_lookup)
+sample_id3 = fidentifier(
+ label = "Teodor Georgiev",
+ prefixes = prefixes,
+ def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
+ simple_lookup)
+
+sample_id3
 ```
 
 ##### Manufacturing Identifier Constructors
@@ -214,3 +227,47 @@ openbiodiv_id = identifier_factory(simple_lookup,
  openbiodiv_id("Pavel Stoev")
 
 ```
+
+
+
+
+
+
+### Literals
+
+To initiliaze literals, you use the `literal` constructor; however, as the
+`literal` constructor has a *xsd type* field, you should use one of the
+already predefined `?xsd_types`.
+
+```{r}
+sample_literal = literal(
+  text_value = "John",
+  xsd_type = xsd_string
+)
+```
+
+What you get in terms of fields is:
+
+```{r}
+sample_literal = list(
+  text_value = "John",
+  xsd_type = "<http://www.w3.org/2001/XMLSchema#string>",
+  lang = NULL,
+  squote = "'John'^^xsd:string"
+)
+
+sample_literal2 = list(
+  text_value = "That Seventies Show",
+  xsd_type = NULL,
+  lang = "en",
+  squote = "'That Seventies Show'@en"
+)
+
+sample_literal3 = list(
+  text_value = "That Seventies Show",
+  xsd_type = NULL,
+  lang = "en",
+  squote = "'That Seventies Show'@en"
+)
+```
+
