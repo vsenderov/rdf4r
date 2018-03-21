@@ -163,7 +163,7 @@ fields.
 
 [identifier_factory(fun = list(...), prefixes, def_prefix, ...)](#manufacturing-identifier-constructors)
 
-[literal(text_value, xsd_type, lang)](#literals) constructor
+[literal(text_value, xsd_type, lang)](#literals) constructs a `literal` object
 
 
 ##### Identifier Consturction
@@ -233,7 +233,7 @@ openbiodiv_id = identifier_factory(simple_lookup,
 
 
 
-### Literals
+### Literals Construction
 
 To initiliaze literals, you use the `literal` constructor; however, as the
 `literal` constructor has a *xsd type* field, you should use one of the
@@ -244,30 +244,17 @@ sample_literal = literal(
   text_value = "John",
   xsd_type = xsd_string
 )
-```
 
-What you get in terms of fields is:
+sample_literal
+```
 
 ```{r}
-sample_literal = list(
-  text_value = "John",
-  xsd_type = "<http://www.w3.org/2001/XMLSchema#string>",
-  lang = NULL,
-  squote = "'John'^^xsd:string"
+sample_literal2 = literal(
+  text_value = "That Seventies Show",
+  lang = "en"
 )
 
-sample_literal2 = list(
-  text_value = "That Seventies Show",
-  xsd_type = NULL,
-  lang = "en",
-  squote = "'That Seventies Show'@en"
-)
-
-sample_literal3 = list(
-  text_value = "That Seventies Show",
-  xsd_type = NULL,
-  lang = "en",
-  squote = "'That Seventies Show'@en"
-)
+sample_literal2
 ```
+
 
