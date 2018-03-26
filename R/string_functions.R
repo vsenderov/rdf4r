@@ -128,6 +128,8 @@ function(x) {
 
 
 
+
+
 #' Strips (or Adds) Angular Brackets from a URI if Present
 #'
 #' @param partial_uri the URI to strip angular brackets from
@@ -161,6 +163,3 @@ strip_angle = function (partial_uri , reverse = FALSE) {
     return(partial_uri)
   }
 }
-
-
-

@@ -26,8 +26,9 @@
 #' @export
 identifier = function(id, prefix = NA)
 {
-  if (length(id) != 1 && length(prefix) != 1) {
-    warning("Arguments to `identifier` not of length 1. Using first positions.")
+  if (length(id) != 1 || length(prefix) != 1|| length(names(prefix)) != 1) {
+    warning("Arguments to `identifier` not of length 1 or missing names!
+            Using first positions.")
   }
 
   id = strip_angle(id[1])
@@ -126,3 +127,8 @@ identifier_factory = function(...,  FUN = list(...), prefixes, def_prefix )
     fidentifier(label, FUN = FUN, prefixes = prefixes, def_prefix = def_prefix, ...)
   }
 }
+
+
+
+
+

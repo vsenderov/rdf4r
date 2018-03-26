@@ -108,7 +108,7 @@ The function `query_factory`'s purpose is to manufacture a function executing a 
 
 ```{r query_factory, results = "hide"}
 p_query = "SELECT DISTINCT ?id WHERE {
-  ?id rdfs:label '%label'
+  ?id rdfs:label %label
 }"
 
 p_query2 = "SELECT * WHERE {
@@ -122,7 +122,7 @@ simplest_f = query_factory(p_query2, access_options = graphdb)
 drop_g = query_factory(drop_query, submit_function = submit_sparql_update, access_options = graphdb_secret)
 
 #simplest_f()
-simple_lookup("Lyubomir Penev")
+simple_lookup("'Lyubomir Penev'")
 #simple_lookup(label = "Pavel Stoev")
 #drop_g("<http://openbiodiv.net/123>")
 ```
@@ -165,6 +165,34 @@ fields.
 
 [literal(text_value, xsd_type, lang)](#literals) constructs a `literal` object
 
+[RDF$new()](#RDF) constructs an `RDF` object
+
+
+### Literals Construction
+
+To initiliaze literals, you use the `literal` constructor; however, as the
+`literal` constructor has a *xsd type* field, you should use one of the
+already predefined `?xsd_types`.
+
+```{r}
+john_doe_label = literal(
+  text_value = "John Doe",
+  xsd_type = xsd_string
+)
+
+john_doe_label
+```
+
+```{r}
+seventies_show_label = literal(
+  text_value = "That Seventies Show",
+  lang = "en"
+)
+
+seventies_show_label
+```
+
+
 
 ##### Identifier Consturction
 
@@ -204,19 +232,25 @@ sample_id2
    openbiodiv = "http://openbiodiv.net/"
  )
 
-sample_id3 = fidentifier(
+teodor_georgiev = fidentifier(
  label = "Teodor Georgiev",
  prefixes = prefixes,
  def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
  simple_lookup)
 
-sample_id3
+lyubomir_penev = fidentifier(
+ label = "Lyubomir Penev",
+ prefixes = prefixes,
+ def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
+ simple_lookup)
+
+teodor_georgiev
 ```
 
-##### Manufacturing Identifier Constructors
+##### Identifier Construction
 
-`identifier_factory` returns a function with just one argument, `label`,
-that wraps around an `findentifier` call.
+`identifier_factory` returns a function with just one argument that wraps
+around an `findentifier` call.
 
 ```{r}
 openbiodiv_id = identifier_factory(simple_lookup,
@@ -226,6 +260,7 @@ openbiodiv_id = identifier_factory(simple_lookup,
  openbiodiv_id("Teodor Georgiev")
  openbiodiv_id("Pavel Stoev")
 
+ 
 ```
 
 
@@ -233,28 +268,24 @@ openbiodiv_id = identifier_factory(simple_lookup,
 
 
 
-### Literals Construction
 
-To initiliaze literals, you use the `literal` constructor; however, as the
-`literal` constructor has a *xsd type* field, you should use one of the
-already predefined `?xsd_types`.
 
-```{r}
-sample_literal = literal(
-  text_value = "John",
-  xsd_type = xsd_string
-)
 
-sample_literal
+### RDF Construction
+
+RDF object are unlike literals or identifiers, which are lists and,
+therefore immutable. RDF objects are R6 mutable objects. This mutability
+implies that one function can create a new RDF object and pass it around,
+while other functions grow it.
+
 ```
+seventies_show = openbiodiv_id(seventies_show_label$squote)
 
-```{r}
-sample_literal2 = literal(
-  text_value = "That Seventies Show",
-  lang = "en"
-)
+sample_paper = RDF$new()
+sample_paper$add_triple(
+  subject = seventies_show,
+  predicate = rdfs_label,
+  object = seventies_show_label)
 
-sample_literal2
+
 ```
-
-

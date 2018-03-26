@@ -76,3 +76,25 @@ DynVector = R6::R6Class(
     }
   )
 )
+
+
+
+
+
+
+
+
+#' @export
+RDF = R6::R6Class(
+  classname = "rdf",
+  inherit = DynVector,
+  public = list(
+    add_triple = function(subject, object, predicate)
+    {
+
+    }
+  )
+)
+
+
+

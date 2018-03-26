@@ -1,3 +1,5 @@
+
+
 #' Check whether supplied text argument has a meaningful value
 #'
 #' Meaningful value means:
@@ -33,3 +35,5 @@ has_meaningful_value = function (text_value)
   if (text_value == "") return  (FALSE)
   return(TRUE)
 }
+
+
