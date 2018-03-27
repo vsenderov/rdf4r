@@ -12,3 +12,14 @@ License: GNU Lesser General Public License
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+Collate: 
+    'db-access-high-level.R'
+    'db-access-low-level.R'
+    'utilities.R'
+    'identifier.R'
+    'literal.R'
+    'misc.R'
+    'prefix.R'
+    'rdf.R'
+    'semantic_elements.R'
+    

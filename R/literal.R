@@ -54,3 +54,18 @@ literal = function(text_value, xsd_type, lang)
 
   return(ll)
 }
+
+
+
+#' Is the object a literal?
+#'
+#' @param x object to check
+#'
+#' @return logical
+#'
+#' @export
+is.literal = function(x)
+{
+  if ("literal" %in% class(x)) TRUE
+  else FALSE
+}

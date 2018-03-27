@@ -17,7 +17,7 @@
 #'
 #' v = DynVector$new(3)
 #' v$add("test")
-#'
+#' @export
 
 DynVector = R6::R6Class(
   classname = "dynamic_vector",
@@ -72,6 +72,9 @@ DynVector = R6::R6Class(
 
     get = function()
     {
+      if (private$last_item == 0) {
+        return (list())
+      }
       private$dynamic_vector[1:private$last_item]
     }
   )
@@ -88,11 +91,60 @@ DynVector = R6::R6Class(
 RDF = R6::R6Class(
   classname = "rdf",
   inherit = DynVector,
-  public = list(
-    add_triple = function(subject, object, predicate)
+
+  private = list(
+    serialization = NULL,
+    write_couplet = function(subject)
     {
+      {
+        private$turtle$add(c(paste(subject, " ")))
+        # subset the triples with only this subject
+        triples = lapply(private$dynamic_vector, function (t) {
+          if (!is.null(t) && t[[1]]$qname == subject )
+            return (t)
+        })
+        triples = triples[!sapply(triples,is.null)]
+        # find the unique predicates
+
+      }
 
     }
+  ),
+
+  public = list(
+    initialize = function(size = 12)
+    {
+      super$initialize(size = size)
+      private$serialization = DynVector$new(size) # will store the serialization
+    },
+
+    add_triple = function(subject, predicate, object)
+    {
+      if (!is.identifier(subject) || !is.identifier(predicate) || !is.list(object)) {
+        return (FALSE);
+      }
+      else {
+        self$add(list(subject = subject, predicate = predicate, object = object))
+        return(TRUE)
+      }
+    },
+
+    serialize = function(context) {
+       private$turtle$add(c(paste(context, "{\n")))
+       # qnames of subjects and kick out NULL
+       subjects = sapply(
+         private$dynamic_vector, function (t) {
+          t[[1]]$qname
+         }
+        )
+       subjects = subjects[!sapply(subjects,is.null)]
+       for (s in unique(subjects)) {
+         private$write_couplet(subject = s)
+         private$turtle$add(". \n")
+       }
+       private$turtle$add(". }")
+       return (private$turtle)
+     }
   )
 )
 

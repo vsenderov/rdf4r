@@ -23,6 +23,5 @@ keep growing. An example with be a list of RDF triples.
 
 v = DynVector$new(3)
 v$add("test")
-
 }
 \keyword{datasets}

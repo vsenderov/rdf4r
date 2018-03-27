@@ -69,6 +69,7 @@ identifier = function(id, prefix = NA)
 #' @param prefixes Named \code{character}. Contains the prefixes.
 #' @param def_prefix The prefix to be used if lookup fails.
 #'
+#'
 #' @examples
 #'
 #' @export
@@ -113,6 +114,7 @@ fidentifier = function(label, ...,  FUN = list(...), prefixes, def_prefix )
 #' @return an identifier constructor function with one parameter
 #'   (\code{label})
 #'
+#' @export
 #' @examples
 #'
 #' openbiodiv_id = identifier_factory(simple_lookup,
@@ -123,8 +125,9 @@ fidentifier = function(label, ...,  FUN = list(...), prefixes, def_prefix )
 #' openbiodiv_id("Pavel Stoev")
 identifier_factory = function(...,  FUN = list(...), prefixes, def_prefix )
 {
-  function(label) {
-    fidentifier(label, FUN = FUN, prefixes = prefixes, def_prefix = def_prefix, ...)
+  function(llabel) {
+    stopifnot(is.literal(llabel))
+    fidentifier(label = llabel$squote, FUN = FUN, prefixes = prefixes, def_prefix = def_prefix, ...)
   }
 }
 
@@ -132,3 +135,18 @@ identifier_factory = function(...,  FUN = list(...), prefixes, def_prefix )
 
 
 
+
+
+
+#' Is the object an identifier?
+#'
+#' @param x object to check
+#'
+#' @return logical
+#'
+#' @export
+is.identifier = function(x)
+{
+  if ("identifier" %in% class(x)) TRUE
+  else FALSE
+}

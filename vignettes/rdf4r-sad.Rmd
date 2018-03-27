@@ -13,46 +13,60 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+
+
 RDF4R (`library(rdf4r)`) is an R package designed to enable the
 R-practicioner to handle Resource Description Framework (RDF) data. This
 is the programmer's documentation, i.e. the "specs and design sheet."
 
-*Table of contents*
+
+
+
+
+## Table of contents
 
 1. [Interfacing with a triple store](#interface-with-a-triple-store)
 2. [Generating RDF](#create-identifiers-and-literals)
 
-## Interface with a triple store
+
+
+
+
+
+## Triple Stores
 
 Connect, run queries on, and upload data to a triple store. Functions are separated into [low-level](#low-level-access) access functions that create connections, send raw data, read queries, and [high-level](#high-level-functions) functions that let you create specific functions for your project via factory functions.
 
-Here's an overview of the low-level access functions:
+Here's an overview of the *low-level access functions*:
 
 [basic_triplestore_access(server_url, user, password, repository)](#connecting-to-a-triplestore) : connecting to a triplestore with no or basic auth 
-
 [api_triplestore_access(server_url, api_key, api_secret, repository)](#connecting-to-a-triplestore) : connecting to a triplestore with a secret key 
-
 [get_protocol_version(access_options)](#connecting-to-a-triplestore) : protocol version at endpoint
-
 [list_repositories(access_options)](#working-with-repositories) : listing repositories at endpoint
-
-[submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) : executing a SPARQL query 
-
-[add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) : adding statements (e.g. Turtle) to a repo 
-
-submit_sparql_update(query, access_options): against the update interface
+[submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) : executing a SPARQL query [add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) : adding statements (e.g. Turtle) to a repo 
+[submit_sparql_update(query, access_options)](): against the update interface
 
 The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
 
-Here's an overview of the high-level functions:
+Here's an overview of the *high-level functions*:
 
 [query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions): returns a parameterized function executing the query on the endpoint
-
 [add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) : Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore 
 
-##### Connecting to a triplestore
+
+
+
+
+
+
+
+
+### Connecting to a triplestore
 
 In order to access the triplestore, you first need to create a `triplestore_access_options` objects (internally a list). This object can be created by `basic_triplestore_access` in the case of no authentication or basic HTTP authentication or by `api_triplestore_access` in the case of API secret key authentication. They will fail if the URL or the authentication is wrong. The repository information can be omitted at this stage (see [list_repositories](#working-with-repositories)). In case of success the `$status` field of the list will be set to the protocol version. The protocol version can also be queried directly with `get_protocol_version`.
+
+*Initializing some connections*:
 
 ```{r}
 # Access with basic HTTP authentication
@@ -68,41 +82,71 @@ graphdb2 = basic_triplestore_access(
 )
 
 # Access with API secret key authentication
-graphdb3 = api_triplestore_access(
-  server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", 
-  api_key = "s4bb1d43uc52",
-  api_secret = "d7h7eg4e263ghss"
-)
+#graphdb3 = api_triplestore_access(
+#  server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", 
+#  api_key = "s4bb1d43uc52",
+#  api_secret = "d7h7eg4e263ghss"
+#)
 
 # Querying the protocol version for a triplestore endpoint.
 get_protocol_version(graphdb)
+get_protocol_version(graphdb2)
 ```
 
-##### Working with repositories
+
+
+
+
+
+
+
+### Selecting a repository
 
 Use `list_repositories` to see what repositories the endpoint offers. The repo id's are given in the column `$id`. You can assign repo id's to the `$repository` field of the `triplestore_access_options` object.
 
+*Selecting a repository*:
 ```{r}
 list_repositories(graphdb)
-graphdb$repository = list_repositories(graphdb)$id[7]
+graphdb$repository = list_repositories(graphdb)$id[8]
 ```
 
-##### Submitting data and querying a repository
+
+
+
+
+
+
+
+
+### Submitting Turtle and executing SPARQL
 
 After you've [selected an endpoint](#connecting-to-a-triplestore) and [a repository](#working-with-repositories), you can add Turtle data to it via `add_data` and submit a SPARQL query via `submit_sparql`. By default results are returned as a dataframe (`as_dataframe = TRUE`). If you override this parameter to `submit_sparql` the results are returned as a raw response that must be parsed (i.e. as JSON).
 
 ```{r}
+# Adds Seralized data to store
+add_data("@prefix owl: <http://www.w3.org/2002/07/owl#>.\n
+          @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.\n
+          <http://openbiodiv.net/example1> a owl:Thing;\n
+                                    rdfs:label 'eg1'.",
+         access_options = graphdb)
+
 # Submit a SPARQL query
 query = "select * where {
-  ?s ?p ?o .
+  <http://openbiodiv.net/example1> ?p ?o .
   } limit 100"
 submit_sparql(query = query, access_options = graphdb)
-
-# Adds Seralized data to store
-add_data("@prefix owl: <http://www.w3.org/2002/07/owl#>. \n <http://openbiodiv.net/sample_id> a owl:Thing.", access_options = graphdb)
 ```
 
-##### Manufacturing READ and UPDATE query functions
+
+
+
+
+
+
+
+
+
+### Manufacturing query functions
 
 The function `query_factory`'s purpose is to manufacture a function executing a specified SPARQL query against a specified endpoint. The SPARQL query that the function takes as an input
 
@@ -113,7 +157,7 @@ p_query = "SELECT DISTINCT ?id WHERE {
 
 p_query2 = "SELECT * WHERE {
   ?s ?p ?o
-} LIMIT 100"
+} LIMIT 5"
 
 drop_query = "DROP GRAPH %subgraph"
 
@@ -121,8 +165,8 @@ simple_lookup = query_factory(p_query, access_options = graphdb)
 simplest_f = query_factory(p_query2, access_options = graphdb)
 drop_g = query_factory(drop_query, submit_function = submit_sparql_update, access_options = graphdb_secret)
 
-#simplest_f()
-simple_lookup("'Lyubomir Penev'")
+simplest_f()
+simple_lookup("'eg1'")
 #simple_lookup(label = "Pavel Stoev")
 #drop_g("<http://openbiodiv.net/123>")
 ```
@@ -133,14 +177,24 @@ Note that the queries are specified in a *parameterized format*. I.e. the string
 args(simple_lookup)
 ```
 
-##### Manufacturing add data functions
+
+
+
+
+
+### Manufacturing unctions that add data
 
 ```{r}
 prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")
-ttl = "openbiodiv:test_context {
-openbiodiv:test1 rdf:label 'sample lab'@en .
-}"
 add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = prefixes)
+
+
+ttl = "openbiodiv:examples {
+openbiodiv:example2 rdfs:label 'Second example'@en .
+}"
+add_data_to_graphdb(ttl)
+
+simple_lookup("'Second example'@en")
 ```
 
 
@@ -150,7 +204,7 @@ add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = pref
 
 
 
-## Generating RDF
+## RDF
 
 The basic building blocks of RDF are resource identifiers and atomic values
 (literals). Identifiers and literals are stored as lists with certain 
@@ -158,43 +212,48 @@ fields.
 
 [identifier(id, prefix = NA)](#identifier-consturction): constructs an 
   unique identifier from a local id and a prefix.
-
 [fidentifier(label, fun = list(...), prefixes, def_prefix, ...)](#identifier-consturction): construct identifier via a lookup function.
-
 [identifier_factory(fun = list(...), prefixes, def_prefix, ...)](#manufacturing-identifier-constructors)
-
 [literal(text_value, xsd_type, lang)](#literals) constructs a `literal` object
-
 [RDF$new()](#RDF) constructs an `RDF` object
 
 
-### Literals Construction
+
+
+
+
+
+
+
+### Literals
 
 To initiliaze literals, you use the `literal` constructor; however, as the
 `literal` constructor has a *xsd type* field, you should use one of the
 already predefined `?xsd_types`.
 
 ```{r}
-john_doe_label = literal(
-  text_value = "John Doe",
-  xsd_type = xsd_string
+king_lear_l = literal(
+  text_value = "King Lear",
+  #xsd_type = xsd_string
 )
 
-john_doe_label
-```
+king_lear_l
 
-```{r}
-seventies_show_label = literal(
-  text_value = "That Seventies Show",
+as_you_like_l = literal(
+  text_value = "As You Like It",
   lang = "en"
 )
 
-seventies_show_label
+as_you_like_l
 ```
 
 
 
-##### Identifier Consturction
+
+
+
+
+### Constructing identifiers
 
 An identifier in the semantic web is something that uniquely identifies a
 resource. Identifiers can be represented as URI's (e.g.
@@ -211,18 +270,18 @@ and returns the unique identifier it found via the lookup functions. If it
 fails, it calls `identifier` with a default prefix and a UUID.
 
 ```{r}
-sample_id = identifier(
+king_lear = identifier(
    id = "57d68e07-8315-4b30-9a8e-57226fd815d7",
    prefix = c(openbiodiv = "http://openbiodiv.net/")
 )
 
-sample_id
+king_lear
 ```
 
 ```{r}
-sample_id2 = identifier("http://www.example.com/1")
+as_you_like = identifier("http://openbiodiv.net/as_you_like")
 
-sample_id2
+as_you_like
 ```
 
 ```{r}
@@ -232,35 +291,39 @@ sample_id2
    openbiodiv = "http://openbiodiv.net/"
  )
 
-teodor_georgiev = fidentifier(
- label = "Teodor Georgiev",
+fidentifier(
+ label = king_lear_l$squote,
  prefixes = prefixes,
  def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
  simple_lookup)
 
-lyubomir_penev = fidentifier(
- label = "Lyubomir Penev",
+fidentifier(
+ label = as_you_like_l$squote,
  prefixes = prefixes,
  def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
  simple_lookup)
-
-teodor_georgiev
 ```
 
-##### Identifier Construction
+Note that at this point the lookup may fail (and create new identifiers
+every time) as we've not submitted our data.
 
-`identifier_factory` returns a function with just one argument that wraps
-around an `findentifier` call.
+
+
+
+
+
+### Manufactureing identifier constructors
+
+`identifier_factory` returns a function with just one argument 
+(that has to be of literal type) that wraps around an `findentifier` call.
 
 ```{r}
 openbiodiv_id = identifier_factory(simple_lookup,
    prefixes = prefixes,
    def_prefix = c(openbiodiv = "http://openbiodiv.net/"))
 
- openbiodiv_id("Teodor Georgiev")
- openbiodiv_id("Pavel Stoev")
-
- 
+ openbiodiv_id(king_lear_l)
+ openbiodiv_id(as_you_like_l)
 ```
 
 
@@ -271,21 +334,36 @@ openbiodiv_id = identifier_factory(simple_lookup,
 
 
 
-### RDF Construction
+
+
+
+
+
+
+### Triples
+
+An RDF object is a list of triples.
 
 RDF object are unlike literals or identifiers, which are lists and,
 therefore immutable. RDF objects are R6 mutable objects. This mutability
 implies that one function can create a new RDF object and pass it around,
 while other functions grow it.
 
-```
-seventies_show = openbiodiv_id(seventies_show_label$squote)
+```{r}
 
-sample_paper = RDF$new()
-sample_paper$add_triple(
-  subject = seventies_show,
+shakespeare_rdf = RDF$new()
+
+shakespeare_rdf$add_triple(
+  subject = king_lear,
   predicate = rdfs_label,
-  object = seventies_show_label)
+  object = king_lear_l
+)
 
+shakespeare_rdf$add_triple(
+  subject = as_you_like,
+  predicate = rdfs_label,
+  object = as_you_like_l
+)
 
+shakespeare_rdf$serialize("<http://example.gov/>")
 ```
