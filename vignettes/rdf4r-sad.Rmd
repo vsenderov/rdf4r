@@ -36,15 +36,22 @@ is the programmer's documentation, i.e. the "specs and design sheet."
 
 ## Interact with a Triple Store
 
-Connect, run queries on, and upload data to a triple store. Functions are separated into [low-level](#low-level-access) access functions that create connections, send raw data, read queries, and [high-level](#high-level-functions) functions that let you create specific functions for your project via factory functions.
+Connect, run queries on, and upload data to a triple store. Functions are separated into low-level access functions that create connections, send raw data, read queries, and high-level functions that let you create specific functions for your project via factory functions.
 
 Here's an overview of the *low-level access functions*:
 
 [basic_triplestore_access(server_url, user, password, repository)](#connecting-to-a-triplestore) : connecting to a triplestore with no or basic auth 
+
 [api_triplestore_access(server_url, api_key, api_secret, repository)](#connecting-to-a-triplestore) : connecting to a triplestore with a secret key 
+
 [get_protocol_version(access_options)](#connecting-to-a-triplestore) : protocol version at endpoint
+
 [list_repositories(access_options)](#working-with-repositories) : listing repositories at endpoint
-[submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) : executing a SPARQL query [add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) : adding statements (e.g. Turtle) to a repo 
+
+[submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) : executing a SPARQL query
+
+[add_data(rdf_data, access_options, data_format)](#submitting-data-and-querying-a-repository) : adding statements (e.g. Turtle) to a repo 
+
 [submit_sparql_update(query, access_options)](): against the update interface
 
 The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
