@@ -48,19 +48,19 @@ Here's an overview of the *low-level access functions*:
 
 [list_repositories(access_options)](#selecting-a-repository) : listing repositories at endpoint
 
-[submit_sparql(query, access_options)](#Submitting-Turtle-and-executing-SPARQL) : executing a SPARQL query
+[submit_sparql(query, access_options)](#submitting-turtle-and-executing-sparql) : executing a SPARQL query
 
-[add_data(rdf_data, access_options, data_format)](#Submitting-Turtle-and-executing-SPARQL) : adding statements (e.g. Turtle) to a repo 
+[add_data(rdf_data, access_options, data_format)](#submitting-turtle-and-executing-sparql) : adding statements (e.g. Turtle) to a repo 
 
-[submit_sparql_update(query, access_options)](#Manufacturing-query-functions): against the update interface
+[submit_sparql_update(query, access_options)](#manufacturing-query-functions): against the update interface
 
 The premise of the high-level functions is to allow the programmer to create their own functions (closures) hiding the database access, the SPARQL code, and other details, and only having parameters of interest.
 
 Here's an overview of the *high-level functions*:
 
-[query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-read-and-UPDATE-query functions): returns a parameterized function executing the query on the endpoint
+[query_factory(p_query, submit_function access_options, prefixes)](#manufacturing-query-functions): returns a parameterized function executing the query on the endpoint
 
-[add_data_factory(access_options, prefixes)](#Manufacturing-add-data-functions) : Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore 
+[add_data_factory(access_options, prefixes)](#manufacturing-query-functions) : Wraps `add_data` to simply submit a Turtle/Trig file to a triplestore 
 
 
 
