@@ -190,7 +190,7 @@ args(simple_lookup)
 
 
 
-### Manufacturing unctions that add data
+### Manufacturing functions that add data
 
 ```{r}
 prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")
