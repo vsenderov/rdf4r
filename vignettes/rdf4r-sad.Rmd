@@ -115,7 +115,7 @@ Use `list_repositories` to see what repositories the endpoint offers. The repo i
 *Selecting a repository*:
 ```{r}
 list_repositories(graphdb)
-graphdb$repository = list_repositories(graphdb)$id[8]
+graphdb$repository = list_repositories(graphdb)$id[7]
 ```
 
 
@@ -220,9 +220,13 @@ fields.
 
 [identifier(id, prefix = NA)](#identifier-consturction): constructs an 
   unique identifier from a local id and a prefix.
+  
 [fidentifier(label, fun = list(...), prefixes, def_prefix, ...)](#identifier-consturction): construct identifier via a lookup function.
+
 [identifier_factory(fun = list(...), prefixes, def_prefix, ...)](#manufacturing-identifier-constructors)
+
 [literal(text_value, xsd_type, lang)](#literals) constructs a `literal` object
+
 [RDF$new()](#RDF) constructs an `RDF` object
 
 
