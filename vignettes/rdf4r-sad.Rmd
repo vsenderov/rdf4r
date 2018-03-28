@@ -46,7 +46,7 @@ Here's an overview of the *low-level access functions*:
 
 [get_protocol_version(access_options)](#connecting-to-a-triplestore) : protocol version at endpoint
 
-[list_repositories(access_options)](#Selecting-a-repository) : listing repositories at endpoint
+[list_repositories(access_options)](#selecting-a-repository) : listing repositories at endpoint
 
 [submit_sparql(query, access_options)](#submitting-data-and-querying-a-repository) : executing a SPARQL query
 
