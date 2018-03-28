@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 RDF4R (`library(rdf4r)`) is an R package designed to enable the
-R-practicioner to handle Resource Description Framework (RDF) data. This
+R-practitioner to handle Resource Description Framework (RDF) data. This
 is the programmer's documentation, i.e. the "specs and design sheet."
 
 
@@ -26,15 +26,15 @@ is the programmer's documentation, i.e. the "specs and design sheet."
 
 ## Table of contents
 
-1. [Interfacing with a triple store](#interface-with-a-triple-store)
-2. [Generating RDF](#create-identifiers-and-literals)
+1. [Interact with a Triple Store](#interact-with-a-triple-store)
+2. [Generate RDF](#generate-rdf)
 
 
 
 
 
 
-## Triple Stores
+## Interact with a Triple Store
 
 Connect, run queries on, and upload data to a triple store. Functions are separated into [low-level](#low-level-access) access functions that create connections, send raw data, read queries, and [high-level](#high-level-functions) functions that let you create specific functions for your project via factory functions.
 
