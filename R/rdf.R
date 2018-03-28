@@ -93,29 +93,90 @@ RDF = R6::R6Class(
   inherit = DynVector,
 
   private = list(
-    serialization = NULL,
-    write_couplet = function(subject)
+    write_couplet = function(subject, triples)
     {
+      local_serialization = DynVector$new(10)
+      local_serialization$add(c(paste(subject, " ")))
+      # subset the triples with only this subject
+      triples = lapply(triples, function(t)
       {
-        private$turtle$add(c(paste(subject, " ")))
-        # subset the triples with only this subject
-        triples = lapply(private$dynamic_vector, function (t) {
-          if (!is.null(t) && t[[1]]$qname == subject )
-            return (t)
-        })
-        triples = triples[!sapply(triples,is.null)]
-        # find the unique predicates
+        if (t$subject$qname == subject) return(t)
+      })
+      triples = triples[!sapply(triples,is.null)]
+      # find the unique predicates
+      predicates = (sapply(triples, function (t)
+      {
+        t$predicate$qname
+      }))
 
+      next_object = FALSE
+      for (p in unique( predicates )) {
+        predicate_stanza = private$write_predicate_stanza(p, triples)
+        if (next_object == FALSE) {
+          local_serialization$add_list(predicate_stanza$get())
+          next_object = TRUE
+        }
+        else{
+          local_serialization$add(c(";\n\t"))
+          local_serialization$add_list(predicate_stanza$get())
+        }
       }
 
+      return(local_serialization)
+    },
+
+    write_predicate_stanza = function(predicate, triples)
+    {
+      local_serialization = DynVector$new(10)
+      local_serialization$add(c(predicate, " "))
+      # subset only for this predicate
+      triples = lapply(triples, function (t) {
+        if (t$predicate$qname == predicate) return (t)
+      })
+      triples = triples[!sapply(triples,is.null)]
+      # We fucking do care about uniqueness of objects!!!!!!!
+      objects = lapply(triples, function (t) {
+        t$object
+      })
+      next_object = FALSE
+      for (o in unique(objects) ) {
+        end_stanza = private$write_end_stanza( o, triples )
+        if (next_object == FALSE) {
+          local_serialization$add_list(end_stanza$get())
+          next_object = TRUE
+        }
+        else {
+          local_serialization$add(c(", "))
+          local_serialization$add_list(end_stanza$get())
+        }
+      }
+      return (local_serialization)
+    },
+
+    write_end_stanza = function (object, triples)
+    {
+      local_serialization = DynVector$new(10)
+      if (is.literal(object)) {
+        local_serialization$add(object$squote)
+      }
+      else if (is.identifier(object)) {
+        local_serialization$add(object$qname)
+      }
+      else {
+        # object is RDF with blank nodes --> recursion
+        local_serialization$add(c(" [ "))
+        local_serialization$add_list(private$write_couplet(subject = blank_node, triples = object))
+        local_serialization$add(c(" ] "))
+      }
+      return(local_serialization)
     }
+
   ),
 
   public = list(
     initialize = function(size = 12)
     {
       super$initialize(size = size)
-      private$serialization = DynVector$new(size) # will store the serialization
     },
 
     add_triple = function(subject, predicate, object)
@@ -129,24 +190,95 @@ RDF = R6::R6Class(
       }
     },
 
-    serialize = function(context) {
-       private$turtle$add(c(paste(context, "{\n")))
-       # qnames of subjects and kick out NULL
-       subjects = sapply(
-         private$dynamic_vector, function (t) {
-          t[[1]]$qname
-         }
-        )
-       subjects = subjects[!sapply(subjects,is.null)]
-       for (s in unique(subjects)) {
-         private$write_couplet(subject = s)
-         private$turtle$add(". \n")
-       }
-       private$turtle$add(". }")
-       return (private$turtle)
-     }
+    add_triples = function(ll)
+    {
+      if(!is.RDF(ll)) return (FALSE)
+      else {
+        self$add_list(ll$get())
+      }
+    },
+
+    serialize = function(context)
+    {
+      serialization = DynVector$new(length(private$dynamic_vector))
+      serialization$add(c(paste(context, "{\n")))
+      # qnames of subjects and kick out NULL
+      subjects = sapply(self$get(), function(t)
+      {
+        t$subject$qname
+      })
+
+      next_object = FALSE
+      for (s in unique(subjects)) {
+        couplet = private$write_couplet(subject = s, triples = self$get())
+        if (next_object == FALSE) {
+          serialization$add_list(couplet$get())
+          next_object = TRUE
+        }
+        else{
+          serialization$add(c(". \n"))
+          serialization$add_list(couplet$get())
+        }
+      }
+      serialization$add(". }")
+      return (unlist(serialization$get()))
+    }
   )
 )
 
 
 
+AnonRDF = R6::R6Class(
+  classname = "anonymous_rdf",
+  inherit = RDF,
+
+  public = list(
+
+    add_triple = function(predicate, object)
+    {
+      if (!is.identifier(predicate) || !is.list(object)) {
+        return (FALSE);
+      }
+      else {
+        super$add(list(subject = blank_node, predicate = predicate, object = object))
+        return(TRUE)
+      }
+    },
+
+    add_triples = function(ll)
+    {
+      if(!is.AnonRDF(ll)) return (FALSE)
+      else {
+        self$add_list(ll$get())
+      }
+    },
+
+    serialize = function(context)
+    {
+      # you cannot serialize anonymous RDF
+      return (FALSE)
+    }
+  )
+)
+
+
+#' Is the object an Triples List (RDF)?
+#'
+#' @param x object to check
+#'
+#' @return logical
+#'
+#' @export
+is.RDF = function(x)
+{
+  if ("rdf" %in% class(x)) TRUE
+  else FALSE
+}
+
+#' Is the object an Anonymous Triples List (RDF)?
+#' @export
+is.AnonRDF = function(x)
+{
+  if ("anonymous_rdf" %in% class(x)) TRUE
+  else FALSE
+}

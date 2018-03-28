@@ -232,19 +232,101 @@ To initiliaze literals, you use the `literal` constructor; however, as the
 already predefined `?xsd_types`.
 
 ```{r}
-king_lear_l = literal(
+lking_lear = literal(
   text_value = "King Lear",
-  #xsd_type = xsd_string
+  lang = "en"
 )
 
-king_lear_l
-
-as_you_like_l = literal(
+las_you_like_it = literal(
   text_value = "As You Like It",
   lang = "en"
 )
 
-as_you_like_l
+lhamlet = literal(
+  text_value = "Hamlet",
+  lang = "en"
+)
+
+lothello = literal(
+  text_value = "Othello",
+  lang = "en"
+)
+
+lsonnet_78 = literal(
+  text_value = "Sonnet 78",
+  lang = "en"
+)
+
+lastrophil = literal(
+  text_value = "Astrophil and Stella",
+  lang = "en"
+)
+
+ledward2 = literal(
+  text_value = "Edward II",
+  lang = "en"
+)
+
+lhero = literal(
+  text_value = "Hero and Leander",
+  lang = "en"
+)
+
+lgreensleeves = literal(
+  text_value = "Greensleeves",
+  lang = "en"
+)
+
+lshakespeare = literal(
+  text_value = "Shakespeare"
+)
+
+lsir_phillip_sidney = literal(
+  text_value = "Sir Phillip Sidney"
+)
+
+lchristopher_marlowe = literal(
+  text_value = "Christopher Marlowe"
+)
+
+lhenry_8_rex = literal(
+  text_value = "Henry VII Rex"
+)
+
+l1599 = literal(
+  text_value = "1599",
+  xsd_type = xsd_integer
+)
+
+l1603 = literal(
+  text_value = "1603",
+  xsd_type = xsd_integer
+)
+
+l1609 = literal(
+  text_value = "1609",
+  xsd_type = xsd_integer
+)
+
+l1590 = literal(
+  text_value = "1609",
+  xsd_type = xsd_integer
+)
+
+l1592 = literal(
+  text_value = "1592",
+  xsd_type = xsd_integer
+)
+
+l1593 = literal(
+  text_value = "1593",
+  xsd_type = xsd_integer
+)
+
+l1525 = literal(
+  text_value = "1593",
+  xsd_type = xsd_integer
+)
 ```
 
 
@@ -270,18 +352,35 @@ and returns the unique identifier it found via the lookup functions. If it
 fails, it calls `identifier` with a default prefix and a UUID.
 
 ```{r}
-king_lear = identifier(
-   id = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+play = identifier(
+   id = "Play",
    prefix = c(openbiodiv = "http://openbiodiv.net/")
 )
 
-king_lear
+poem = identifier(
+   id = "Poem",
+   prefix = c(openbiodiv = "http://openbiodiv.net/")
+)
+
+song = identifier(
+   id = "Song",
+   prefix = c(openbiodiv = "http://openbiodiv.net/")
+)
+
+wrote = identifier(
+   id = "wrote",
+   prefix = c(openbiodiv = "http://openbiodiv.net/")
+)
+
+has_year = identifier(
+  id = "has_year",
+  prefix = c(openbiodiv = "http://openbiodiv.net/")
+)
 ```
 
 ```{r}
-as_you_like = identifier("http://openbiodiv.net/as_you_like")
-
-as_you_like
+another_example = identifier("http://openbiodiv.net/as_you_like")
+another_example
 ```
 
 ```{r}
@@ -292,13 +391,13 @@ as_you_like
  )
 
 fidentifier(
- label = king_lear_l$squote,
+ label = lking_lear$squote,
  prefixes = prefixes,
  def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
  simple_lookup)
 
 fidentifier(
- label = as_you_like_l$squote,
+ label = las_you_like_it$squote,
  prefixes = prefixes,
  def_prefix = c(openbiodiv = "http://openbiodiv.net/"),
  simple_lookup)
@@ -322,8 +421,19 @@ openbiodiv_id = identifier_factory(simple_lookup,
    prefixes = prefixes,
    def_prefix = c(openbiodiv = "http://openbiodiv.net/"))
 
- openbiodiv_id(king_lear_l)
- openbiodiv_id(as_you_like_l)
+ idking_lear = openbiodiv_id(lking_lear)
+ idas_you_like_it = openbiodiv_id(las_you_like_it)
+ idhamlet = openbiodiv_id(lhamlet)
+ idothello = openbiodiv_id(lothello)
+ idsonnet78 = openbiodiv_id(lsonnet_78)
+ idastrophil = openbiodiv_id(lastrophil)
+ idedward2 = openbiodiv_id(ledward2)
+ idhero = openbiodiv_id(lhero)
+ idgreensleeves = openbiodiv_id(lgreensleeves)
+ idshakespeare = openbiodiv_id(lshakespeare)
+ idsir_phillip_sidney = openbiodiv_id(lsir_phillip_sidney)
+ idchristopher_marlowe = openbiodiv_id(lchristopher_marlowe)
+ idlhenry_8_rex = openbiodiv_id(lhenry_8_rex)
 ```
 
 
@@ -351,19 +461,31 @@ while other functions grow it.
 
 ```{r}
 
-shakespeare_rdf = RDF$new()
+classics_rdf = RDF$new()
 
-shakespeare_rdf$add_triple(
-  subject = king_lear,
-  predicate = rdfs_label,
-  object = king_lear_l
+classics_rdf$add_triple(
+  subject = idshakespeare, predicate = wrote, object = idking_lear
 )
 
-shakespeare_rdf$add_triple(
-  subject = as_you_like,
-  predicate = rdfs_label,
-  object = as_you_like_l
+classics_rdf$add_triple(
+  subject = idking_lear, predicate = rdfs_label, object = lking_lear
 )
 
-shakespeare_rdf$serialize("<http://example.gov/>")
+classics_rdf$add_triple(
+  subject = idshakespeare, predicate = wrote, object = idas_you_like_it
+)
+
+classics_rdf$add_triple(
+  subject = idas_you_like_it, predicate = rdfs_label, object = las_you_like_it
+)
+
+classics_rdf$add_triple(
+  subject = idas_you_like_it, predicate = has_year, object = l1599
+)
+
+classics_rdf$add_triple(
+  subject = idas_you_like_it, predicate = rdf_type, object = play
+)
+
+classics_rdf$serialize("<http://example.gov/>")
 ```
