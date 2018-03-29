@@ -88,8 +88,8 @@ DynVector = R6::R6Class(
 
 
 #' @export
-RDF = R6::R6Class(
-  classname = "rdf",
+ResourceDescriptionFramework = R6::R6Class(
+  classname = "ResourceDescriptionFramework",
   inherit = DynVector,
 
   private = list(
@@ -192,7 +192,7 @@ RDF = R6::R6Class(
 
     add_triples = function(ll)
     {
-      if(!is.RDF(ll)) return (FALSE)
+      if(!is.ResourceDescriptionFramework(ll)) return (FALSE)
       else {
         self$add_list(ll$get())
       }
@@ -230,7 +230,7 @@ RDF = R6::R6Class(
 
 AnonRDF = R6::R6Class(
   classname = "anonymous_rdf",
-  inherit = RDF,
+  inherit = ResourceDescriptionFramework,
 
   public = list(
 
@@ -269,9 +269,9 @@ AnonRDF = R6::R6Class(
 #' @return logical
 #'
 #' @export
-is.RDF = function(x)
+is.ResourceDescriptionFramework = function(x)
 {
-  if ("rdf" %in% class(x)) TRUE
+  if ("ResourceDescriptionFramework" %in% class(x)) TRUE
   else FALSE
 }
 
