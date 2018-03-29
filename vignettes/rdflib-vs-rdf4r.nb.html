@@ -500,11 +500,11 @@ classics_rdf$add_triple(subject = idas_you_like_it, predicate = rdf_type,   obje
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0KGNsYXNzaWNzX3JkZiRzZXJpYWxpemUoc3RyaXBfYW5nbGUoZWcsIHJldmVyc2UgPSBUUlVFKSkpXG5gYGAifQ== -->
 <pre class="r"><code>cat(classics_rdf$serialize(strip_angle(eg, reverse = TRUE)))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiPGh0dHA6Ly9yZGZsaWItcmRmNHIubmV0Lz4ge1xuIGFydDpjZDZkMjYxMi0zNzU1LTQyZTEtYjY4ZC0xMjhlMzg2ZjdlOTAgICBhcnQ6d3JvdGUgICBhcnQ6MGNkODBhODgtNTU1Zi00ODAyLTlmNWEtY2RmZDY2ODRlM2ZiICwgIGFydDpjYzY4MzhkNy0xMTQ1LTQ2YTEtYjA2Ny0wMGJhYzAxZGMxNzggLiBcbiBhcnQ6MGNkODBhODgtNTU1Zi00ODAyLTlmNWEtY2RmZDY2ODRlM2ZiICAgcmRmczpsYWJlbCAgIFwiS2luZyBMZWFyXCJAZW4gLiBcbiBhcnQ6Y2M2ODM4ZDctMTE0NS00NmExLWIwNjctMDBiYWMwMWRjMTc4ICAgcmRmczpsYWJlbCAgIFwiQXMgWW91IExpa2UgSXRcIkBlbiA7XG5cdCBhcnQ6aGFzX3llYXIgICBcIjE1OTlcIl5eeHNkOmludGVnZXIgO1xuXHQgcmRmOnR5cGUgICBhcnQ6UGxheSAuIH1cbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiPGh0dHA6Ly9yZGZsaWItcmRmNHIubmV0Lz4ge1xuIGV4YW1wbGU6OGU2ZTE5NzUtNjFmYS00MTA0LWIyMTEtMjJjZDkxZTIxOTAyICAgYXJ0Ondyb3RlICAgZXhhbXBsZTo2MGU0Y2M2ZC1hNTcwLTQ1MDctYjQxNi0zODE3MWM0MmMwOGIgLCAgZXhhbXBsZTplOTZkYmE2Yi01MTU1LTRjMTEtYmM1NS0yZjg4NzIyNGU4NzAgLiBcbiBleGFtcGxlOjYwZTRjYzZkLWE1NzAtNDUwNy1iNDE2LTM4MTcxYzQyYzA4YiAgIHJkZnM6bGFiZWwgICBcIktpbmcgTGVhclwiQGVuIC4gXG4gZXhhbXBsZTplOTZkYmE2Yi01MTU1LTRjMTEtYmM1NS0yZjg4NzIyNGU4NzAgICByZGZzOmxhYmVsICAgXCJBcyBZb3UgTGlrZSBJdFwiQGVuIDtcblx0IGFydDpoYXNfeWVhciAgIFwiMTU5OVwiXl54c2Q6aW50ZWdlciA7XG5cdCByZGY6dHlwZSAgIGFydDpQbGF5IC4gfVxuIn0= -->
 <pre><code>&lt;http://rdflib-rdf4r.net/&gt; {
- art:cd6d2612-3755-42e1-b68d-128e386f7e90   art:wrote   art:0cd80a88-555f-4802-9f5a-cdfd6684e3fb ,  art:cc6838d7-1145-46a1-b067-00bac01dc178 . 
- art:0cd80a88-555f-4802-9f5a-cdfd6684e3fb   rdfs:label   &quot;King Lear&quot;@en . 
- art:cc6838d7-1145-46a1-b067-00bac01dc178   rdfs:label   &quot;As You Like It&quot;@en ;
+ example:8e6e1975-61fa-4104-b211-22cd91e21902   art:wrote   example:60e4cc6d-a570-4507-b416-38171c42c08b ,  example:e96dba6b-5155-4c11-bc55-2f887224e870 . 
+ example:60e4cc6d-a570-4507-b416-38171c42c08b   rdfs:label   &quot;King Lear&quot;@en . 
+ example:e96dba6b-5155-4c11-bc55-2f887224e870   rdfs:label   &quot;As You Like It&quot;@en ;
      art:has_year   &quot;1599&quot;^^xsd:integer ;
      rdf:type   art:Play . }</code></pre>
 <!-- rnb-output-end -->
@@ -519,10 +519,10 @@ classics_rdf$add_triple(subject = idas_you_like_it, predicate = rdf_type,   obje
 <pre class="r"><code>cat(do.call(paste, c(as.list(readLines(out)), list(sep = &quot;\n&quot;))))
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQGJhc2UgPGxvY2FsaG9zdDovLz4gLlxuQHByZWZpeCByZGY6IDxodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjPiAuXG5AcHJlZml4IGh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSM6IDxyZGZzPiAuXG5cbjxodHRwOi8vcmRmbGliLXJkZjRyLm5ldC84ZTZlMTk3NS02MWZhLTQxMDQtYjIxMS0yMmNkOTFlMjE5MDI+XG4gICAgPGh0dHA6Ly9hcnQtb250b2xvZ3kubmV0L3dyb3RlPiA8aHR0cDovL3JkZmxpYi1yZGY0ci5uZXQvNjBlNGNjNmQtYTU3MC00NTA3LWI0MTYtMzgxNzFjNDJjMDhiPiwgPGh0dHA6Ly9yZGZsaWItcmRmNHIubmV0L2U5NmRiYTZiLTUxNTUtNGMxMS1iYzU1LTJmODg3MjI0ZTg3MD4gLlxuXG48aHR0cDovL3JkZmxpYi1yZGY0ci5uZXQvZTk2ZGJhNmItNTE1NS00YzExLWJjNTUtMmY4ODcyMjRlODcwPlxuICAgIDxodHRwOi8vYXJ0LW9udG9sb2d5Lm5ldC9oYXNfeWVhcj4gXCIxNTk5XCJeXjxodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSNzdHJpbmc+IDtcbiAgICBhIDxodHRwOi8vYXJ0LW9udG9sb2d5Lm5ldC9QbGF5PiA7XG4gICAgPGh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSNsYWJlbD4gXCJBcyBZb3UgTGlrZSBJdFwiXl48aHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEjc3RyaW5nPiAuXG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiQGJhc2UgPGxvY2FsaG9zdDovLz4gLlxuQHByZWZpeCByZGY6IDxodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjPiAuXG5AcHJlZml4IHJkZnM6IDxodHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjPiAuXG5cbjxodHRwOi8vcmRmbGliLXJkZjRyLm5ldC84ZTZlMTk3NS02MWZhLTQxMDQtYjIxMS0yMmNkOTFlMjE5MDI+XG4gICAgPGh0dHA6Ly9hcnQtb250b2xvZ3kubmV0L3dyb3RlPiA8aHR0cDovL3JkZmxpYi1yZGY0ci5uZXQvNjBlNGNjNmQtYTU3MC00NTA3LWI0MTYtMzgxNzFjNDJjMDhiPiwgPGh0dHA6Ly9yZGZsaWItcmRmNHIubmV0L2U5NmRiYTZiLTUxNTUtNGMxMS1iYzU1LTJmODg3MjI0ZTg3MD4gLlxuXG48aHR0cDovL3JkZmxpYi1yZGY0ci5uZXQvZTk2ZGJhNmItNTE1NS00YzExLWJjNTUtMmY4ODcyMjRlODcwPlxuICAgIDxodHRwOi8vYXJ0LW9udG9sb2d5Lm5ldC9oYXNfeWVhcj4gXCIxNTk5XCJeXjxodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSNzdHJpbmc+IDtcbiAgICBhIDxodHRwOi8vYXJ0LW9udG9sb2d5Lm5ldC9QbGF5PiA7XG4gICAgcmRmczpsYWJlbCBcIkFzIFlvdSBMaWtlIEl0XCJeXjxodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSNzdHJpbmc+IC5cbiJ9 -->
 <pre><code>@base &lt;localhost://&gt; .
 @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
-@prefix http://www.w3.org/2000/01/rdf-schema#: &lt;rdfs&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
 
 &lt;http://rdflib-rdf4r.net/8e6e1975-61fa-4104-b211-22cd91e21902&gt;
     &lt;http://art-ontology.net/wrote&gt; &lt;http://rdflib-rdf4r.net/60e4cc6d-a570-4507-b416-38171c42c08b&gt;, &lt;http://rdflib-rdf4r.net/e96dba6b-5155-4c11-bc55-2f887224e870&gt; .
@@ -530,7 +530,7 @@ classics_rdf$add_triple(subject = idas_you_like_it, predicate = rdf_type,   obje
 &lt;http://rdflib-rdf4r.net/e96dba6b-5155-4c11-bc55-2f887224e870&gt;
     &lt;http://art-ontology.net/has_year&gt; &quot;1599&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; ;
     a &lt;http://art-ontology.net/Play&gt; ;
-    &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; &quot;As You Like It&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .</code></pre>
+    rdfs:label &quot;As You Like It&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
