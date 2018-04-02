@@ -182,7 +182,7 @@ rdf_add(classics_rdflib,
         subject   = strip_angle(idas_you_like_it$uri),
         predicate = strip_angle(has_year$uri),
         object    = l1599$text_value,
-        datatype_uri = strip_angle(las_you_like_it$xsd_type$uri)
+        datatype_uri = strip_angle(l1599$xsd_type$uri)
       )
 
 rdf_add(classics_rdflib,
@@ -192,6 +192,6 @@ rdf_add(classics_rdflib,
 )
 
 out <- tempfile("file", fileext = ".rdf")
-rdf_serialize(classics_rdflib, doc = out, format = "turtle", namespace = prefixes, prefix = names(prefixes))
+rdf_serialize(classics_rdflib, doc = out, format = "turtle", namespace = prefixes)
 cat(do.call(paste, c(as.list(readLines(out)), list(sep = "\n"))))
 ```
