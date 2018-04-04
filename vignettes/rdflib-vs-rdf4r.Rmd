@@ -4,8 +4,8 @@ output: html_notebook
 ---
 
 ```{r}
-library(magrittr)
-library(rdflib)
+#library(magrittr)
+#library(rdflib)
 library(rdf4r)
 ```
 
@@ -141,6 +141,7 @@ Now to create the RDF representation:
 
 ```{r chunk, results = "hide"}
 classics_rdf = ResourceDescriptionFramework$new()
+classics_rdf$set_context(identifier(id = "<example>"))
 classics_rdf$add_triple(subject = idshakespeare,    predicate = wrote,      object = idking_lear)
 classics_rdf$add_triple(subject = idking_lear,      predicate = rdfs_label, object = lking_lear)
 classics_rdf$add_triple(subject = idshakespeare,    predicate = wrote,      object = idas_you_like_it)

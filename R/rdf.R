@@ -1,98 +1,143 @@
-#' An Amortized Vector
+#' Mutable RDF Object
 #'
-#' This object stores a preallocated list. You can add objects to the list
-#' with \code{add} and add lists to the list with \code{add_list}. When the
-#' objects to be added exceed the dimensions of the list, the list is re-
-#' allocated with double the size. This amortizes the runtime if you keep
-#' growing the dynamic vector.
+#' This is a mutable object. Adds, stores, and serializes RDF statements
+#' efficiently. Uses an amortized vector \code{DynVector} as a internal
+#' storage. You can inherit this class and override to create your own
+#' implementation and still retain syntax compatibility.
 #'
-#' Use this object if you need an object with a mutable states that you
-#' keep growing. An example with be a list of RDF triples.
+#' @param initialize(size=100) Constructor. Use this to create new objects
+#'   it has a default tuning parameter. You may want to set it to the average
+#'   number of triples per processed document.
 #'
-#' @method add x adds x
+#' @param set_context(context) Context needs to be an \code{identifier}
+#'   object that correspond to the named graph of where the statements
+#'   are stored.
+#'
+#' @param get_prefixes() Returns the prefixes as a deduplicated named
+#'   character vector of prefix to namespace mappings.
+#'
+#' @param add_triple(subject,predicate,object) \itemize{
+#'   \item{\code{subject} \code{identifier}}
+#'   \item{\code{predicate} \code{identifier}}
+#'   \item{\code{object} \code{identifier} or \code{literal} or \code{AnonymousRDF}.
+#'   Use the anonymous RDF if you hop through a blank node.}
+#' } Returns the success status (\code{logical})
+#'
+#' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
+#'   object. The information is merged.
+#'
+#' @param serialize() Returns the Turtle serialization.
+#'
+#' @param prefix_list \code{dynamic_vector} Prefixes of all the stored
+#'   identifiers as an uncollapsed list. For most cases you would want
+#'   to use \code{get_prefixes}.
+#'
+#' @param context \code{identifier}. The named graph of where the statements
+#'   are stored.
 #'
 #'
-#'
-#' @examples
-#'
-#' v = DynVector$new(3)
-#' v$add("test")
-#' @export
-
-DynVector = R6::R6Class(
-  classname = "dynamic_vector",
-
-  private = list(
-    dynamic_vector = NULL,
-    last_item = 0
-  ),
-
-  public = list(
-
-    initialize = function(size)
-    {
-      private$dynamic_vector = vector(mode = "list", length = size)
-    },
-
-    add = function(x)
-    {
-      current_item = private$last_item + 1
-      if (current_item > length(private$dynamic_vector)) {
-        # need to reallocate
-        b = DynVector$new(length(private$dynamic_vector)*2)
-        b$add_list(self$get())
-        b$add(x)
-        # is it possible to just replace self with b?
-        private$dynamic_vector = b$get()
-        private$last_item = length(private$dynamic_vector)
-      }
-      else {
-        private$dynamic_vector[[current_item]] = x
-        private$last_item = private$last_item + 1
-      }
-    },
-
-    add_list = function(l)
-    {
-      end_list = private$last_item + length(l)
-      if (end_list > length(private$dynamic_vector)) {
-        #reallocate
-        b = DynVector$new(length(private$dynamic_vector)*2)
-        b$add_list(self$get())
-        b$add_list(l)
-        # is it possible to just replace self with b?
-        private$dynamic_vector = b$get()
-        private$last_item = length(private$dynamic_vector)
-      }
-      else {
-        private$dynamic_vector[(private$last_item + 1):end_list] = l
-        private$last_item = end_list
-      }
-    },
-
-    get = function()
-    {
-      if (private$last_item == 0) {
-        return (list())
-      }
-      private$dynamic_vector[1:private$last_item]
-    }
-  )
-)
-
-
-
-
-
-
-
 
 #' @export
 ResourceDescriptionFramework = R6::R6Class(
   classname = "ResourceDescriptionFramework",
-  inherit = DynVector,
+
+  public = list(
+
+    prefix_list = NULL, # DynVector
+    context = NULL, # identifer
+
+    initialize = function(size = 100)
+    {
+      private$triples = DynVector$new(size = size)
+      self$prefix_list = DynVector$new(size = size)
+    },
+
+    set_context = function(context)
+    {
+      stopifnot(is.identifier(context))
+      self$context = context
+    },
+
+    get_prefixes = function()
+    {
+      un = unlist(self$prefix_list$get())
+      un[!duplicated(un)]
+    },
+
+    add_triple = function(subject, predicate, object)
+    {
+      if (!is.identifier(subject) || !is.identifier(predicate) || !is.list(object)) {
+        return (FALSE)
+      }
+      else {
+        self$prefix_list$add(subject$prefix)
+        self$prefix_list$add(predicate$prefix)
+        if (is.identifier(object)) {
+          self$prefix_list$add(object$prefix)
+        }
+        private$triples$add(list(subject = subject, predicate = predicate, object = object))
+        return(TRUE)
+      }
+    },
+
+    add_triples = function(ll)
+    {
+      if(!is.ResourceDescriptionFramework(ll)) return (FALSE)
+      else {
+        private$prefix_list$add_list(ll$prefixes$get())
+        private$triples$add_list(ll$get())
+      }
+    },
+
+    serialize = function()
+    {
+      if (is.null(self$context)) {
+        error("context not set. cannot serialize")
+      }
+      # TODO prepend the prefiexes
+      serialization = DynVector$new(10)
+
+      serialization$add(
+        prefix_serializer(self$get_prefixes(), lang = "Turtle")
+        )
+
+      serialization$add(c(paste(self$context$qname, "{\n")))
+      # qnames of subjects and kick out NULL
+      subjects = sapply(private$triples$get(), function(t)
+      {
+        t$subject$qname
+      })
+
+      next_object = FALSE
+      for (s in unique(subjects)) {
+        couplet = private$write_couplet(subject = s, triples = private$triples$get())
+        if (next_object == FALSE) {
+          serialization$add_list(couplet$get())
+          next_object = TRUE
+        }
+        else{
+          serialization$add(c(". \n"))
+          serialization$add_list(couplet$get())
+        }
+      }
+      serialization$add(". }")
+      return (unlist(serialization$get()))
+    }
+  ),
+
+
+
+
+
+
+
+
 
   private = list(
+
+    triples = NULL, # DynVector
+
+    # --- Serialization Functions ---
     write_couplet = function(subject, triples)
     {
       local_serialization = DynVector$new(10)
@@ -125,6 +170,15 @@ ResourceDescriptionFramework = R6::R6Class(
       return(local_serialization)
     },
 
+
+
+
+
+
+
+
+
+
     write_predicate_stanza = function(predicate, triples)
     {
       local_serialization = DynVector$new(10)
@@ -153,6 +207,15 @@ ResourceDescriptionFramework = R6::R6Class(
       return (local_serialization)
     },
 
+
+
+
+
+
+
+
+
+
     write_end_stanza = function (object, triples)
     {
       local_serialization = DynVector$new(10)
@@ -171,58 +234,6 @@ ResourceDescriptionFramework = R6::R6Class(
       return(local_serialization)
     }
 
-  ),
-
-  public = list(
-    initialize = function(size = 12)
-    {
-      super$initialize(size = size)
-    },
-
-    add_triple = function(subject, predicate, object)
-    {
-      if (!is.identifier(subject) || !is.identifier(predicate) || !is.list(object)) {
-        return (FALSE);
-      }
-      else {
-        self$add(list(subject = subject, predicate = predicate, object = object))
-        return(TRUE)
-      }
-    },
-
-    add_triples = function(ll)
-    {
-      if(!is.ResourceDescriptionFramework(ll)) return (FALSE)
-      else {
-        self$add_list(ll$get())
-      }
-    },
-
-    serialize = function(context)
-    {
-      serialization = DynVector$new(length(private$dynamic_vector))
-      serialization$add(c(paste(context, "{\n")))
-      # qnames of subjects and kick out NULL
-      subjects = sapply(self$get(), function(t)
-      {
-        t$subject$qname
-      })
-
-      next_object = FALSE
-      for (s in unique(subjects)) {
-        couplet = private$write_couplet(subject = s, triples = self$get())
-        if (next_object == FALSE) {
-          serialization$add_list(couplet$get())
-          next_object = TRUE
-        }
-        else{
-          serialization$add(c(". \n"))
-          serialization$add_list(couplet$get())
-        }
-      }
-      serialization$add(". }")
-      return (unlist(serialization$get()))
-    }
   )
 )
 

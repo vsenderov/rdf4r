@@ -21,5 +21,6 @@ Collate:
     'misc.R'
     'prefix.R'
     'rdf.R'
-    'semantic_elements.R'
+    'semantic-elements.R'
+    'dynamic-vector.R'
     
