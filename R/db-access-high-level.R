@@ -30,7 +30,7 @@
 #' drop_g = query_factory(drop_query, submit_function = submit_sparql_update, access_options = graphdb_secret)
 #'
 #' @export
-query_factory = function(p_query, submit_function = submit_sparql, access_options, prefixes = NA)
+query_factory = function(p_query, submit_function = submit_sparql, access_options, prefixes = NA, ...)
 {
   # add prefixes to beginning of the query and flatten
   p_query = c(prefix_serializer(prefixes), p_query, sep = "\n\n")
@@ -43,7 +43,7 @@ query_factory = function(p_query, submit_function = submit_sparql, access_option
   )))
 
   # define the returning function; signature will be added later
-  f = function(...){
+  f = function(){
     replacement = as.list(environment())[names(formals())] # takes argument list
     names(replacement) = pasteif('%', names(replacement), cond = length(replacement) > 0)
     # replace the parameters in the p_query with values of its arguments and
@@ -52,7 +52,7 @@ query_factory = function(p_query, submit_function = submit_sparql, access_option
       gsubfn::gsubfn(pattern = "%[[:alnum:]_]+",
                      replacement = replacement,
                      x = p_query),
-      access_options = access_options
+      access_options = access_options, ...
     )
   }
 
