@@ -20,6 +20,15 @@
 #' @export
 #'
 #' @examples
+#'
+#' lking_lear = literal(text_value = "King Lear", lang = "en")
+#' lshakespeare = literal(text_value = "Shakespeare")
+#' l1599 = literal(text_value = "1599", xsd_type = xsd_integer)
+#'
+#' lking_lear
+#' lshakespeare
+#' l1599
+#'
 #' # see vignette
 literal = function(text_value, xsd_type, lang)
 {
@@ -55,6 +64,17 @@ literal = function(text_value, xsd_type, lang)
   return(ll)
 }
 
+
+#' Outputs a literal in a default way
+#'
+#' @param ll \code{literal}
+#'
+#' @return \code{character} default representation.
+#' @export
+print.literal = function(ll)
+{
+  print(ll$squote)
+}
 
 
 #' Is the object a literal?

@@ -1,8 +1,15 @@
 #' Identifier Consturction
 #'
+#' This is the constructor function for objects of the \code{identifier}
+#' class.
+#'
 #' An identifier in the semantic web is something that uniquely identifies
 #' a resource. Identifiers can be represented as URI's (e.g.
 #' \code{<http://example.com/id>}), or as QNAME's (e.g. \code{example:id}).
+#'
+#' The Semantic Web model also allows for resources to be anonymous, via
+#' so-called blank nodes. We use identifiers whose QNAME prefix is an
+#' underscore (e.g. \code{_:alice}).
 #'
 #' RDF4R stores identifiers as lists with the following fields:
 #'
@@ -13,19 +20,40 @@
 #'   prefix = c(openbiodiv = "http://openbiodiv.net")
 #' )}
 #'
-#' @describeIn identifier constructs an unique identifier from a local id and a prefix.
-#'
-#' @param id \code{character} Local ID. E.g., a UUID. The part of
+#' @param id \code{character}. Local ID, for example a UUID. The part of
 #'   identifier after the prefix.
-#' @param prefix Named \code{character}. The first one will be used. If
-#'   there is no prefix supplied QNAME and URI will essentially be the
-#'   same.
+#'
+#' @param prefix named \code{character}. The name corresponds to the
+#'   prefix and the proper part to the namespace. Only the first element
+#'   of the vector will be honored. If you don't supply a prefix, the ID
+#'   will be treated as a URI and the QNAME and URI will be the same.
+#'
+#' @param blank optional \code{logical}. If you want to create a blank node.
 #'
 #' @return \code{identifier} object (a type of list).
 #'
+#' @examples
+#'
+#' a = identifier(
+#'   id = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+#'   prefix = c(openbiodiv = "http://openbiodiv.net")
+#' )
+#'
+#' b = identifier(
+#'   id = "alice",
+#'   blank = TRUE
+#' )
+#'
+#' a
+#' b
+#'
 #' @export
-identifier = function(id, prefix = NA)
+identifier = function(id, prefix = NA, blank = FALSE)
 {
+  if (blank == TRUE) {
+    prefix = c("_" = "_")
+  }
+
   if (length(id) != 1 || length(prefix) != 1|| length(names(prefix)) != 1) {
     warning("Arguments to `identifier` not of length 1 or missing names!
             Using first positions.")
@@ -47,9 +75,16 @@ identifier = function(id, prefix = NA)
 }
 
 
-
-
-
+#' Outputs an identifier in a default way
+#'
+#' @param id \code{identifier}
+#'
+#' @return \code{character} default representation.
+#' @export
+print.identifier = function(id)
+{
+  print(id$qname)
+}
 
 
 

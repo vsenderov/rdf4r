@@ -31,5 +31,14 @@ just spaces, invalid type, etc.), the returned object is the equivalent
 of NA
 }
 \examples{
+
+lking_lear = literal(text_value = "King Lear", lang = "en")
+lshakespeare = literal(text_value = "Shakespeare")
+l1599 = literal(text_value = "1599", xsd_type = xsd_integer)
+
+lking_lear
+lshakespeare
+l1599
+
 # see vignette
 }

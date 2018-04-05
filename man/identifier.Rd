@@ -5,17 +5,20 @@
 \alias{fidentifier}
 \title{Identifier Consturction}
 \usage{
-identifier(id, prefix = NA)
+identifier(id, prefix = NA, blank = FALSE)
 
 fidentifier(label, ..., FUN = list(...), prefixes, def_prefix)
 }
 \arguments{
-\item{id}{\code{character} Local ID. E.g., a UUID. The part of
+\item{id}{\code{character}. Local ID, for example a UUID. The part of
 identifier after the prefix.}
 
-\item{prefix}{Named \code{character}. The first one will be used. If
-there is no prefix supplied QNAME and URI will essentially be the
-same.}
+\item{prefix}{named \code{character}. The name corresponds to the
+prefix and the proper part to the namespace. Only the first element
+of the vector will be honored. If you don't supply a prefix, the ID
+will be treated as a URI and the QNAME and URI will be the same.}
+
+\item{blank}{optional \code{logical}. If you want to create a blank node.}
 
 \item{label}{\code{character(1)} Parameter that will be passed to the lookup
 functions. See \code{...} for details.}
@@ -37,11 +40,18 @@ functions. See \code{...} for details.}
 \code{identifier} object (a type of list).
 }
 \description{
+This is the constructor function for objects of the \code{identifier}
+class.
+}
+\details{
 An identifier in the semantic web is something that uniquely identifies
 a resource. Identifiers can be represented as URI's (e.g.
 \code{<http://example.com/id>}), or as QNAME's (e.g. \code{example:id}).
-}
-\details{
+
+The Semantic Web model also allows for resources to be anonymous, via
+so-called blank nodes. We use identifiers whose QNAME prefix is an
+underscore (e.g. \code{_:alice}).
+
 RDF4R stores identifiers as lists with the following fields:
 
 \code{sample_id = list(
@@ -53,11 +63,23 @@ RDF4R stores identifiers as lists with the following fields:
 }
 \section{Functions}{
 \itemize{
-\item \code{identifier}: constructs an unique identifier from a local id and a prefix.
-
 \item \code{fidentifier}: construct identifier via a lookup function.
 }}
 
 \examples{
+
+a = identifier(
+  id = "57d68e07-8315-4b30-9a8e-57226fd815d7",
+  prefix = c(openbiodiv = "http://openbiodiv.net")
+)
+
+b = identifier(
+  id = "alice",
+  blank = TRUE
+)
+
+a
+b
+
 
 }
