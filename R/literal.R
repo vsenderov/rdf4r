@@ -76,6 +76,18 @@ print.literal = function(ll)
   print(ll$squote)
 }
 
+#' Outputs a literal in a default way (not print!)
+#'
+#' @param ll \code{literal}
+#'
+#' @return \code{character} default representation.
+#' @export
+represent.literal = function(ll)
+{
+  ll$squote
+}
+
+
 
 #' Is the object a literal?
 #'

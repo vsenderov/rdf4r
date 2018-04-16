@@ -239,6 +239,26 @@ ResourceDescriptionFramework = R6::R6Class(
 
 
 
+
+#' Is the object an Triples List (RDF)?
+#'
+#' @param x object to check
+#'
+#' @return logical
+#'
+#' @export
+is.ResourceDescriptionFramework = function(x)
+{
+  if ("ResourceDescriptionFramework" %in% class(x)) TRUE
+  else FALSE
+}
+
+
+
+
+
+
+#' @export
 AnonRDF = R6::R6Class(
   classname = "anonymous_rdf",
   inherit = ResourceDescriptionFramework,
@@ -273,18 +293,6 @@ AnonRDF = R6::R6Class(
 )
 
 
-#' Is the object an Triples List (RDF)?
-#'
-#' @param x object to check
-#'
-#' @return logical
-#'
-#' @export
-is.ResourceDescriptionFramework = function(x)
-{
-  if ("ResourceDescriptionFramework" %in% class(x)) TRUE
-  else FALSE
-}
 
 #' Is the object an Anonymous Triples List (RDF)?
 #' @export
@@ -293,3 +301,34 @@ is.AnonRDF = function(x)
   if ("anonymous_rdf" %in% class(x)) TRUE
   else FALSE
 }
+
+
+
+
+
+
+
+#' RDF Class with \code{rdflib} backend
+#'
+#' @inheritParams ResourceDescriptionFramework
+#'
+#' @export
+RdfLibBackend = R6::R6Class(
+  inherit = ResourceDescriptionFramework,
+  classname = "RdfLibBackend",
+
+  public = list(
+
+    initialize = function(context)
+    {
+      super$initialize()
+      super$set_context(context)
+    },
+
+    nquad = function(subject, predicate, object, context)
+    {
+      paste(represent(subject), represent(predicate), represent(object), represent(self$context), ".")
+    }
+
+  )
+)

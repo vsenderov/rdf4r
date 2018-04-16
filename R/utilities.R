@@ -163,3 +163,15 @@ strip_angle = function (partial_uri , reverse = FALSE) {
     return(partial_uri)
   }
 }
+
+
+#' Defualt representation
+#'
+#' @param x
+#'
+#' @export
+represent = function(x)
+{
+    UseMethod("represent", x)
+}
+

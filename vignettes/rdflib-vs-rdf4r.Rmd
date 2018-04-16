@@ -4,8 +4,8 @@ output: html_notebook
 ---
 
 ```{r}
-#library(magrittr)
-#library(rdflib)
+library(magrittr)
+library(rdflib)
 library(rdf4r)
 ```
 
@@ -191,6 +191,16 @@ rdf_add(classics_rdflib,
         predicate = strip_angle(rdf_type$uri),
         object    = strip_angle(play$uri)
 )
+
+out <- tempfile("file", fileext = ".rdf")
+rdf_serialize(classics_rdflib, doc = out, format = "turtle", namespace = prefixes)
+cat(do.call(paste, c(as.list(readLines(out)), list(sep = "\n"))))
+```
+```{r}
+c2 = RdfLibBackend$new(identifier(id = "<http://openbiodiv.net/123>"))
+nq = c2$nquad(subject = idshakespeare,    predicate = wrote,      object = idking_lear)
+classics_rdflib <- rdf()
+rdf_parse(nq, format = "nquads", classics_rdflib)
 
 out <- tempfile("file", fileext = ".rdf")
 rdf_serialize(classics_rdflib, doc = out, format = "turtle", namespace = prefixes)

@@ -62,11 +62,15 @@ identifier = function(id, prefix = NA, blank = FALSE)
   id = strip_angle(id[1])
   prefix = strip_angle(prefix[1])
   uri = strip_angle(
-    pasteif(prefix[1], id, cond = !is.na(prefix), return_value = id),
+    pasteif(prefix[1], id, cond = (!is.na(prefix)), return_value = id),
     reverse = TRUE
   )
   qname =
     pasteif(names(prefix)[1], id, sep = ":", cond = !is.na(prefix), return_value = uri)
+
+  if (blank == TRUE) {
+    uri = qname
+  }
 
   ll = list(id = id, uri = uri, qname = qname, prefix = prefix)
   class(ll) = "identifier"
@@ -85,6 +89,20 @@ print.identifier = function(id)
 {
   print(id$qname)
 }
+
+
+#' Outputs an identifier in a default way (not print)
+#'
+#' @param id \code{identifier}
+#'
+#' @return \code{character} default representation.
+#' @export
+represent.identifier = function(id)
+{
+  id$uri
+}
+
+
 
 
 
