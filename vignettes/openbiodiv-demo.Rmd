@@ -60,5 +60,6 @@ genus_lookup("\"Drosophila\"")
 ## BONUS
 
 ```{r}
+library(taxize)
 gnr_resolve(names = "\"Drosophila\"", fields = "all")
 ```

@@ -1,3 +1,12 @@
+#' XSD Date Type
+#' @name xsd_date
+#' @export
+xsd_string = identifier(
+  id = "date",
+  prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
+)
+
+
 #' XSD String Type
 #' @name xsd_string
 #' @export

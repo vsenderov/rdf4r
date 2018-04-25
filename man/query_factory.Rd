@@ -5,7 +5,7 @@
 \title{Query Function Factory}
 \usage{
 query_factory(p_query, submit_function = submit_sparql, access_options,
-  prefixes = NA)
+  prefixes = NA, ...)
 }
 \arguments{
 \item{p_query}{character. A parameterized SPARQL query. Parameters are
