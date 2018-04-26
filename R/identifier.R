@@ -107,33 +107,29 @@ represent.identifier = function(id)
 
 
 
-#' @describeIn identifier construct identifier via a lookup function.
+
+#' Identifier Constructor via a List of Lookup Functions
 #'
-#' @param label \code{character(1)} Parameter that will be passed to the lookup
-#'   functions. See \code{...} for details.
-#' @param ... (lookup) functions that will be executed in order to
-#'   obtain the identifier. The functions should have one argument to which
-#'   \code{label} will be assigned during the call. As soon as we have a
-#'   unique match the function execution halts. If there is no match, a
-#'   URI with the base prefix (the one indiciated by "_base") and a UUID
-#'   will be generated.
-#'  @param FUN list of lookup functions to be tried. this can be omitted and
-#'   instead the functions specified as additional arguments.
-#' @param prefixes Named \code{character}. Contains the prefixes.
-#' @param def_prefix The prefix to be used if lookup fails.
-#'
-#'
-#' @examples
+#' @param fun \code{list} of lookup functions to be tried. The functions
+#' should have the same arguments (see \code{...} below). As soon as we have
+#' a unique match the function execution halts. If there is no match, a
+#' URI with the base prefix (the one indiciated by "_base") and a UUID
+#' will be generated.
+#' @param ... arguments to be passed to every lookup function.
+#' @param prefixes Named \code{character} that contains the prefixes to be
+#' used for identifier construction after each lookup.
+#' @param def_prefix named character of length 1. default prefix The prefix
+#' to be used if lookup fails.
 #'
 #' @export
-fidentifier = function(label, ...,  FUN = list(...), prefixes, def_prefix )
+fidentifier = function(fun, ...,  prefixes, def_prefix)
 {
   # sanity
   stopifnot(is.character(label) && length(label) == 1 && is.character(prefixes))
   fi = 1
   partial_uri = character()
   while (fi <= length(FUN)) {
-    partial_uri = FUN[[fi]](label)[[1]]
+    partial_uri = fun[[fi]](...)[[1]]
     if (length(partial_uri) == 1) {
       # found a unique solution
       # try to find if we have a prefix match

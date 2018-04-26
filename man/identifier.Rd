@@ -2,12 +2,9 @@
 % Please edit documentation in R/identifier.R
 \name{identifier}
 \alias{identifier}
-\alias{fidentifier}
 \title{Identifier Consturction}
 \usage{
 identifier(id, prefix = NA, blank = FALSE)
-
-fidentifier(label, ..., FUN = list(...), prefixes, def_prefix)
 }
 \arguments{
 \item{id}{\code{character}. Local ID, for example a UUID. The part of
@@ -19,22 +16,6 @@ of the vector will be honored. If you don't supply a prefix, the ID
 will be treated as a URI and the QNAME and URI will be the same.}
 
 \item{blank}{optional \code{logical}. If you want to create a blank node.}
-
-\item{label}{\code{character(1)} Parameter that will be passed to the lookup
-functions. See \code{...} for details.}
-
-\item{...}{(lookup) functions that will be executed in order to
- obtain the identifier. The functions should have one argument to which
- \code{label} will be assigned during the call. As soon as we have a
- unique match the function execution halts. If there is no match, a
- URI with the base prefix (the one indiciated by "_base") and a UUID
- will be generated.
-@param FUN list of lookup functions to be tried. this can be omitted and
- instead the functions specified as additional arguments.}
-
-\item{prefixes}{Named \code{character}. Contains the prefixes.}
-
-\item{def_prefix}{The prefix to be used if lookup fails.}
 }
 \value{
 \code{identifier} object (a type of list).
@@ -61,11 +42,6 @@ RDF4R stores identifiers as lists with the following fields:
   prefix = c(openbiodiv = "http://openbiodiv.net")
 )}
 }
-\section{Functions}{
-\itemize{
-\item \code{fidentifier}: construct identifier via a lookup function.
-}}
-
 \examples{
 
 a = identifier(
@@ -80,6 +56,5 @@ b = identifier(
 
 a
 b
-
 
 }

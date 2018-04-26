@@ -1,7 +1,7 @@
 #' XSD Date Type
 #' @name xsd_date
 #' @export
-xsd_string = identifier(
+xsd_date = identifier(
   id = "date",
   prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
 )
