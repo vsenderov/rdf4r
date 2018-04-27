@@ -66,7 +66,7 @@ ResourceDescriptionFramework = R6::R6Class(
 
     add_triple = function(subject, predicate, object)
     {
-      if (!is.identifier(subject) || !is.identifier(predicate) || !is.list(object)) {
+      if (!is.identifier(subject) || !is.identifier(predicate) || !(is.literal(object) || is.identifier(object) || is.ResourceDescriptionFramework(object))) {
         return (FALSE)
       }
       else {

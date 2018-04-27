@@ -4,20 +4,23 @@
 \alias{identifier_factory}
 \title{Manufacturing Identifier Constructors}
 \usage{
-identifier_factory(..., FUN = list(...), prefixes, def_prefix)
+identifier_factory(fun, prefixes, def_prefix)
 }
 \arguments{
-\item{...}{arguments to be passed to every lookup function.}
+\item{fun}{\code{list} of lookup functions to be tried. The functions
+should have the same arguments (see \code{...} below). As soon as we have
+a unique match the function execution halts. If there is no match, a
+URI with the base prefix (the one indiciated by "_base") and a UUID
+will be generated.}
 
 \item{prefixes}{Named \code{character} that contains the prefixes to be
 used for identifier construction after each lookup.}
 
-\item{def_prefix}{named character of length 1. default prefix The prefix
-to be used if lookup fails.}
+\item{def_prefix}{to use if all else fails}
 }
 \value{
-an identifier constructor function with one parameter
-  (\code{label})
+a function. The first argument of the function is a list. Each list
+  element is a list of arguments to be passed to the lookup function.
 }
 \description{
 Manufacturing Identifier Constructors

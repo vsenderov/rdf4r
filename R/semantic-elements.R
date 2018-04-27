@@ -6,7 +6,6 @@ xsd_date = identifier(
   prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
 )
 
-
 #' XSD String Type
 #' @name xsd_string
 #' @export
@@ -37,7 +36,6 @@ rdf_type = identifier(
   id = "type",
   prefix = c(rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 )
-
 
  blank_node = identifier(
    id = "_blank000"
