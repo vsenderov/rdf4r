@@ -189,13 +189,12 @@ list_repositories = function(access_options)
 #'@export
 submit_sparql = function(query, access_options, as_dataframe = TRUE)
 {
-  headers = if(as_dataframe) {
-    httr::add_headers(Accept = "text/csv, */*;q=0.5")
-  }
+
   result = httr::POST(
     url = paste0(access_options$server_url, "/repositories/", access_options$repository),
     access_options$authentication,
-    headers,
+    httr::add_headers(Accept = "text/csv, */*;q=0.5"),
+    httr::add_headers('Content-Type' = "application/x-www-form-urlencoded; charset=utf-8"),
     body = list(query = query),
     encode = "form"
   )

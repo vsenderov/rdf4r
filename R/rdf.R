@@ -84,9 +84,14 @@ ResourceDescriptionFramework = R6::R6Class(
     {
       if(!is.ResourceDescriptionFramework(ll)) return (FALSE)
       else {
-        private$prefix_list$add_list(ll$prefixes$get())
-        private$triples$add_list(ll$get())
+        self$prefix_list$add_list(ll$prefix_list$get())
+        private$triples$add_list(ll$get_list())
       }
+    },
+
+    get_list = function()
+    {
+      private$triples$get()
     },
 
     serialize = function()

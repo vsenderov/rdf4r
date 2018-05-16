@@ -115,7 +115,8 @@ represent.identifier = function(id)
 #' a unique match the function execution halts. If there is no match, a
 #' URI with the base prefix (the one indiciated by "_base") and a UUID
 #' will be generated.
-#' @param ... arguments to be passed to every lookup function.
+#' @param ... arguments to be passed to every lookup function. The arguments
+#'   must be "representable", i.e. either a literal or a identifier
 #' @param prefixes Named \code{character} that contains the prefixes to be
 #' used for identifier construction after each lookup.
 #'
@@ -127,7 +128,7 @@ fidentifier = function(fun, ...,  prefixes)
   fi = 1
   partial_uri = character()
   while (fi <= length(fun)) {
-    partial_uri = fun[[fi]](...)[[1]]
+    partial_uri = do.call(fun[[fi]], lapply(list(...), represent))[[1]]
     if (length(partial_uri) == 1) {
       # found a unique solution
       # try to find if we have a prefix match
@@ -160,8 +161,10 @@ fidentifier = function(fun, ...,  prefixes)
 #'
 #' @param def_prefix to use if all else fails
 #'
-#' @return a function. The first argument of the function is a list. Each list
-#'   element is a list of arguments to be passed to the lookup function.
+#' @return an indetifier constructor function.
+#'   The identifier constructor has two arguments. "label" is a list
+#'   of argument lists to 'fidentifier', "generate" is a boolean of
+#'   whether to generate
 #'
 #' @export
 #' @examples
@@ -178,18 +181,28 @@ identifier_factory = function(fun, prefixes, def_prefix)
   {
     stopifnot(is.list(label))
     if(length(label) == 0) {
-      ii = NA
+      return(NA)
     } else {
       for (l in label) {
-        ii = do.call(fidentifier, list(fun = fun, l, prefixes = prefixes))
+        # is l an argument list or a single argument?
+        if ((is.literal(l) || is.identifier(l))) {
+          ii = do.call(fidentifier, list(fun = fun, l, prefixes = prefixes))
+        }
+        else {
+          # l is an argument list, we just need to modify it
+          l$fun = fun
+          l$prefixes = prefixes
+          ii = do.call(fidentifier, l)
+        }
         if (!is.na(ii)) {
           return(ii)
         }
       }
     }
     if (is.na(ii) && generate == TRUE) {
-      identifier(id = uuid::UUIDgenerate(), prefix = def_prefix)
+      return(identifier(id = uuid::UUIDgenerate(), prefix = def_prefix))
     }
+    return(NA)
   }
 }
 

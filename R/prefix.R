@@ -62,7 +62,7 @@ prefix_serializer = function(prefixes, reqd = names(prefixes), lang = "SPARQL")
   serialization = sapply(prefixes, function (p)
   {
     i = which(prefixes == p)
-    line_function(names(prefixes)[i], p)
+    line_function(names(prefixes)[i], paste0("<", p, ">"))
   })
 
   return(serialization)

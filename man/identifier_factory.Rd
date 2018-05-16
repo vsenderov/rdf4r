@@ -19,8 +19,10 @@ used for identifier construction after each lookup.}
 \item{def_prefix}{to use if all else fails}
 }
 \value{
-a function. The first argument of the function is a list. Each list
-  element is a list of arguments to be passed to the lookup function.
+an indetifier constructor function.
+  The identifier constructor has two arguments. "label" is a list
+  of argument lists to 'fidentifier', "generate" is a boolean of
+  whether to generate
 }
 \description{
 Manufacturing Identifier Constructors

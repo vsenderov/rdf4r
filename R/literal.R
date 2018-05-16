@@ -33,7 +33,7 @@
 literal = function(text_value, xsd_type, lang)
 {
   if (!has_meaningful_value(text_value)) {
-    text_value = as.character(NA)
+    return(NULL)
   }
 
   text_value = text_value[1]
@@ -42,7 +42,11 @@ literal = function(text_value, xsd_type, lang)
     xsd_type = xsd_string
     postfix = paste0("@", lang)
   }
-  else if (!missing(xsd_type) && !is.null(xsd_type)) {
+  else if (
+    !missing(xsd_type) &&
+    !is.null(xsd_type) &&
+    !(xsd_type != "<http://www.w3.org/2001/XMLSchema#string>")
+    ) {
     lang = ""
     postfix = paste0("^^", xsd_type$qname)
   }
