@@ -60,6 +60,7 @@ identifier = function(id, prefix = NA, blank = FALSE)
   }
 
   id = strip_angle(id[1])
+  if (!has_meaningful_value(id)) {return (NULL)}
   prefix = strip_angle(prefix[1])
   uri = strip_angle(
     pasteif(prefix[1], id, cond = (!is.na(prefix)), return_value = id),

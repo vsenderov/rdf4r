@@ -82,7 +82,9 @@ ResourceDescriptionFramework = R6::R6Class(
 
     add_triples = function(ll)
     {
+
       if(!is.ResourceDescriptionFramework(ll)) return (FALSE)
+      if(length(ll$get_list()) == 0) return (FALSE)
       else {
         self$prefix_list$add_list(ll$prefix_list$get())
         private$triples$add_list(ll$get_list())
@@ -98,6 +100,9 @@ ResourceDescriptionFramework = R6::R6Class(
     {
       if (is.null(self$context)) {
         error("context not set. cannot serialize")
+      }
+      if (length(self$get_list()) == 0) {
+        return("")
       }
       # TODO prepend the prefiexes
       serialization = DynVector$new(10)

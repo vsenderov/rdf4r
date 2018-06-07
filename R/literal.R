@@ -36,7 +36,7 @@ literal = function(text_value, xsd_type, lang)
     return(NULL)
   }
 
-  text_value = text_value[1]
+  text_value = gsub("\\s+"," ", trimws(text_value[1]))
 
   if (!missing(lang) && has_meaningful_value(lang)) {
     xsd_type = xsd_string
@@ -45,7 +45,7 @@ literal = function(text_value, xsd_type, lang)
   else if (
     !missing(xsd_type) &&
     !is.null(xsd_type) &&
-    !(xsd_type != "<http://www.w3.org/2001/XMLSchema#string>")
+    !(xsd_type$uri == "<http://www.w3.org/2001/XMLSchema#string>")
     ) {
     lang = ""
     postfix = paste0("^^", xsd_type$qname)
