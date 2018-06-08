@@ -138,7 +138,7 @@ list_repositories = function(access_options)
   #title = xml2::xml_text(xml2::xml_find_all(result, xpath = "//d1:results/d1:result/d1:binding[@name = 'title']/d1:literal"))
   readable = xml2::xml_text(xml2::xml_find_all(result, xpath = "//d1:results/d1:result/d1:binding[@name = 'readable']/d1:literal"))
   writable = xml2::xml_text(xml2::xml_find_all(result, xpath = "//d1:results/d1:result/d1:binding[@name = 'writable']/d1:literal"))
-  data.frame(uri, id, title, readable, writable, stringsAsFactors = FALSE)
+  data.frame(uri, id,  readable, writable, stringsAsFactors = FALSE)
 }
 
 
