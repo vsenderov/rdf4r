@@ -56,6 +56,16 @@ RDF4R uses an amortized vector data structure to store RDF triples as mutable [R
 
 RDF4R has some basic resource identifiers for widely used classes and predicates predifined (e.g. for `rdf:type`, `rdfs:label`, etc.).
 
+## Usage
+
+The usage of the package is discussed in detail in the vignette "Using RDF4R". After installing the package, you can open the vignette from R with:
+
+```
+vignette("using-rdf4r")
+```
+
+Here, we give some examples.
+
 ## Discussion
 
 ### Related Packages
