@@ -12,15 +12,17 @@ RDF4R depends on the following packages (list may change in future releases):
 - httr
 - xml2
 - R6
+- devtools (needed to install from GitHub)
 
 Please, first install these packages with `install.packages`. Pay attention to error messages during their installation as additional OS-level components may need to be installed.
 
 Then, install RDF4R from GitHub with the following command:
 
 ```
-install_github("vsenderov/rdf4r")
+devtools::install_github("vsenderov/rdf4r")
 ```
 
+The package will be submited and perhaps available for installation through CRAN and/or [rOpenSci](https://ropensci.org/).
 
 ## Specification
 
