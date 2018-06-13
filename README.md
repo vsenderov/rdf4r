@@ -4,6 +4,24 @@
 
 RDF4R is an R package for working with [Resource Description Framework (RDF)](https://www.w3.org/RDF/) data. It was developed as part of the [OpenBiodiv](http://openbiodiv.net) project but is completely free of any OpenBiodiv-specific code and can be used for generic purposes requiring tools to work with RDF data in the [R programming environment](https://www.r-project.org/).
 
+## Installation
+
+RDF4R depends on the following packages (list may change in future releases):
+
+- gsubfn
+- httr
+- xml2
+- R6
+
+Please, first install these packages with `install.packages`. Pay attention to error messages during their installation as additional OS-level components may need to be installed.
+
+Then, install RDF4R from GitHub with the following command:
+
+```
+install_github("vsenderov/rdf4r")
+```
+
+
 ## Specification
 
 RDF4R supports has the following features
@@ -31,6 +49,10 @@ Prefixes are managed automatically during serialization by being extracted from 
 ### Creation and serialization of RDF
 
 RDF4R uses an amortized vector data structure to store RDF triples as mutable [R6](https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html) objects. Blank nodes are partially supported: a triple may contain an RDF object (a list of triples with the same subject) as its object. In this case, the parent RDF is serialed as turtle by using the bracket syntax. Current serialization only supports Turtle and only supports adding new triples.
+
+### A basic vocabulary of semantic elements
+
+RDF4R has some basic resource identifiers for widely used classes and predicates predifined (e.g. for `rdf:type`, `rdfs:label`, etc.).
 
 ## Discussion
 
