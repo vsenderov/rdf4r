@@ -58,7 +58,7 @@ RDF4R has some basic resource identifiers for widely used classes and predicates
 
 ## Usage
 
-The usage of the package is discussed in detail in the vignette "Using RDF4R". After installing the package, you can open the vignette from R with:
+The usage of the package is discussed in detail in the vignette ["Using RDF4R"](vignettes/using-rdf4r.Rmd). After installing the package, you can open the vignette from R with:
 
 ```
 vignette("using-rdf4r")
