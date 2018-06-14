@@ -9,3 +9,6 @@ is.AnonRDF(x)
 \description{
 Is the object an Anonymous Triples List (RDF)?
 }
+\seealso{
+Other anonymous rdf: \code{\link{AnonRDF}}
+}

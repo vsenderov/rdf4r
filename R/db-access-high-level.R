@@ -1,4 +1,4 @@
-#' Query Function Factory
+#' Convert a parameterized SPARQL query to an R function
 #'
 #' The function `query_factory`'s purpose is to manufacture a function
 #' executing a specified SPARQL query against a specified endpoint.
@@ -72,7 +72,9 @@ query_factory = function(p_query, submit_function = submit_sparql, access_option
 
 
 
-#' Add Data Function Factory
+#' Create a function that submits serialized RDF to a specific endpoint
+#'
+#' TODO : use the serializer from the RDF object and no need for the prefix argument
 #'
 #' Wraps \code{add_data} to simply submit a Turtle/Trig file to a triplestore
 #'
@@ -81,6 +83,8 @@ query_factory = function(p_query, submit_function = submit_sparql, access_option
 #'
 #' @return a function with one parameter, \code{rdf_data}
 #' @export
+#'
+#'
 #'
 #' @examples
 #' prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")

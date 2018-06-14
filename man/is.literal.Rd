@@ -15,3 +15,8 @@ logical
 \description{
 Is the object a literal?
 }
+\seealso{
+Other literal functions: \code{\link{literal}},
+  \code{\link{print.literal}},
+  \code{\link{represent.literal}}
+}

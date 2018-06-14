@@ -11,4 +11,9 @@ xsd_integer
 \description{
 XSD Integer Type
 }
+\seealso{
+Other semantic elements: \code{\link{blank_node}},
+  \code{\link{rdf_type}}, \code{\link{semantic_elements}},
+  \code{\link{xsd_date}}, \code{\link{xsd_string}}
+}
 \keyword{datasets}

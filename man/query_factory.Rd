@@ -2,7 +2,7 @@
 % Please edit documentation in R/db-access-high-level.R
 \name{query_factory}
 \alias{query_factory}
-\title{Query Function Factory}
+\title{Convert a parameterized SPARQL query to an R function}
 \usage{
 query_factory(p_query, submit_function = submit_sparql, access_options,
   prefixes = NA, ...)

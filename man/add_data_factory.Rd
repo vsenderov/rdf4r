@@ -2,7 +2,7 @@
 % Please edit documentation in R/db-access-high-level.R
 \name{add_data_factory}
 \alias{add_data_factory}
-\title{Add Data Function Factory}
+\title{Create a function that submits serialized RDF to a specific endpoint}
 \usage{
 add_data_factory(access_options, prefixes)
 }

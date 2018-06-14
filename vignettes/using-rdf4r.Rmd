@@ -1,58 +1,234 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Using RDF4R"
+author: "Viktor Senderov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Using RDF4R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+This vignette explains how to use the package RDF4R by means of examples. If you would like an overview of all package facilities grouped by category, please consult the package documentation available via `?rdf4r`. In order to fully utilize the package capabilities, one needs to have access to an RDF graph database. We have made available a public endpoint to allow the users of the package to experiment. Since write access is enabled, please be considerate and don't issue catastrophic commands.
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+## Connect to triple store
 
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+library(rdf4r)
+graphdb = rdf4r::basic_triplestore_access(
+  server_url = "http://graph.openbiodiv.net:7777",
+  user = "dbuser",
+  password = "public-access",
+  repository = "obkms_i6"
+)
+graphdb
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+The above has created an object that stores the information needed to access the database. You need to supply it to the access functions. All examples in this vignette use this access.
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+## Example 1: Create an R function that does a simple lookup via SPARQL
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+The purpose of this example is to convert a simple SPARQL lookup query to an R function. The publicly accessible endpoint happens to store some biological information but for the purposes of this example knowledge of biological taxonomy or ontology of the store is irrelevant. You only need to know that the database stores information about biological papers that contain references to biological names. We are looking for papers that mention the biological name _Drosophila_, which a genus of flies. The important thing to note here is the **parametrization of the SPARQL query**.
 
-## More Examples
+```{r}
+p_query = 
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dwc: <http://rs.tdwg.org/dwc/terms/>
+PREFIX openbiodiv: <http://openbiodiv.net/>
+PREFIX dwciri: <http://rs.tdwg.org/dwc/iri/>
+PREFIX pkm: <http://proton.semanticweb.org/protonkm#>
+PREFIX fabio: <http://purl.org/spar/fabio/>
+PREFIX po: <http://www.essepuntato.it/2008/12/pattern#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+SELECT (SAMPLE(?name) AS ?name) (SAMPLE(?genus) AS ?genus) (SAMPLE(?title) AS ?title)
 
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+WHERE
+{
+  ?name rdfs:label %label ;
+        rdf:type openbiodiv:LatinName ;
+  		dwc:genus ?genus.
+
+  ?article rdf:type fabio:JournalArticle ;
+  		   po:contains/pkm:mentions ?name ;
+           dc:title ?title .
+
+} GROUP BY ?article 
+"
 ```
 
-Also a quote using `>`:
+Note that this almost valid SPARQL with one exception - the `%label` string on the first line of the WHERE clause. You parameterize SPARQL queries by specifying a `%` in front of the tokens that you would like to become the arguments of your R function. Let's now construct a function that looks up a genus (a biological rank) by a string that you supply.
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r}
+genus_lookup = rdf4r::query_factory(p_query = p_query, access_options = graphdb)
+```
+
+`query_factory` takes two arguments: the parameterized query and an object with access options for an endpoint and returns an R function whose arguments are the parameters of the parameterized SPARQL query and which executes the SPARQL query against the endpoint specified in `access_options` and returns formatted results as a dataframe.
+
+```{r}
+genus_lookup("\"Drosophila\"")
+```
+
+Note that we have enclosed the string "\"Drosophila\"" in escaped quotes as only that would make the replacement of the parameter in the parameterized SPARQL query a valid SPARQL. Had the parameter been a resource identiefier, we would not have needed the quotes. In a later example, we will show how we can get around this hassle by utilzing the built-in classes for literals and resource identifiers.
+
+**Excercise:** Try experimenting with `genus_lookup` by looking up information about some other genera (_Eupolybothrus_ - a millepede, _Myotis_ - a bat).
+
+## Example 2: Create RDF based on classical works
+
+We want to model to model Table 3-1 from [Semantic Web for the Working Ontologist](http://www.kevenlw.name/downloads/Ontologist.pdf). To make things more interesting we will use the prefix <http://rdflib-rdf4r.net/> for all instances that we create and a dummy ontology (not actually defined) with the prefix <http://art-ontology.net/> to reify the example classes and properties.
+
+**Literals**
+
+```{r}
+lking_lear      = literal(text_value = "King Lear",        lang = "en")
+las_you_like_it = literal(text_value = "As You Like It",   lang = "en")
+lhamlet         = literal(text_value = "Hamlet",           lang = "en")
+lothello        = literal(text_value = "Othello",          lang = "en")
+lsonnet_78      = literal(text_value = "Sonnet 78",        lang = "en")
+lastrophil      = literal(text_value = "Astrophil and Stella",
+                                                           lang = "en")
+ledward2        = literal(text_value = "Edward II",        lang = "en")
+lhero           = literal(text_value = "Hero and Leander", lang = "en")
+lgreensleeves   = literal(text_value = "Greensleeves",     lang = "en")
+
+lshakespeare         = literal(text_value = "Shakespeare")
+lsir_phillip_sidney  = literal(text_value = "Sir Phillip Sidney")
+lchristopher_marlowe = literal(text_value = "Christopher Marlowe")
+lhenry_8_rex         = literal(text_value = "Henry VII Rex")
+
+l1599 = literal(text_value = "1599", xsd_type = xsd_integer)
+l1603 = literal(text_value = "1603", xsd_type = xsd_integer)
+l1609 = literal(text_value = "1609", xsd_type = xsd_integer)
+l1590 = literal(text_value = "1590", xsd_type = xsd_integer)
+l1592 = literal(text_value = "1592", xsd_type = xsd_integer)
+l1593 = literal(text_value = "1593", xsd_type = xsd_integer)
+l1525 = literal(text_value = "1525", xsd_type = xsd_integer)
+```
+
+Here, we repeatedly called the `literal` function, which is a constructor of objects of class `literal`, with different arguments. `literal` can construct phrases in English (or any other language) with the `lang` argument. It can construct pure strings (by omitting the lang argument) of type `xsd:string`. It can also construct literals of a number of defined semantic types by using the `xsd_type` argument. In order to see which types are available execute `?semantic_elements`. Note that the XSD types are implemented as resource identifiers (class `identifier`), which allows you to implement additional types that are not provided. Behind the scenes the URL of the resource identifier will be appended to the representation (`?represent`) of the literal as text through pasting of "^^" and then the URL.
+
+In other words, for the work titles, we use the argument `lang="en"` telling the literal constructor that the literal value is in English, whereas for the names, we omit this argument. As per semantic web conventions, when the argument is omitted, and no type is explicitly specified, it is assumed that the literal is a string (`xsd:string`). For the literals containing years, on the other hand, we explicitly specify an integer type; otherwise they would have parsed as strings as well. All of this can be seen by inspecting the individual lists (objects of class `literal` are lists):
+
+```{r}
+lhamlet
+str(lhamlet)
+represent(lhamlet)
+lshakespeare
+str(lshakespeare)
+represent(lshakespeare)
+l1603
+str(l1603)
+represent(l1603)
+```
+
+**Identifiers**
+
+We need resource identifiers for our resources, i.e. playwrights, works of art, as well for the classes of which those resources are instances of. To make things simpler, we use a fictional ontology with the prefix <http://art-ontology.net/>. Let's hardcode identifiers for the ontology classes:
+
+```{r}
+prefixes = c(
+   rdfs = "http://www.w3.org/2000/01/rdf-schema#",
+   rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+   example = "http://rdflib-rdf4r.net/",
+   art = "http://art-ontology.net/"
+ )
+eg = prefixes[3]
+art = prefixes[4]
+artist = identifier(id = "Artist", prefix = art)
+play = identifier(id = "Play", prefix = art)
+poem = identifier(id = "Poem", prefix = art)
+song = identifier(id = "Song", prefix = art)
+wrote = identifier(id = "wrote", prefix = art)
+has_year = identifier(id = "has_year", prefix = art)
+```
+
+Let's inspect one class and one property:
+
+```{r}
+artist
+str(artist)
+represent(artist)
+wrote
+str(wrote)
+represent(wrote)
+```
+
+Note that each `identifier` object is a list where the field `$uri` gives the URI of the resource and the field `qname` gives the shortened name (QNAME) with respect to the prefix stored in `$prefix`. Also note that both `literal` and `identifier` are _representable_, i.e. we have defined a the generic `represent` on both of the classes that outputs a proper string representation of the literal or resource identifier that can be used in a serialization.
+
+We also need resource identifiers for our entitites such as Shakespaere, Christopher Malrowe, etc. Semantic Web best practices discourage the liberal minting of  identifiers for resources for which somebody has already minted an identifier. Instead, we want to look them up in a database, and only mint if they are not found. For this, RDF4R offers factory functions to create lookup/mint functions.
+
+```{r}
+p_query = "SELECT DISTINCT ?id WHERE {
+  ?id rdfs:label %label
+}"
+
+simple_lookup = query_factory(p_query, access_options = graphdb)
+
+lookup_or_mint_id = identifier_factory(fun = list(simple_lookup),
+   prefixes = prefixes,
+   def_prefix = eg)
+
+idking_lear = lookup_or_mint_id(list(lking_lear))
+idas_you_like_it = lookup_or_mint_id(list(las_you_like_it))
+idhamlet = lookup_or_mint_id(list(lhamlet))
+idothello = lookup_or_mint_id(list(lothello))
+idsonnet78 = lookup_or_mint_id(list(lsonnet_78))
+idastrophil = lookup_or_mint_id(list(lastrophil))
+idedward2 = lookup_or_mint_id(list(ledward2))
+idhero = lookup_or_mint_id(list(lhero))
+idgreensleeves = lookup_or_mint_id(list(lgreensleeves))
+idshakespeare = lookup_or_mint_id(list(lshakespeare))
+idsir_phillip_sidney = lookup_or_mint_id(list(lsir_phillip_sidney))
+idchristopher_marlowe = lookup_or_mint_id(list(lchristopher_marlowe))
+idlhenry_8_rex = lookup_or_mint_id(list(lhenry_8_rex))
+```
+
+`identifer_factory`'s first argument, `fun` is a list of (lookup) functions that will be tried. `identifier_factory` returns an identifier constructor function, in our case we named it `lookup_or_mind_id`. The lookup functions need to return a single column (labeled e.g. `?id`). They will be tried in order and if any of them returns a unique solution, it will be returned by the constructor function to create an identifier object. If none of the lookup functions returns a unique solution, a new identifier will be minted.
+
+Let's inspect
+
+```{r}
+idshakespeare
+```
+
+**Creating RDF**
+
+Now to create the RDF representation:
+
+```{r chunk, results = "hide"}
+classics_rdf = ResourceDescriptionFramework$new()
+
+classics_rdf$add_triple(subject = idshakespeare,    predicate = wrote,      object = idking_lear)
+classics_rdf$add_triple(subject = idking_lear,      predicate = rdfs_label, object = lking_lear)
+classics_rdf$add_triple(subject = idshakespeare,    predicate = wrote,      object = idas_you_like_it)
+classics_rdf$add_triple(subject = idas_you_like_it, predicate = rdfs_label, object = las_you_like_it)
+classics_rdf$add_triple(subject = idas_you_like_it, predicate = has_year,   object = l1599)
+classics_rdf$add_triple(subject = idas_you_like_it, predicate = rdf_type,   object = play)
+```
+
+The easiest way to inspect the `ResourceDescriptionFramework` object is to actually serialize it. Before we serialize, however, we need to specify the subgraph where the triples should be stored with `$set_context(id)`. We will reuse the example for that.
+
+```{r}
+classics_rdf$set_context(identifier(id = "classic_example", prefix  = eg))
+cat(classics_rdf$serialize())
+```
+
+**Submitting RDF to the triple store**
+
+Now that we have created some RDF (`classics_rdf`), we are ready to submit it to the endpoint (`graphdb`). We can either submit it directly via `add_data`, or we can use the `add_data_factory` to create a submitter function.
+
+```{r}
+# via add_data
+add_data(classics_rdf$serialize(), access_options = graphdb)
+simple_lookup(represent(lking_lear))
+simple_lookup(represent(lking_lear))
+p_query_describe = "PREFIX example: <http://rdflib-rdf4r.net/>
+SELECT ?p ?o
+WHERE {
+%resource ?p ?o .
+}"
+describe = query_factory(p_query = p_query_describe, access_options = graphdb)
+describe(represent(idshakespeare))
+describe(represent(idas_you_like_it))
+```

@@ -45,4 +45,7 @@ efficiently. Uses an amortized vector \code{DynVector} as a internal
 storage. You can inherit this class and override to create your own
 implementation and still retain syntax compatibility.
 }
+\seealso{
+Other rdf: \code{\link{is.ResourceDescriptionFramework}}
+}
 \keyword{datasets}

@@ -170,6 +170,7 @@ strip_angle = function (partial_uri , reverse = FALSE) {
 #' @param x
 #'
 #' @export
+#' @family representables
 represent = function(x)
 {
     UseMethod("represent", x)

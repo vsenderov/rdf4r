@@ -2,7 +2,7 @@
 % Please edit documentation in R/literal.R
 \name{literal}
 \alias{literal}
-\title{Literal Construction}
+\title{Construct a literal}
 \usage{
 literal(text_value, xsd_type, lang)
 }
@@ -41,4 +41,9 @@ lshakespeare
 l1599
 
 # see vignette
+}
+\seealso{
+Other literal functions: \code{\link{is.literal}},
+  \code{\link{print.literal}},
+  \code{\link{represent.literal}}
 }

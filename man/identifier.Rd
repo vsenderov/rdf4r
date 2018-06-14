@@ -58,3 +58,8 @@ a
 b
 
 }
+\seealso{
+Other identifier functions: \code{\link{is.identifier}},
+  \code{\link{print.identifier}},
+  \code{\link{represent.identifier}}
+}

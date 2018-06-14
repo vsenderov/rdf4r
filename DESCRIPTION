@@ -23,6 +23,7 @@ Collate:
     'rdf.R'
     'semantic-elements.R'
     'dynamic-vector.R'
+    'rdf4r.R'
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

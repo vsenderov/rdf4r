@@ -36,7 +36,7 @@ Tripe stores, also known as quad stores, graph databases or semantic databases, 
 
 Once you have established connection to a triple store, it is possible to inspect the protocol version, view the list of repositories in the database, execute SPARQL Read (SELECT keyword and related) and SPARQL Update (INSERT and related) queries, as well as submit serialized RDF data directly.
 
-### Function factories to convert SPARQL queries, or data endpoints to R functions.*
+### Function factories to convert SPARQL queries, or data endpoints to R functions.
 
 A unique feature of RDF4R are its high-level facilities (functions that return functions) to converting SPARQL queries and end-points to R functions. In a nutshell, given a parameterized SPARQL query (parametrization syntax is very simple but will be explained later), and an endpoint, the `query_factory` returns a function whose arguments are the parameters of the query, and which when executed submits the query to the endpoint and returns the results. Similarly, the `add_data_factory` returns a function whose parameter is an RDF data serialization and which returns the success status of the execution of an `add_data` query to the specified endpoint.
 
@@ -63,6 +63,8 @@ The usage of the package is discussed in detail in the vignette "Using RDF4R". A
 ```
 vignette("using-rdf4r")
 ```
+
+If you would like an overview of all package facilities grouped by category, please consult the package documentation available via `?rdf4r`.
 
 Here, we give some examples.
 

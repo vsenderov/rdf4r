@@ -48,6 +48,7 @@
 #' b
 #'
 #' @export
+#' @family identifier functions
 identifier = function(id, prefix = NA, blank = FALSE)
 {
   if (blank == TRUE) {
@@ -86,6 +87,7 @@ identifier = function(id, prefix = NA, blank = FALSE)
 #'
 #' @return \code{character} default representation.
 #' @export
+#' @family identifier functions
 print.identifier = function(id)
 {
   print(id$qname)
@@ -98,6 +100,8 @@ print.identifier = function(id)
 #'
 #' @return \code{character} default representation.
 #' @export
+#' @family identifier functions
+#' @family representables
 represent.identifier = function(id)
 {
   id$uri
@@ -221,6 +225,7 @@ identifier_factory = function(fun, prefixes, def_prefix)
 #' @return logical
 #'
 #' @export
+#' @family identifier functions
 is.identifier = function(x)
 {
   if ("identifier" %in% class(x)) TRUE

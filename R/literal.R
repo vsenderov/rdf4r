@@ -1,4 +1,4 @@
-#' Literal Construction
+#' Construct a literal
 #'
 #' \code{literal} constructs a \code{literal} object.
 #'
@@ -30,6 +30,7 @@
 #' l1599
 #'
 #' # see vignette
+#' @family literal functions
 literal = function(text_value, xsd_type, lang)
 {
   if (!has_meaningful_value(text_value)) {
@@ -75,6 +76,7 @@ literal = function(text_value, xsd_type, lang)
 #'
 #' @return \code{character} default representation.
 #' @export
+#' @family literal functions
 print.literal = function(ll)
 {
   print(ll$squote)
@@ -86,6 +88,8 @@ print.literal = function(ll)
 #'
 #' @return \code{character} default representation.
 #' @export
+#' @family literal functions
+#' @family representables
 represent.literal = function(ll)
 {
   ll$squote
@@ -98,8 +102,8 @@ represent.literal = function(ll)
 #' @param x object to check
 #'
 #' @return logical
-#'
 #' @export
+#' @family literal functions
 is.literal = function(x)
 {
   if ("literal" %in% class(x)) TRUE

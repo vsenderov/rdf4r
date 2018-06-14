@@ -15,3 +15,6 @@ logical
 \description{
 Is the object an Triples List (RDF)?
 }
+\seealso{
+Other rdf: \code{\link{ResourceDescriptionFramework}}
+}

@@ -36,8 +36,8 @@
 #'   are stored.
 #'
 #'
-
 #' @export
+#' @family rdf
 ResourceDescriptionFramework = R6::R6Class(
   classname = "ResourceDescriptionFramework",
 
@@ -257,6 +257,7 @@ ResourceDescriptionFramework = R6::R6Class(
 #' @return logical
 #'
 #' @export
+#' @family rdf
 is.ResourceDescriptionFramework = function(x)
 {
   if ("ResourceDescriptionFramework" %in% class(x)) TRUE
@@ -267,8 +268,9 @@ is.ResourceDescriptionFramework = function(x)
 
 
 
-
+#' Create a list of RDF statements that all share the same blank subject node
 #' @export
+#' @family anonymous rdf
 AnonRDF = R6::R6Class(
   classname = "anonymous_rdf",
   inherit = ResourceDescriptionFramework,
@@ -306,6 +308,7 @@ AnonRDF = R6::R6Class(
 
 #' Is the object an Anonymous Triples List (RDF)?
 #' @export
+#' @family anonymous rdf
 is.AnonRDF = function(x)
 {
   if ("anonymous_rdf" %in% class(x)) TRUE
