@@ -110,10 +110,7 @@ add_data_to_graphdb(rdf_data = ttl)
 
 The constructed function, `add_data_to_graphdb` does not have the parameter `access_options` any more. Instead, `add_data_to_graphdb` looks for `access_options` in its closure. This pattern allows us to hide some of the complexity and reduce errors.
 
-
-
-
-For example, `identifier_factory` is a functor that takes in as argument a list of lookup functions (created for example with the facilities for converting SPARQL to an R function) and returns an identifier constructor function that can be used to construct identifier objects based on executing the lookup functions from the argument list supplied to the functor. The reasoning behing this functor is to enable the working ontologist to generate code that first looks up a resource identifier in several different places before coining a new one.
+The last example of the functional style that we will look at is to be found in the [`identifier_factory`](R/identifier.R) and [`fidentifier`](R/identifier.R) function. This is perhaps an example of where a reduction in complexity was not achieved to our satisfaction. `identifier_factory` takes a list of lookup functions as an input and returns constructor functions. This makes `identifier_factory` into a [functor](https://en.wikipedia.org/wiki/Functor) as it both takes functions as inputs and returns functions. The reasoning behing this functor is to enable the working ontologist to generate code that first looks up a resource identifier in several different places before coining a new one.
 
 ### Pros and Cons
 
