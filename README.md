@@ -38,7 +38,7 @@ Once a connection to a triple-store has been established, it is possible to insp
 
 ### Function factories to convert SPARQL queries r data endpoints to R functions
 
-A unique feature of RDF4R are its high-level facilities (functions that return functions) to converting SPARQL queries and end-points to R functions. In a nutshell, given a parameterized SPARQL query (parametrization syntax is very simple but will be explained later), and an endpoint, the `query_factory` returns a function whose arguments are the parameters of the query, and which when executed submits the query to the endpoint and returns the results. Similarly, the `add_data_factory` returns a function whose parameter is an RDF data serialization and which returns the success status of the execution of an `add_data` query to the specified endpoint.
+An important feature of RDF4R are its facilities for converting SPARQL queries and the like to R functions. This conversion is realized by a family of functions that return functions. In a nutshell, given a parameterized SPARQL query (parametrization syntax is explained in the ["Using RDF4R" vignette](vignettes/using-rdf4r.Rmd)), the `query_factory` function returns a function whose arguments are the parameters of the query. Upon called this function submits the query a SPARQL endpoint and returns the results.
 
 ### Work with literals and identifiers
 
