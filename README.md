@@ -132,6 +132,13 @@ Here, one has to enclose the arguments to `lookup_or_mind_id` in a `list`, as it
 In l$fun = fun : Coercing LHS to a list
 ```
 
+There are several solutions to this problem. One is to define a class (perhaps with the R6 mechanism discussed in the next section) for a list of representables (literals or identifiers) and then have `lookup_or_mind_id` check its inputs.
+
+Another, perhaps more in-line with the traditional functional programming style, is to have `lookup_or_mint_id` have a dynamic function signature taking one more arguments of the representable type. We will address this problem in a future release (2.0) of RDF4R.
+
+### Elements of Object Oriented Style
+
+We already briefly touched on the need to define specialized classes in the previous section. Classes may be needed for type-checking and for bundling related functionality together.
 
 
 ### Pros and Cons
