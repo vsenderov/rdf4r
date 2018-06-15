@@ -64,11 +64,11 @@ The usage of the package is discussed in detail in the vignette ["Using RDF4R"](
 vignette("using-rdf4r")
 ```
 
-If you would like an overview of all package facilities grouped by category, please consult the package documentation available via `?rdf4r`.
+If you would like an overview of all package facilities grouped by category, please consult the package documentation available via `?rdf4r.`
 
 ## Discussion
 
-We would like now to compare RDF4R to other programs designed for a similar purpose and critically discuss some of its futures.
+We would like now to compare RDF4R to other programs designed for a similar purpose and critically discuss some of its features.
 
 ### Related Packages
 
