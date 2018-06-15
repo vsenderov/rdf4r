@@ -66,11 +66,25 @@ vignette("using-rdf4r")
 
 If you would like an overview of all package facilities grouped by category, please consult the package documentation available via `?rdf4r`.
 
-Here, we give some examples.
-
 ## Discussion
 
+We would like now to compare RDF4R to other programs designed for a similar purpose and critically discuss some of its futures.
+
 ### Related Packages
+
+#### `rdflib`
+
+Perhaps, the closest match to RDF4R is the [rdflib R package](https://github.com/ropensci/rdflib.git) by [Carl Boettiger](https://github.com/cboettig). `rdflib`'s' first official release was on [Dec 10, 2017](https://github.com/ropensci/rdflib/releases/tag/0.0.1), whereas work on the codebase that is now known as RDF4R began at Pensoft around mid-2015 at the onset of the OpenBiodiv project. This explains why two closely related R packages for working with RDF exist. In our opinion, the packages have different design philosophies and are thus complementary.
+
+`rdflib` is a high-level wrapper to [`redland`](http://librdf.org/), a powerful C library that provides support for RDF. `redland` provides an in-memory storage model for RDF beyond what is available in RDF4R and also persistent storage working with a number of databases. It enables the user to query RDF objects with SPARQL. Thus, `redland` can be considered a complete graph database implementation in C. There is also a [`redland` R package](https://cran.r-project.org/web/packages/redland/index.html), which is a low-level wrapper to the C `redland`, essentially mapping function calls one-to-one.
+
+In our opinion `redland` is more complex than needed for OpenBiodiv. At the onset of the OpenBiodiv project, we decided not to use it as we were going to rely on GraphDB for our storage and querying. RDF4R's main purpose was (and is) to provide a convenient R interface for users of GraphDB and similar RDF4J compatible graph databases.
+
+A feature that differentiates `redland`/`rdflib` from RDF4R is the design philosophy. While `rdflib` concentrates on JSON-LD support (and many others), RDF4R was designed primariy with the [Turtle](https://www.w3.org/TR/turtle/) and [TriG](https://www.w3.org/TR/trig/) serializations in mind. This means that RDF4R can work with named graphs, where their usage is discouraged or perhaps [impossible with `rdflib`](https://github.com/ropensci/rdflib/issues/23).
+
+It is hard to ignore the superior in-memory model of `redland`/`rdflib`. Therefore, [the maintainer of RDF4R](@https://github.com/vsenderov/), has contributed several compatibility patches to `rdflib`. Thus makes it possible to extend RDF4R to use either one of the in-memory models - RDF4R's own amortized vector, or `rdflib`/`redland`. Thus, it will be possible for the user of RDF4R to retain its syntax and high-level features - constructor factories, functors, etc, and the ability to use named graphs - but benefit from performance increases, stability, and scalability with the `redland`/`rdflib` backend.
+
+This will enable the users of the R programming environment to use whichever syntax they prefer and benefit from an efficient storage engine.
 
 ### Pros and Cons
 
