@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette explains how to use the package RDF4R by means of examples. If you would like an overview of all package facilities grouped by category, please consult the package documentation available via `?rdf4r`. In order to fully utilize the package capabilities, one needs to have access to an RDF graph database. We have made available a public endpoint to allow the users of the package to experiment. Since write access is enabled, please be considerate and don't issue catastrophic commands.
+This vignette explains how to use the package RDF4R by means of examples. In order to fully utilize the package capabilities, one needs to have access to an RDF graph database. We have made available a public endpoint to allow the users of the package to experiment. Since write access is enabled, please be considerate and don't issue catastrophic commands.
 
 ## Connect to triple store
 
