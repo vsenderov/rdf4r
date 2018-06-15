@@ -110,7 +110,29 @@ add_data_to_graphdb(rdf_data = ttl)
 
 The constructed function, `add_data_to_graphdb` does not have the parameter `access_options` any more. Instead, `add_data_to_graphdb` looks for `access_options` in its closure. This pattern allows us to hide some of the complexity and reduce errors.
 
-The last example of the functional style that we will look at is to be found in the [`identifier_factory`](R/identifier.R) and [`fidentifier`](R/identifier.R) function. This is perhaps an example of where a reduction in complexity was not achieved to our satisfaction. `identifier_factory` takes a list of lookup functions as an input and returns constructor functions. This makes `identifier_factory` into a [functor](https://en.wikipedia.org/wiki/Functor) as it both takes functions as inputs and returns functions. The reasoning behing this functor is to enable the working ontologist to generate code that first looks up a resource identifier in several different places before coining a new one.
+The last example of the functional style that we will look at is to be found in the [`identifier_factory`](R/identifier.R) and [`fidentifier`](R/identifier.R) function. This is perhaps an example of where a reduction in complexity was not achieved sufficiently. `identifier_factory` takes a list of lookup functions as an input and returns constructor functions. This makes `identifier_factory` into a [functor](https://en.wikipedia.org/wiki/Functor) as it both takes functions as inputs and returns functions. The reasoning behing this functor is to enable the working ontologist to generate code that first looks up a resource identifier in several different places before coining a new one. Unfortunately, the syntax achieved is somewhat unsatisfactory, as the user needs to write
+
+```
+lookup_or_mint_id = identifier_factory(fun = list(simple_lookup),
+   prefixes = prefixes,
+   def_prefix = eg)
+
+idking_lear = lookup_or_mint_id(list(lking_lear))
+```
+
+Here, one has to enclose the arguments to `lookup_or_mind_id` in a `list`, as it is possible that the SPARQL queries that `lookup_or_mind_id` encapsulates - in this case the single `simple_lookup` - may have more that one parameters. One may forget to enclose `lking_lear` in a list, and the error message that one gets is not particularly helpful:
+
+```
+> lookup_or_mint_id(lking_lear)
+ Show Traceback
+ 
+ Rerun with Debug
+ Error in UseMethod("represent", x) : 
+  no applicable method for 'represent' applied to an object of class "character" In addition: Warning message:
+In l$fun = fun : Coercing LHS to a list
+```
+
+
 
 ### Pros and Cons
 
