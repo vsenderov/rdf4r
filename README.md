@@ -14,7 +14,7 @@ RDF4R depends on the following packages (list may change in future releases):
 - [R6](https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html)
 - [devtools](https://cran.r-project.org/web/packages/devtools/index.html): needed for the GitHub install
 
-Please, first install these packages with `install.packages`. Pay attention to error messages during their installation as additional OS-level components may need to be installed.
+Please, first install these packages with `install.packages.` Pay attention to error messages during their installation as additional OS-level components may need to be installed.
 
 Then, install RDF4R from GitHub with the following command:
 
