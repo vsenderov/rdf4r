@@ -22,12 +22,12 @@ Then, install RDF4R from GitHub with the following command:
 devtools::install_github("vsenderov/rdf4r")
 ```
 
-The package will be submited and perhaps available for installation through CRAN and/or [rOpenSci](https://ropensci.org/).
+We are currently in the process of submitting the package to a repository and making it available through the standard installation facilities of R. Our intention is to publish it through [CRAN](https://cran.r-project.org/) and/or [rOpenSci](https://ropensci.org/).
 
 ## Specification
 
 RDF4R supports has the following features
-
+https://cran.r-project.org/
 ### Connection to a triple store
 
 Tripe stores, also known as quad stores, graph databases or semantic databases, are databases that store RDF data and allow the quering of RDF data via the [SPARQL query language](https://www.w3.org/TR/rdf-sparql-query/). RDF4R can connect to triple stores that support the [RDF4J API](http://docs.rdf4j.org/rest-api/) such as [GraphDB](http://graphdb.ontotext.com/). It is possible to establish both basic connections (no password or basic HTTP authentication), and connection secured with an API access token.
