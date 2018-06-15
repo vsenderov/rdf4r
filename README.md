@@ -22,7 +22,7 @@ Then, install RDF4R from GitHub with the following command:
 devtools::install_github("vsenderov/rdf4r")
 ```
 
-We are currently in the process of submitting the package to a repository and making it available through the standard installation facilities of R. Our intention is to publish it through [CRAN](https://cran.r-project.org/) and/or [rOpenSci](https://github.com/ropensci/onboarding).
+We are currently in the process of submitting the package to a repository and making it available through the standard installation facilities of R. Our intention is to publish it through [CRAN](https://cran.r-project.org/) and/or [rOpenSci](https://github.com/ropensci/onboarding). In addition to that this README is being prepared as a software description paper in the [RIO Journal](http://riojournal.com).
 
 ## Specification
 
