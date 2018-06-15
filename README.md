@@ -50,7 +50,7 @@ Prefixes are managed automatically during serialization by being extracted from 
 
 ### Creation and serialization of RDF
 
-RDF4R uses an amortized vector data structure to store RDF triples as mutable [R6](https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html) objects (third element). Blank nodes are partially supported: a triple may contain an anonymous RDF object (a list of triples with the same subject) as its object. In this case, the parent RDF is serialed as turtle by using the bracket syntax. Current serialization only supports Turtle and only supports adding new triples.
+RDF4R uses an amortized vector data structure to store RDF triples as mutable [R6](https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html) objects (third element). Blank nodes are partially supported: a triple may contain an anonymous RDF object (a list of triples with the same subject) as its object. In this case, the parent RDF is serialed as [Turtle by using the bracket syntax](https://www.w3.org/TR/turtle/#BNodes). Current serialization only supports Turtle (and its variant Trig) and only supports adding new triples.
 
 ### A basic vocabulary of semantic elements
 
