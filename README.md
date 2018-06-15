@@ -32,9 +32,9 @@ RDF4R has the features listed in the following subsections.
 
 Triple-stores, also known as quad-stores, graph databases, or semantic databases, are databases that store RDF data and allow the quering of RDF data via the [SPARQL query language](https://www.w3.org/TR/rdf-sparql-query/). RDF4R can connect to triple-stores that support the [RDF4J server REST API](http://docs.rdf4j.org/rest-api/) such as [GraphDB](http://graphdb.ontotext.com/). It is possible to establish both basic connections (requiring no password or requiring basic HTTP user-pass authentication) or connection secured with an API access token.
 
-### Work with repositories on a triple store
+### Work with repositories on a triple-store
 
-Once you have established connection to a triple store, it is possible to inspect the protocol version, view the list of repositories in the database, execute SPARQL Read (SELECT keyword and related) and SPARQL Update (INSERT and related) queries, as well as submit serialized RDF data directly.
+Once you have established connection to a triple-store, it is possible to inspect the talk protocol version, view the list of repositories on the database, execute SPARQL Read (SELECT keyword and related) and SPARQL Update (INSERT and related) queries on the database, as well as submit serialized RDF data directly to the database.
 
 ### Function factories to convert SPARQL queries, or data endpoints to R functions.
 
