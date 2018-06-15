@@ -34,7 +34,7 @@ Triple-stores, also known as quad-stores, graph databases, or semantic databases
 
 ### Work with repositories on a triple-store
 
-Once you have established connection to a triple-store, it is possible to inspect the talk protocol version, view the list of repositories on the database, execute SPARQL Read (SELECT keyword and related) and SPARQL Update (INSERT and related) queries on the database, as well as submit serialized RDF data directly to the database.
+Once a connection to a triple-store has been established, it is possible to inspect the talk protocol version, view the list of repositories on the database, execute SPARQL Read (SELECT keyword and related) and SPARQL Update (INSERT and related) queries on the database, as well as submit serialized RDF data directly to the database.
 
 ### Function factories to convert SPARQL queries r data endpoints to R functions
 
