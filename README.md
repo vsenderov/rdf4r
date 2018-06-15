@@ -8,11 +8,11 @@ RDF4R is an R package for working with [Resource Description Framework (RDF)](ht
 
 RDF4R depends on the following packages (list may change in future releases):
 
-- gsubfn
-- httr
-- xml2
-- R6
-- devtools (needed to install from GitHub)
+- [gsubfn](https://cran.r-project.org/web/packages/gsubfn/index.html)
+- [httr](https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html)
+- [xml2](https://cran.r-project.org/web/packages/xml2/index.html)
+- [R6](https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html)
+- [devtools](https://cran.r-project.org/web/packages/devtools/index.html): needed for the GitHub install
 
 Please, first install these packages with `install.packages`. Pay attention to error messages during their installation as additional OS-level components may need to be installed.
 
