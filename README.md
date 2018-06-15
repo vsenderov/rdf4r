@@ -42,7 +42,7 @@ An important feature of RDF4R are its facilities for converting SPARQL queries a
 
 ### Work with literals and identifiers
 
-The building blocks of RDF are literals (e.g. strings, numbers, dates, etc.) and resource identifiers. RDF4R provides classes for literals and resource identifiers that are tightly integrated with the other facilities of the package. For example, `identifier_factory` is a functor that takes in as argument a list of lookup functions (created for example with the facilities for converting SPARQL to an R function) and returns an identifier constructor function that can be used to construct identifier objects based on executing the lookup functions from the argument list supplied to the functor. The reasoning behing this functor is to enable the working ontologist to generate code that first looks up a resource identifier in several different places before coining a new one.
+The building blocks of RDF are literals (e.g. strings, numbers, dates, etc.) and resource identifiers. RDF4R provides classes for literals and resource identifiers that are tightly integrated with the other facilities of the package.
 
 ### Prefix management
 
@@ -85,6 +85,10 @@ A feature that differentiates `redland`/`rdflib` from RDF4R is the design philos
 It is hard to ignore the superior in-memory model of `redland`/`rdflib`. Therefore, [the maintainer of RDF4R](@https://github.com/vsenderov/), has contributed several compatibility patches to `rdflib`. Thus makes it possible to extend RDF4R to use either one of the in-memory models - RDF4R's own amortized vector, or `rdflib`/`redland`. Thus, it will be possible for the user of RDF4R to retain its syntax and high-level features - constructor factories, functors, etc, and the ability to use named graphs - but benefit from performance increases, stability, and scalability with the `redland`/`rdflib` backend.
 
 This will enable the users of the R programming environment to use whichever syntax they prefer and benefit from an efficient storage engine.
+
+### Elements of functional style
+
+For example, `identifier_factory` is a functor that takes in as argument a list of lookup functions (created for example with the facilities for converting SPARQL to an R function) and returns an identifier constructor function that can be used to construct identifier objects based on executing the lookup functions from the argument list supplied to the functor. The reasoning behing this functor is to enable the working ontologist to generate code that first looks up a resource identifier in several different places before coining a new one.
 
 ### Pros and Cons
 
