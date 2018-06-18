@@ -78,7 +78,7 @@ Perhaps, the closest match to RDF4R is the [rdflib R package](https://github.com
 
 In our opinion `redland` is more complex than needed for OpenBiodiv. At the onset of the OpenBiodiv project, we decided not to use it as we were going to rely on GraphDB for our storage and querying. RDF4R's main purpose was (and is) to provide a convenient R interface for users of GraphDB and similar RDF4J compatible graph databases.
 
-A feature that differentiates `redland`/`rdflib` from RDF4R is the design philosophy. While `rdflib` concentrates on JSON-LD support (and many others), RDF4R was designed primariy with the [Turtle](https://www.w3.org/TR/turtle/) and [TriG](https://www.w3.org/TR/trig/) serializations in mind. This means that RDF4R can work with named graphs, where their usage is discouraged or perhaps [impossible with `rdflib`](https://github.com/ropensci/rdflib/issues/23).
+A feature that differentiates `redland`/`rdflib` from RDF4R is the design philosophy. RDF4R was designed primariy with the [Turtle](https://www.w3.org/TR/turtle/) and [TriG](https://www.w3.org/TR/trig/) serializations in mind. This means that RDF4R can work with named graphs, where their usage is discouraged or perhaps [impossible with `rdflib`](https://github.com/ropensci/rdflib/issues/23), even though `rdflib`'s default format is [N-Quads](https://www.w3.org/TR/n-quads/#simple-triples). Another differentiating feature are the function factories for converting SPARQL and related statements to R functions.
 
 It is hard to ignore the superior in-memory model of `redland`/`rdflib`. Therefore, [the maintainer of RDF4R](@https://github.com/vsenderov/), has contributed several compatibility patches to `rdflib`. Thus makes it possible to extend RDF4R to use either one of the in-memory models - RDF4R's own amortized vector, or `rdflib`/`redland`. Thus, it will be possible for the user of RDF4R to retain its syntax and high-level features - constructor factories, functors, etc, and the ability to use named graphs - but benefit from performance increases, stability, and scalability with the `redland`/`rdflib` backend.
 
@@ -132,13 +132,28 @@ Here, one has to enclose the arguments to `lookup_or_mind_id` in a `list`, as it
 In l$fun = fun : Coercing LHS to a list
 ```
 
-There are several solutions to this problem. One is to define a class (perhaps with the R6 mechanism discussed in the next section) for a list of representables (literals or identifiers) and then have `lookup_or_mind_id` check its inputs.
+There are several solutions to this problem. One is to define a class for a list of representables (literals or identifiers) and then have `lookup_or_mind_id` check its inputs.
 
 Another, perhaps more in-line with the traditional functional programming style, is to have `lookup_or_mint_id` have a dynamic function signature taking one more arguments of the representable type. We will address this problem in a future release (2.0) of RDF4R.
 
-### Elements of Object Oriented Style
+### Elements of Object-Oriented Style
 
-We already briefly touched on the need to define specialized classes in the previous section. Classes may be needed for type-checking and for bundling related functionality together.
+We already briefly touched on the need to define specialized classes in the previous section. Classes may be needed for type-checking and for bundling related functionality together. A slightly different problem that may be solved with the R6-style objects is to have mutable state. There are several ways to implement object-oriented programming in R.
+
+The simplest way is to use [S3](http://adv-r.had.co.nz/S3.html) classes. S3 is a mechanism for writing generic functions that dispatch on the class of their arguments. It is a very straightforward system and we have used it for the `literal` and `identifier` classes. A more complicated [S4](http://adv-r.had.co.nz/S4.html) systems exists that introduces some type-checking and gives objects slots to store data. We have not used S4 in the package as it has a reputation of being slow and complex. Recently, the R6 system has gained traction which is similar to S4 as R6 objects have a standardized way of storing data but also differs from S4 in that it allows its objects to have mutable state. Honorable mentions deserve [Reference Classes](http://adv-r.had.co.nz/R5.html) and home-brew classes where one creates constructor functions that do something and then return their own environment back (a variant of R6 is doing under hood).
+
+### S3 Usage
+
+Several functions of RDF4R return lists with their class attribute set. The most notable of those are `literal` and `identifier`. There are also several generics functions used to invoke class-specific implemented via `UseMethods`. The most notable of those is `represent`:
+
+```
+represent = function(x)
+{
+     UseMethod("represent", x)
+}
+```
+
+The reasoning behind `represent` is to enable the serialization both literals and resource identifiers. Whereas literals need to be potentially quoted together with an XSD type (e.g. "CNN"^^xsd:string, resource identifiers just need to be pasted in Turtle as they are (e.g. "<http://cnn.com>". By having this generic the serialization function doesn't need to be aware of these details and just calls the represent method.
 
 
 ### Pros and Cons
