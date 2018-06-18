@@ -155,6 +155,31 @@ represent = function(x)
 
 The reasoning behind `represent` is to enable the serialization both literals and resource identifiers. Whereas literals need to be potentially quoted together with an XSD type (e.g. "CNN"^^xsd:string, resource identifiers just need to be pasted in Turtle as they are (e.g. "<http://cnn.com>". By having this generic the serialization function doesn't need to be aware of these details and just calls the represent method.
 
+### R6 Usage
+
+R6 is used for the in-memory representation of RDF (`ResourceDescriptionFormat`). The design decision to use R6 was taken in order to allow users of the package to create their RDF object incrementally, by adding more triples. E.g.
+
+```
+classics_rdf = ResourceDescriptionFramework$new()
+
+classics_rdf$add_triple(subject = idshakespeare,    predicate = wrote,      object = idking_lear)
+classics_rdf$add_triple(subject = idking_lear,      predicate = rdfs_label, object = lking_lear)
+```
+
+As resizing of R lists is a [costly operation if they had not been preallocated](http://www.burns-stat.com/documents/books/the-r-inferno/), we have implemented an [amortized vector as part of the package](R/dynamic-vector.R). `DynVector` initializes a list and everytime its length is exceeded by adding new elements, it reallocates double the space, which results in [a lot faster computation on average](http://www.cs.cmu.edu/afs/cs/academic/class/15451-s07/www/lecture_notes/lect0206.pdf). As we pointed our earlier, however, a future realease of RDF4R will support both `DynVector` and `rdflib` as in-memory storage models.
+
+Furthermore, we support the `$add_triples(rdf)` method that lets the user grow one `ResourceDescriptionFramework` object with another. This enables a more functional-style of programming. For example one may have a list of objects `information` and a function that generates triples from `information`, `extract_triples` that returns an RDF object. We may merge the output of these functions by `$add_triples(rdf)` in the following way:
+
+```
+merged_rdf = ResourceDescriptionFramework$new()
+lapply(lapply(information, extract_triples), merged_rdf$add_triples)
+```
+
+Note that this still can only be executed sequentially in order not to corrupt the in-memory representation of `merged_rdf` as each call to `merged_rdf$add_triples` changes the state of `merged_rdf`. A future release of the package will contain an additional `Triple` class allowing users to store RDF as lists of triples (and thus benefitting from parralelism constructs such as `parLapply`). The user will have the option of waiting until the last possible moment to create a `ResourceDescriptionFramework` class from a list of triples before serialization.
+
+
+
+
 
 ### Pros and Cons
 
