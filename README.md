@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/vsenderov/rdf4r.svg?branch=master)](https://travis-ci.org/vsenderov/rdf4r) 
+
 # RDF4R: R Library for Working with RDF
 
 ## Introduction
