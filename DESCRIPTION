@@ -28,7 +28,8 @@ Imports:
     gsubfn,
     httr,
     xml2,
-    R6
+    R6,
+    uuid
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
