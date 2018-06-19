@@ -24,6 +24,11 @@ Collate:
     'semantic-elements.R'
     'dynamic-vector.R'
     'rdf4r.R'
+Imports:
+    gsubfn,
+    httr,
+    xml2,
+    R6
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
