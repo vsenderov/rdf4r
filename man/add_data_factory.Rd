@@ -13,9 +13,13 @@ add_data_factory(access_options, prefixes)
 a function with one parameter, \code{rdf_data}
 }
 \description{
+TODO : use the serializer from the RDF object and no need for the prefix argument
+}
+\details{
 Wraps \code{add_data} to simply submit a Turtle/Trig file to a triplestore
 }
 \examples{
+\dontrun{
 prefixes = c(rdfs = "<http://www.w3.org/2000/01/rdf-schema#>", foaf = "<http://xmlns.com/foaf/0.1/>", openbiodiv = "<http://openbiodiv.net/>")
 ttl = "openbiodiv:test_context {
 openbiodiv:test1 rdf:label 'sample lab'@en .
@@ -23,6 +27,8 @@ openbiodiv:test1 rdf:label 'sample lab'@en .
 add_data_to_graphdb = add_data_factory(access_options = graphdb, prefixes = prefixes)
 
 add_data_to_graphdb(rdf_data = ttl)
+}
+
 
 
 }

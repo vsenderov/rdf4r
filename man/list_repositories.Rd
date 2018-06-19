@@ -17,6 +17,9 @@ data.frame. Contains repository information for that access point.
 List Repositories
 }
 \examples{
+\dontrun{
 list_repositories(graphdb)
+}
+
 
 }

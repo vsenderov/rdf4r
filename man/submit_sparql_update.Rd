@@ -32,9 +32,11 @@ INSERT
 DELETE
 }
 \examples{
-drop_query = "DROP GRAPH <http::/openbiodiv.net/test123>"
+\dontrun{
+#' drop_query = "DROP GRAPH <http::/openbiodiv.net/test123>"
 
 submit_sparql_update(drop_query, access_options = graphdb)
+}
 
 }
 \seealso{

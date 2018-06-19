@@ -38,11 +38,14 @@ DESCRIBE
 ASK
 }
 \examples{
+\dontrun{
 query = "SELECT * WHERE {
   ?s ?p ?o .
 } LIMIT 100"
 
 submit_sparql(query = query, access_options = graphdb)
+}
+
 
 }
 \seealso{

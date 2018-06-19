@@ -20,7 +20,10 @@ version.
 This function tests the connectivity to the graph database. If there is connectivity it will return the protocol version as an integer. If there is no connectivity, an error will be raised.
 }
 \examples{
+\dontrun{
 get_protocol_version(graphdb)
+}
+
 
 }
 \seealso{

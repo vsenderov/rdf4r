@@ -94,7 +94,10 @@ api_triplestore_access = function(server_url, repository = NA, api_key = "", api
 #' @seealso \code{basic_triplestore_access} in order to see how to create the connection options for a triple store with basic HTTP authentication and \code{api_access_options} for API-based authentication to a triplestore
 #'
 #' @examples
+#' \dontrun{
 #' get_protocol_version(graphdb)
+#' }
+#'
 #'
 #' @export
 get_protocol_version = function(access_options)
@@ -125,7 +128,10 @@ get_protocol_version = function(access_options)
 #' @return data.frame. Contains repository information for that access point.
 #'
 #' @examples
+#' \dontrun{
 #' list_repositories(graphdb)
+#' }
+#'
 #'
 #' @export
 list_repositories = function(access_options)
@@ -180,11 +186,14 @@ list_repositories = function(access_options)
 #'  found or query could not be executed.
 #'
 #' @examples
+#' \dontrun{
 #' query = "SELECT * WHERE {
 #'   ?s ?p ?o .
 #' } LIMIT 100"
 #'
 #' submit_sparql(query = query, access_options = graphdb)
+#' }
+#'
 #'
 #'@export
 submit_sparql = function(query, access_options, as_dataframe = TRUE)
@@ -239,9 +248,12 @@ submit_sparql = function(query, access_options, as_dataframe = TRUE)
 #' @return
 #'
 #' @examples
-#' drop_query = "DROP GRAPH <http::/openbiodiv.net/test123>"
+#' \dontrun{
+#' #' drop_query = "DROP GRAPH <http::/openbiodiv.net/test123>"
 #'
 #' submit_sparql_update(drop_query, access_options = graphdb)
+
+#' }
 #'
 #' @export
 submit_sparql_update = function(query, access_options) {
@@ -272,10 +284,13 @@ submit_sparql_update = function(query, access_options) {
 #' @return the response of the `httr::POST` against the endpoint
 #'
 #' @examples
+#' \dontrun{
 #' rdf_data = c("<http://test.net/mytest1> {
 #'   <http://test.net/mysubject2> <http://test.net/has-value> '5' .
 #' }")
 #' add_data(rdf_data, access_options = graphdb)
+#' }
+#'
 #'
 #' @export
 add_data = function(rdf_data, access_options, data_format = "application/x-trig")

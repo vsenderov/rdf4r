@@ -20,9 +20,12 @@ the response of the `httr::POST` against the endpoint
 Add Data to a Repository
 }
 \examples{
+\dontrun{
 rdf_data = c("<http://test.net/mytest1> {
   <http://test.net/mysubject2> <http://test.net/has-value> '5' .
 }")
 add_data(rdf_data, access_options = graphdb)
+}
+
 
 }

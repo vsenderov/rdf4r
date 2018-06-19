@@ -172,14 +172,6 @@ fidentifier = function(fun, ...,  prefixes)
 #'   whether to generate
 #'
 #' @export
-#' @examples
-#'
-#' openbiodiv_id = identifier_factory(simple_lookup,
-#'   prefixes = prefixes,
-#'   def_prefix = c(openbiodiv = "http://openbiodiv.net/"))
-#'
-#' openbiodiv_id("Teodor Georgiev")
-#' openbiodiv_id("Pavel Stoev")
 identifier_factory = function(fun, prefixes, def_prefix)
 {
   function(label, generate = TRUE)
