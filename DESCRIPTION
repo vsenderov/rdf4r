@@ -30,6 +30,8 @@ Imports:
     xml2,
     R6,
     uuid
-Suggests: knitr,
-    rmarkdown
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
