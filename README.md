@@ -1,3 +1,8 @@
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Travis-CI Build Status](https://travis-ci.org/vsenderov/rdf4r.svg?branch=master)](https://travis-ci.org/vsenderov/rdf4r) 
+[![Coverage Status](https://img.shields.io/codecov/c/github/vsenderov/rdf4r/master.svg)](https://codecov.io/github/vsenderov/rdf4r?branch=master)
+
+
 # RDF4R: R Library for Working with RDF
 
 ## Introduction
