@@ -49,3 +49,13 @@ test_that("Query conversions work.", {
   expect_match(class(genus_lookup), "function")
   expect_true(nrow(genus_lookup("\"Drosophila\"")) >= 2)
 })
+
+test_that("Literal and identifier constructors work.", {
+  lking_lear      = literal(text_value = "King Lear",        lang = "en")
+  expect_match(represent(lking_lear), "\"King Lear\"@en")
+  lshakespeare         = literal(text_value = "Shakespeare")
+  expect_match(represent(lshakespeare), "\"Shakespeare\"")
+  l1599 = literal(text_value = "1599", xsd_type = xsd_integer)
+  expect_match(l1599$text_value, "1599")
+  expect_match(l1599$xsd_type$uri, "<http://www.w3.org/2001/XMLSchema#integer>")
+})
