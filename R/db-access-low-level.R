@@ -61,8 +61,9 @@ basic_triplestore_access = function(server_url, repository = NA, user = NA, pass
 #' @return list. Contains the server access options.
 #'
 #' @examples
+#' \dontrun{
 #' graphdb3 = api_triplestore_access(server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", repository = "test", api_key = "s4bb1d43uc52", api_secret = "d7h7eg4e263ghss")
-#'
+#' }
 #' @export
 api_triplestore_access = function(server_url, repository = NA, api_key = "", api_secret = "")
 {
