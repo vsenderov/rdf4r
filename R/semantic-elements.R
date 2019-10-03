@@ -31,6 +31,12 @@ xsd_date = identifier(
    prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
  )
 
+#' @export
+xsd_uri = identifier(
+  id = "anyURI",
+  prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
+)
+
 
 #' Has Label Property
 #' @name xsd_string
