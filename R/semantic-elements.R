@@ -31,7 +31,10 @@ xsd_date = identifier(
    prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
  )
 
+#' XSD URI Type
+#' @name xsd_uri
 #' @export
+#' @family semantic elements
 xsd_uri = identifier(
   id = "anyURI",
   prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
