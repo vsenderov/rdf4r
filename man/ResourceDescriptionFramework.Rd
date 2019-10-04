@@ -48,4 +48,5 @@ implementation and still retain syntax compatibility.
 \seealso{
 Other rdf: \code{\link{is.ResourceDescriptionFramework}}
 }
+\concept{rdf}
 \keyword{datasets}

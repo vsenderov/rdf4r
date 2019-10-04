@@ -23,10 +23,6 @@ list. Contains the server access options.
 \description{
 Create an object with the access options for a triple-store. If successful it also outputs to the screen the protocol version. If unsuccessful it raises an error. Uses API authentication.
 }
-\examples{
-graphdb3 = api_triplestore_access(server_url = "https://rdf.ontotext.com/4135593934/openbiodiv", repository = "test", api_key = "s4bb1d43uc52", api_secret = "d7h7eg4e263ghss")
-
-}
 \seealso{
 \code{api_triplestore_access}
 }

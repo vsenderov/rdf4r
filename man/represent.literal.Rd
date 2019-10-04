@@ -22,3 +22,5 @@ Other literal functions: \code{\link{is.literal}},
 Other representables: \code{\link{represent.identifier}},
   \code{\link{represent}}
 }
+\concept{literal functions}
+\concept{representables}

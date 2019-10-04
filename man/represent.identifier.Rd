@@ -23,3 +23,5 @@ Other identifier functions: \code{\link{identifier}},
 Other representables: \code{\link{represent.literal}},
   \code{\link{represent}}
 }
+\concept{identifier functions}
+\concept{representables}

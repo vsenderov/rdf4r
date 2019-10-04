@@ -11,3 +11,4 @@ Other semantic elements: \code{\link{blank_node}},
   \code{\link{rdf_type}}, \code{\link{xsd_date}},
   \code{\link{xsd_integer}}, \code{\link{xsd_string}}
 }
+\concept{semantic elements}

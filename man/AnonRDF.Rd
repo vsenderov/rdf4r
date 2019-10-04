@@ -14,4 +14,5 @@ Create a list of RDF statements that all share the same blank subject node
 \seealso{
 Other anonymous rdf: \code{\link{is.AnonRDF}}
 }
+\concept{anonymous rdf}
 \keyword{datasets}
