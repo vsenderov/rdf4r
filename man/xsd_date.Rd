@@ -14,7 +14,8 @@ XSD Date Type
 \seealso{
 Other semantic elements: \code{\link{blank_node}},
   \code{\link{rdf_type}}, \code{\link{semantic_elements}},
-  \code{\link{xsd_integer}}, \code{\link{xsd_string}}
+  \code{\link{xsd_integer}}, \code{\link{xsd_string}},
+  \code{\link{xsd_uri}}
 }
 \concept{semantic elements}
 \keyword{datasets}
