@@ -4,7 +4,7 @@
 \name{AnonRDF}
 \alias{AnonRDF}
 \title{Create a list of RDF statements that all share the same blank subject node}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 AnonRDF
 }

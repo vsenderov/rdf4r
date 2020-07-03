@@ -56,7 +56,6 @@ b = identifier(
 
 a
 b
-
 }
 \seealso{
 Other identifier functions: \code{\link{is.identifier}},

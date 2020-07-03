@@ -4,7 +4,7 @@
 \name{RdfLibBackend}
 \alias{RdfLibBackend}
 \title{RDF Class with \code{rdflib} backend}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 RdfLibBackend
 }

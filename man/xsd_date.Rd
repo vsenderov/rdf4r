@@ -13,7 +13,8 @@ XSD Date Type
 }
 \seealso{
 Other semantic elements: \code{\link{blank_node}},
-  \code{\link{rdf_type}}, \code{\link{semantic_elements}},
+  \code{\link{rdf_type}}, \code{\link{rdfs_label}},
+  \code{\link{semantic_elements}},
   \code{\link{xsd_integer}}, \code{\link{xsd_string}},
   \code{\link{xsd_uri}}
 }
