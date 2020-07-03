@@ -46,7 +46,7 @@ ResourceDescriptionFramework = R6::R6Class(
     prefix_list = NULL, # DynVector
     context = NULL, # identifer
 
-    initialize = function(size = 100)
+    initialize = function(size = 1000000)
     {
       private$triples = DynVector$new(size = size)
       self$prefix_list = DynVector$new(size = size)
@@ -66,12 +66,15 @@ ResourceDescriptionFramework = R6::R6Class(
 
     add_triple = function(subject, predicate, object)
     {
+      #put this here bc some predicate prefixes are not added otherwise
+      self$prefix_list$add(predicate$prefix)
+
       if (!is.identifier(subject) || !is.identifier(predicate) || !(is.literal(object) || is.identifier(object) || is.ResourceDescriptionFramework(object))) {
         return (FALSE)
       }
       else {
         self$prefix_list$add(subject$prefix)
-        self$prefix_list$add(predicate$prefix)
+        #self$prefix_list$add(predicate$prefix)
         if (is.identifier(object)) {
           self$prefix_list$add(object$prefix)
         }
@@ -109,7 +112,7 @@ ResourceDescriptionFramework = R6::R6Class(
 
       serialization$add(
         prefix_serializer(self$get_prefixes(), lang = "Turtle")
-        )
+      )
 
       serialization$add(c(paste(self$context$qname, "{\n")))
       # qnames of subjects and kick out NULL
