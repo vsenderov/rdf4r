@@ -12,3 +12,4 @@ Is the object an Anonymous Triples List (RDF)?
 \seealso{
 Other anonymous rdf: \code{\link{AnonRDF}}
 }
+\concept{anonymous rdf}

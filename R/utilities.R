@@ -65,14 +65,14 @@ pasteconstr = function(sep) {
 #'
 #' @export
 pasteif =
-function(..., sep = "", cond, return_value = NULL) {
-  if (cond) {
-    paste(..., sep = sep)
+  function(..., sep = "", cond, return_value = NULL) {
+    if (cond) {
+      paste(..., sep = sep)
+    }
+    else {
+      return(return_value)
+    }
   }
-  else {
-    return(return_value)
-  }
-}
 
 
 
@@ -122,9 +122,9 @@ get_filename_extension = function(filename)
 #'
 #' @export
 strip_trailing_symbol =
-function(x) {
-  sub("(/|:)$", "", x)
-}
+  function(x) {
+    sub("(/|:)$", "", x)
+  }
 
 
 
@@ -144,7 +144,6 @@ function(x) {
 #' uri = "<http://test.gov>"
 #' strip_angle(uri)
 #' strip_angle(uri, reverse = TRUE)
-#'
 #' @export
 strip_angle = function (partial_uri , reverse = FALSE) {
   # check if angular brackets are present
@@ -173,6 +172,6 @@ strip_angle = function (partial_uri , reverse = FALSE) {
 #' @family representables
 represent = function(x)
 {
-    UseMethod("represent", x)
+  UseMethod("represent", x)
 }
 

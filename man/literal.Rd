@@ -47,3 +47,4 @@ Other literal functions: \code{\link{is.literal}},
   \code{\link{print.literal}},
   \code{\link{represent.literal}}
 }
+\concept{literal functions}

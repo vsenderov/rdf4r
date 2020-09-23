@@ -20,3 +20,4 @@ Other identifier functions: \code{\link{identifier}},
   \code{\link{print.identifier}},
   \code{\link{represent.identifier}}
 }
+\concept{identifier functions}

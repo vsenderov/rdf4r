@@ -4,7 +4,7 @@
 \alias{identifier_factory}
 \title{Manufacturing Identifier Constructors}
 \usage{
-identifier_factory(fun, prefixes, def_prefix)
+identifier_factory(fun, prefixes, def_prefix, schema_name, mongo_key)
 }
 \arguments{
 \item{fun}{\code{list} of lookup functions to be tried. The functions

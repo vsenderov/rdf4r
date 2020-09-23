@@ -18,27 +18,36 @@ xsd_date = identifier(
 #' @name xsd_string
 #' @export
 #' @family semantic elements
- xsd_string = identifier(
-   id = "string",
-   prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
- )
+xsd_string = identifier(
+  id = "string",
+  prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
+)
 
- #' XSD Integer Type
- #' @export
- #' @family semantic elements
- xsd_integer = identifier(
-   id = "integer",
-   prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
- )
+#' XSD Integer Type
+#' @export
+#' @family semantic elements
+xsd_integer = identifier(
+  id = "integer",
+  prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
+)
+
+#' XSD URI Type
+#' @name xsd_uri
+#' @export
+#' @family semantic elements
+xsd_uri = identifier(
+  id = "anyURI",
+  prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
+)
 
 
 #' Has Label Property
-#' @name xsd_string
+#' @name rdfs_label
 #' @export
 #' @family semantic elements
- rdfs_label = identifier(
-   id = "label",
-   prefix = c(rdfs = "http://www.w3.org/2000/01/rdf-schema#")
+rdfs_label = identifier(
+  id = "label",
+  prefix = c(rdfs = "http://www.w3.org/2000/01/rdf-schema#")
 )
 
 #' RDF Type
@@ -52,8 +61,8 @@ rdf_type = identifier(
 #' A blank node
 #' @export
 #' @family semantic elements
- blank_node = identifier(
-   id = "_blank000"
- )
+blank_node = identifier(
+  id = "_blank000"
+)
 
- blank_node$qname = ""
+blank_node$qname = ""

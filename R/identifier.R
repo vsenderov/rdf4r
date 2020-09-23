@@ -46,9 +46,8 @@
 #'
 #' a
 #' b
-#'
-#' @export
 #' @family identifier functions
+#' @export
 identifier = function(id, prefix = NA, blank = FALSE)
 {
   if (blank == TRUE) {
@@ -62,8 +61,8 @@ identifier = function(id, prefix = NA, blank = FALSE)
 
   id = strip_angle(id[1])
   if (!has_meaningful_value(id)) {return (NULL)}
-  prefix = strip_angle(prefix[1])
-  uri = strip_angle(
+  prefix =  strip_angle(prefix[1])
+  uri =  strip_angle(
     pasteif(prefix[1], id, cond = (!is.na(prefix)), return_value = id),
     reverse = TRUE
   )
@@ -78,6 +77,35 @@ identifier = function(id, prefix = NA, blank = FALSE)
   class(ll) = "identifier"
 
   ll
+}
+
+#' Identifier new
+#'
+#' A modification of identifier() from rdf4r (queries mongo, instead of openbiodiv)
+#'
+#' @export
+identifier_new = function (node, xml, mongo_key, prefix = NA, blank = FALSE, publisher_id, journal_id, doi, article_id )
+{
+  if (blank == TRUE) {
+    prefix = c(`_` = "_")
+  }
+
+
+  if (is.na(xml2::xml_attr(node, "obkms_id")) || is.author(mongo_key)) {
+
+    component_df = process_schema_component(node, mongo_key, publisher_id, journal_id, plazi_doc = is.plazi_doc(xml), doi = doi, article_id = article_id)
+
+    id = get_or_set_mongoid(component_df, prefix)
+    xml2::xml_attr(node, "obkms_id") = id
+  }else {
+    id = xml2::xml_attr(node, "obkms_id")
+  }
+
+  if(is.null(id))
+    ident = NULL
+  else
+    ident = identifier(id = id, prefix = prefix)
+  ident
 }
 
 
@@ -128,7 +156,6 @@ represent.identifier = function(id)
 #' @export
 fidentifier = function(fun, ...,  prefixes)
 {
-  # sanity
   stopifnot(is.character(prefixes))
   fi = 1
   partial_uri = character()
@@ -172,21 +199,20 @@ fidentifier = function(fun, ...,  prefixes)
 #'   whether to generate
 #'
 #' @export
-identifier_factory = function(fun, prefixes, def_prefix)
+identifier_factory = function (fun, prefixes, def_prefix, schema_name, mongo_key)
 {
-  function(label, generate = TRUE)
-  {
+  function(label, generate = TRUE) {
     stopifnot(is.list(label))
-    if(length(label) == 0) {
+    if (length(label) == 0) {
       return(NA)
-    } else {
+    }
+    else {
       for (l in label) {
-        # is l an argument list or a single argument?
         if ((is.literal(l) || is.identifier(l))) {
-          ii = do.call(fidentifier, list(fun = fun, l, prefixes = prefixes))
+          ii = do.call(fidentifier, list(fun = fun, l,
+                                         prefixes = prefixes))
         }
         else {
-          # l is an argument list, we just need to modify it
           l$fun = fun
           l$prefixes = prefixes
           ii = do.call(fidentifier, l)
@@ -197,12 +223,15 @@ identifier_factory = function(fun, prefixes, def_prefix)
       }
     }
     if (is.na(ii) && generate == TRUE) {
-      return(identifier(id = uuid::UUIDgenerate(), prefix = def_prefix))
+      print(xml_schema['schema_name'])
+      id = paste0(schema_name$schema_name,"/",names(mongo_key),"/",uuid::UUIDgenerate())
+
+      identifier(id = id, prefix = def_prefix)
+      return(identifier)
     }
     return(NA)
   }
 }
-
 
 
 

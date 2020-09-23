@@ -4,7 +4,7 @@
 \name{ResourceDescriptionFramework}
 \alias{ResourceDescriptionFramework}
 \title{Mutable RDF Object}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 ResourceDescriptionFramework
 }
@@ -48,4 +48,5 @@ implementation and still retain syntax compatibility.
 \seealso{
 Other rdf: \code{\link{is.ResourceDescriptionFramework}}
 }
+\concept{rdf}
 \keyword{datasets}
