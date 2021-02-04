@@ -101,7 +101,7 @@ ResourceDescriptionFramework = R6::R6Class(
     
     set_list = function(dynamic_vector)
     {
-      private$triples <- dynamic_vector$get()
+      private$triples = dynamic_vector
     },
 
     serialize = function()
