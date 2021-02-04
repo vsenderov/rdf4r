@@ -31,7 +31,7 @@
 #'
 #' @param serialize() Returns the Turtle serialization.
 #'
-#' @param prefix_list \code{dynamic_vector} Prefixes of all the stored
+#' @param prefix_list \code{DynVector} Prefixes of all the stored
 #'   identifiers as an uncollapsed list. For most cases you would want
 #'   to use \code{get_prefixes}.
 #'
