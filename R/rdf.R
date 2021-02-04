@@ -26,6 +26,9 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
+#' @param set_list(triple_list) ll needs to be a \code{list}
+#'   object. The information is merged.
+#'
 #' @param serialize() Returns the Turtle serialization.
 #'
 #' @param prefix_list \code{dynamic_vector} Prefixes of all the stored
