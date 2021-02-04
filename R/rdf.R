@@ -26,7 +26,7 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
-#' @param set_list(triple_list) ll needs to be a \code{list}
+#' @param set_list(triple_list) ll needs to be a \code{DynVector}
 #'   object. The information is merged.
 #'
 #' @param serialize() Returns the Turtle serialization.
@@ -99,9 +99,9 @@ ResourceDescriptionFramework = R6::R6Class(
       private$triples$get()
     },
     
-    set_list = function(triple_list)
+    set_list = function(dynamic_vector)
     {
-      private$triples <- triple_list
+      private$triples <- dynamic_vector$get()
     },
 
     serialize = function()
