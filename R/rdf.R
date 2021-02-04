@@ -96,9 +96,9 @@ ResourceDescriptionFramework = R6::R6Class(
       private$triples$get()
     },
     
-    set_list = function(11)
+    set_list = function(triple_list)
     {
-      private$triples <- 11
+      private$triples <- triple_list
     },
 
     serialize = function()
