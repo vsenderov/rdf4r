@@ -46,7 +46,7 @@ ResourceDescriptionFramework = R6::R6Class(
     prefix_list = NULL, # DynVector
     context = NULL, # identifer
 
-    initialize = function(size = 100)
+    initialize = function(size = 1000000)
     {
       private$triples = DynVector$new(size = size)
       self$prefix_list = DynVector$new(size = size)
