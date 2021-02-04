@@ -26,7 +26,7 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
-#' @param set_list(triple_vector) ll needs to be a \code{DynVector}
+#' @param set_list(triple_vector) triple_vector needs to be a \code{DynVector}
 #'   object. The information is merged.
 #'
 #' @param serialize() Returns the Turtle serialization.
