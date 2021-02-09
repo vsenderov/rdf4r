@@ -26,7 +26,7 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
-#' @param add_triples_extended(data, subject_column_label, subject_column_name, subject_rdf_prefix, predicate, object_column_label, object_column_name, object_rdf_prefix, progress_bar = TRUE) file_name needs to be characters, and
+#' @param add_triples_extended(data, subject_column_label, subject_column_name, subject_rdf_prefix, predicate, object_column_label, object_column_name, object_rdf_prefix, progress_bar = TRUE, append = FALSE) file_name needs to be characters, and
 #' progress_bar needs to be boolean.
 #'
 #' @param set_list(triple_vector) triple_vector needs to be a \code{DynVector}
@@ -169,14 +169,17 @@ ResourceDescriptionFramework = R6::R6Class(
       # write }
       cat(" }", file = file_name, append = TRUE)
     },
-    add_triples_extended = function(data, subject_column_label, subject_column_name, subject_rdf_prefix, predicate, object_column_label, object_column_name, object_rdf_prefix, progress_bar = TRUE){
+    add_triples_extended = function(data, subject_column_label, subject_column_name, subject_rdf_prefix, predicate, object_column_label, object_column_name, object_rdf_prefix, progress_bar = TRUE, append=FALSE){
       the_predicate <- identifier(paste0(subject_column_label, subject_column_name), prefix = subject_rdf_prefix)
       # define resource identifiers for subjects and objects:
       n_rows = nrow(data)
       if(isTRUE(progress_bar)) {
         pb <- txtProgressBar(1, n_rows, style = 3)
       }
-      phathe_triples <- DynVector$new(size = n_rows)
+      phathe_triples <- private$triples
+      if(isFALSE(append)){
+        phathe_triples <- DynVector$new(size = n_rows)
+      }
       for (i in 1:n_rows) {
         the_subject <- identifier(paste0(subject_column_label, data[i,subject_column_name]), prefix = subject_rdf_prefix)
         the_object <- identifier(paste0(object_column_label, data[i,object_column_name]), prefix = object_rdf_prefix)
