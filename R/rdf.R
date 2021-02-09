@@ -26,10 +26,16 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
+#' @param add_triples_extended(data, subject_column_label, subject_column_name, subject_rdf_prefix, predicate, object_column_label, object_column_name, object_rdf_prefix, progress_bar = TRUE) file_name needs to be characters, and
+#' progress_bar needs to be boolean.
+#'
 #' @param set_list(triple_vector) triple_vector needs to be a \code{DynVector}
 #'   object. The information is merged.
 #'
 #' @param serialize() Returns the Turtle serialization.
+#'
+#' @param serialize_to_file(file_name,progress_bar=TRUE) file_name needs to be characters, and
+#' progress_bar needs to be boolean.
 #'
 #' @param prefix_list \code{DynVector} Prefixes of all the stored
 #'   identifiers as an uncollapsed list. For most cases you would want
@@ -37,7 +43,6 @@
 #'
 #' @param context \code{identifier}. The named graph of where the statements
 #'   are stored.
-#'
 #'
 #' @export
 #' @family rdf
@@ -98,7 +103,7 @@ ResourceDescriptionFramework = R6::R6Class(
     {
       private$triples$get()
     },
-    
+
     set_list = function(triple_vector)
     {
       private$triples = triple_vector
@@ -140,6 +145,48 @@ ResourceDescriptionFramework = R6::R6Class(
       }
       serialization$add(". }")
       return (unlist(serialization$get()))
+    },
+    serialize_to_file = function(file_name, progress_bar=TRUE){
+      # write prefixes
+      cat(paste0(prefix_serializer(self$get_prefixes(), lang = "Turtle")), file = file_name)
+
+      # write context
+      cat(paste0(self$context$qname," {"),file = file_name, append = TRUE, sep="\n")
+      n_triples <- length(private$triples$get())
+      if(isTRUE(progress_bar)){
+        pb <- txtProgressBar(1, n_triples, style = 3)
+      }
+      n <- 0
+      for (triple in private$triples$get()) {
+        n <- n + 1
+        if(isTRUE(progress_bar)){
+          setTxtProgressBar(pb, n)
+        }
+        # writ triple to file
+        this_triple <- paste0(" ", triple$subject$qname, " ", triple$predicate$qname, " ", triple$object$qname," .\n")
+        cat(this_triple, file = file_name, append = TRUE)
+      }
+      # write }
+      cat(" }", file = file_name, append = TRUE)
+    },
+    add_triples_extended = function(data, subject_column_label, subject_column_name, subject_rdf_prefix, predicate, object_column_label, object_column_name, object_rdf_prefix, progress_bar = TRUE){
+      the_predicate <- identifier(paste0(subject_column_label, subject_column_name), prefix = subject_rdf_prefix)
+      # define resource identifiers for subjects and objects:
+      n_rows = nrow(data)
+      if(isTRUE(progress_bar)) {
+        pb <- txtProgressBar(1, n_rows, style = 3)
+      }
+      phathe_triples <- DynVector$new(size = n_rows)
+      for (i in 1:n_rows) {
+        the_subject <- identifier(paste0(subject_column_label, data[i,subject_column_name]), prefix = subject_rdf_prefix)
+        the_object <- identifier(paste0(object_column_label, data[i,object_column_name]), prefix = object_rdf_prefix)
+        # build triples:
+        phathe_triples$add(list(subject = the_subject, predicate = predicate, object = the_object))
+        if(isTRUE(progress_bar)) {
+          setTxtProgressBar(pb, i)
+        }
+      }
+      self$set_list(triple_vector = phathe_triples)
     }
   ),
 
