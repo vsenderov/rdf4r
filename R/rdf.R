@@ -165,7 +165,7 @@ ResourceDescriptionFramework = R6::R6Class(
         if (is.literal(triple$object)) {
           the_object <- triple$object$squote
         }
-        else if (is.identifier(object)) {
+        else if (is.identifier(triple$object)) {
           the_object <- triple$object$qname
         }
         # writ triple to file
