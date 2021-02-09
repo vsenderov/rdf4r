@@ -26,7 +26,7 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
-#' @param add_triples_extended(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE, append=FALSE) file_name needs to be characters, and
+#' @param add_triples_extended(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE) file_name needs to be characters, and
 #' progress_bar needs to be boolean.
 #'
 #' @param set_list(triple_vector) triple_vector needs to be a \code{DynVector}
@@ -51,6 +51,8 @@ ResourceDescriptionFramework = R6::R6Class(
 
   public = list(
 
+    triples_list = NULL, # list of DynVector
+
     prefix_list = NULL, # DynVector
     context = NULL, # identifer
 
@@ -58,6 +60,7 @@ ResourceDescriptionFramework = R6::R6Class(
     {
       private$triples = DynVector$new(size = size)
       self$prefix_list = DynVector$new(size = size)
+      self$triples_list <- list()
     },
 
     set_context = function(context)
@@ -152,39 +155,45 @@ ResourceDescriptionFramework = R6::R6Class(
 
       # write context
       cat(paste0(self$context$qname," {"),file = file_name, append = TRUE, sep="\n")
-      n_triples <- length(private$triples$get())
-      if(isTRUE(progress_bar)){
-        pb <- txtProgressBar(1, n_triples, style = 3)
+      m_triples <- 0
+
+      for(triple_list in self$triples_list){
+        m_triples <- m_triples + length(triple_list$get())
       }
+
+      if(isTRUE(progress_bar)){
+        pb <- txtProgressBar(1, m_triples, style = 3)
+      }
+
       n <- 0
-      for (triple in private$triples$get()) {
-        n <- n + 1
-        if(isTRUE(progress_bar)){
-          setTxtProgressBar(pb, n)
+      for(triple_list in self$triples_list){
+        n_triples <- length(triple_list)
+        for(triple in triple_list$get()) {
+          n <- n + 1
+          if(isTRUE(progress_bar)){
+            setTxtProgressBar(pb, n)
+          }
+          if (is.literal(triple$object)) {
+            the_object <- triple$object$squote
+          }
+          else if (is.identifier(triple$object)) {
+            the_object <- triple$object$qname
+          }
+          # writ triple to file
+          this_triple <- paste0(" ", triple$subject$qname, " ", triple$predicate$qname, " ", the_object," .\n")
+          cat(this_triple, file = file_name, append = TRUE)
         }
-        if (is.literal(triple$object)) {
-          the_object <- triple$object$squote
-        }
-        else if (is.identifier(triple$object)) {
-          the_object <- triple$object$qname
-        }
-        # writ triple to file
-        this_triple <- paste0(" ", triple$subject$qname, " ", triple$predicate$qname, " ", the_object," .\n")
-        cat(this_triple, file = file_name, append = TRUE)
       }
       # write }
       cat(" }", file = file_name, append = TRUE)
     },
-    add_triples_extended = function(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE, append=FALSE){
+    add_triples_extended = function(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE){
       # define resource identifiers for subjects and objects:
       n_rows = nrow(data)
       if(isTRUE(progress_bar)) {
         pb <- txtProgressBar(1, n_rows, style = 3)
       }
-      phathe_triples <- private$triples
-      if(isFALSE(append)){
-        phathe_triples <- DynVector$new(size = n_rows)
-      }
+      phathe_triples <- DynVector$new(size = n_rows)
 
       if(subject_rdf_prefix != "") self$prefix_list$add(subject_rdf_prefix)
       if(object_rdf_prefix != "") self$prefix_list$add(object_rdf_prefix)
@@ -207,7 +216,8 @@ ResourceDescriptionFramework = R6::R6Class(
           setTxtProgressBar(pb, i)
         }
       }
-      self$set_list(triple_vector = phathe_triples)
+      n <- length(self$triples_list)
+      self$triples_list[[n+1]] <- phathe_triples
     }
   ),
 
