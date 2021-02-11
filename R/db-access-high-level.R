@@ -108,3 +108,19 @@ add_data_factory = function(access_options, prefixes)
     add_data(do.call(paste, as.list(rdf_data)), access_options = access_options)
   }
 }
+
+#' Create a function that submits serialized RDF from trig files to graphdb
+#' @param add_trig_file_to_graphdb = function(graphdb_access_options,prefixes,trig_file)
+#' @export
+#' 
+add_trig_file_to_graphdb = function(graphdb_access_options,prefixes,trig_file){
+  if(missing(trig_file)){
+    return ("File missing")
+  } else if(!file.exists(trig_file)) {
+    return (paste0("File ",trig_file," not found."))
+  } else {
+    rdf_data <- scan(trig_file, what = "", sep = "\n")
+  }
+  add_data_to_graphdb = add_data_factory(access_options = graphdb_access_options, prefixes = prefixes)
+  return(add_data_to_graphdb(rdf_data = rdf_data))
+}
