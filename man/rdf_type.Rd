@@ -4,7 +4,9 @@
 \name{rdf_type}
 \alias{rdf_type}
 \title{RDF Type}
-\format{An object of class \code{identifier} of length 4.}
+\format{
+An object of class \code{identifier} of length 4.
+}
 \usage{
 rdf_type
 }
@@ -12,8 +14,12 @@ rdf_type
 RDF Type
 }
 \seealso{
-Other semantic elements: \code{\link{blank_node}},
-  \code{\link{semantic_elements}}, \code{\link{xsd_date}},
-  \code{\link{xsd_integer}}, \code{\link{xsd_string}}
+Other semantic elements: 
+\code{\link{blank_node}},
+\code{\link{semantic_elements}},
+\code{\link{xsd_date}},
+\code{\link{xsd_integer}},
+\code{\link{xsd_string}}
 }
+\concept{semantic elements}
 \keyword{datasets}

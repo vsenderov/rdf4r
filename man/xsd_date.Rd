@@ -4,7 +4,9 @@
 \name{xsd_date}
 \alias{xsd_date}
 \title{XSD Date Type}
-\format{An object of class \code{identifier} of length 4.}
+\format{
+An object of class \code{identifier} of length 4.
+}
 \usage{
 xsd_date
 }
@@ -12,8 +14,12 @@ xsd_date
 XSD Date Type
 }
 \seealso{
-Other semantic elements: \code{\link{blank_node}},
-  \code{\link{rdf_type}}, \code{\link{semantic_elements}},
-  \code{\link{xsd_integer}}, \code{\link{xsd_string}}
+Other semantic elements: 
+\code{\link{blank_node}},
+\code{\link{rdf_type}},
+\code{\link{semantic_elements}},
+\code{\link{xsd_integer}},
+\code{\link{xsd_string}}
 }
+\concept{semantic elements}
 \keyword{datasets}

@@ -16,9 +16,14 @@
 Outputs a literal in a default way (not print!)
 }
 \seealso{
-Other literal functions: \code{\link{is.literal}},
-  \code{\link{literal}}, \code{\link{print.literal}}
+Other literal functions: 
+\code{\link{is.literal}()},
+\code{\link{literal}()},
+\code{\link{print.literal}()}
 
-Other representables: \code{\link{represent.identifier}},
-  \code{\link{represent}}
+Other representables: 
+\code{\link{represent.identifier}()},
+\code{\link{represent}()}
 }
+\concept{literal functions}
+\concept{representables}

@@ -43,7 +43,9 @@ l1599
 # see vignette
 }
 \seealso{
-Other literal functions: \code{\link{is.literal}},
-  \code{\link{print.literal}},
-  \code{\link{represent.literal}}
+Other literal functions: 
+\code{\link{is.literal}()},
+\code{\link{print.literal}()},
+\code{\link{represent.literal}()}
 }
+\concept{literal functions}

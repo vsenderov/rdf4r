@@ -3,7 +3,6 @@
 \docType{package}
 \name{rdf4r}
 \alias{rdf4r}
-\alias{rdf4r-package}
 \title{RDF4R: R Library for Working with RDF}
 \description{
 RDF4R provides the following facilities.
@@ -35,6 +34,12 @@ RDF4R provides the following facilities.
 \itemize{
   \item \code{\link{query_factory}}: Convert a parameterized SPARQL query to an R function
   \item \code{\link{add_data_factory}}: Create a function that submits serialized RDF to a specific endpoint
+}
+
+
+
+\itemize{
+  \item \code{\link{add_trig_file_to_graphdb}}: Retrieves rdf data from a file and imports it to graphdb
 }
 }
 
