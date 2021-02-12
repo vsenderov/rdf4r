@@ -4,7 +4,9 @@
 \name{blank_node}
 \alias{blank_node}
 \title{A blank node}
-\format{An object of class \code{identifier} of length 4.}
+\format{
+An object of class \code{identifier} of length 4.
+}
 \usage{
 blank_node
 }
@@ -12,8 +14,12 @@ blank_node
 A blank node
 }
 \seealso{
-Other semantic elements: \code{\link{rdf_type}},
-  \code{\link{semantic_elements}}, \code{\link{xsd_date}},
-  \code{\link{xsd_integer}}, \code{\link{xsd_string}}
+Other semantic elements: 
+\code{\link{rdf_type}},
+\code{\link{semantic_elements}},
+\code{\link{xsd_date}},
+\code{\link{xsd_integer}},
+\code{\link{xsd_string}}
 }
+\concept{semantic elements}
 \keyword{datasets}

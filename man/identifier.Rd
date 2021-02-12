@@ -59,7 +59,9 @@ b
 
 }
 \seealso{
-Other identifier functions: \code{\link{is.identifier}},
-  \code{\link{print.identifier}},
-  \code{\link{represent.identifier}}
+Other identifier functions: 
+\code{\link{is.identifier}()},
+\code{\link{print.identifier}()},
+\code{\link{represent.identifier}()}
 }
+\concept{identifier functions}

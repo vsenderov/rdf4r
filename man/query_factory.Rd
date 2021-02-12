@@ -4,8 +4,13 @@
 \alias{query_factory}
 \title{Convert a parameterized SPARQL query to an R function}
 \usage{
-query_factory(p_query, submit_function = submit_sparql, access_options,
-  prefixes = NA, ...)
+query_factory(
+  p_query,
+  submit_function = submit_sparql,
+  access_options,
+  prefixes = NA,
+  ...
+)
 }
 \arguments{
 \item{p_query}{character. A parameterized SPARQL query. Parameters are
