@@ -27,6 +27,7 @@ Other rdf:
 \item \href{#method-serialize}{\code{ResourceDescriptionFramework$serialize()}}
 \item \href{#method-serialize_to_file}{\code{ResourceDescriptionFramework$serialize_to_file()}}
 \item \href{#method-add_triples_extended}{\code{ResourceDescriptionFramework$add_triples_extended()}}
+\item \href{#method-ntriples}{\code{ResourceDescriptionFramework$ntriples()}}
 \item \href{#method-clone}{\code{ResourceDescriptionFramework$clone()}}
 }
 }
@@ -135,6 +136,15 @@ are stored.}
   object_rdf_prefix = "",
   progress_bar = TRUE
 )}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ntriples"></a>}}
+\if{latex}{\out{\hypertarget{method-ntriples}{}}}
+\subsection{Method \code{ntriples()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ResourceDescriptionFramework$ntriples()}\if{html}{\out{</div>}}
 }
 
 }

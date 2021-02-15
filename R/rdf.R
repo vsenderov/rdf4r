@@ -29,6 +29,8 @@
 #' @param add_triples_extended(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE) file_name needs to be characters, and
 #' progress_bar needs to be boolean.
 #'
+#' @param ntriples() returns number of triples inserted by add_riples_extended function.
+#'
 #' @param set_list(triple_vector) triple_vector needs to be a \code{DynVector}
 #'   object. The information is merged.
 #'
@@ -218,6 +220,13 @@ ResourceDescriptionFramework = R6::R6Class(
       }
       n <- length(self$triples_list)
       self$triples_list[[n+1]] <- phathe_triples
+    },
+    ntriples = function(){
+      n <- 0
+      for(triple_list in self$triples_list){
+        n <- n + length(triple_list$get())
+      }
+      return(n)
     }
   ),
 
