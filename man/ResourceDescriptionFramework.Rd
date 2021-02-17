@@ -133,6 +133,7 @@ are stored.}
   predicate,
   object_column_label = "",
   object_column_name = "",
+  object_rdf_type = NULL,
   object_rdf_prefix = "",
   progress_bar = TRUE
 )}\if{html}{\out{</div>}}

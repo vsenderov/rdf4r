@@ -26,7 +26,7 @@
 #' @param add_triples(ll) ll needs to be a \code{ResourceDescriptionFramework}
 #'   object. The information is merged.
 #'
-#' @param add_triples_extended(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE) file_name needs to be characters, and
+#' @param add_triples_extended(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_type = NULL, object_rdf_prefix = "", progress_bar = TRUE) file_name needs to be characters, and
 #' progress_bar needs to be boolean.
 #'
 #' @param ntriples() returns number of triples inserted by add_riples_extended function.
@@ -189,7 +189,7 @@ ResourceDescriptionFramework = R6::R6Class(
       # write }
       cat(" }", file = file_name, append = TRUE)
     },
-    add_triples_extended = function(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_prefix = "", progress_bar = TRUE){
+    add_triples_extended = function(data, subject_column_label = "", subject_column_name = "", subject_rdf_prefix = "", predicate, object_column_label = "", object_column_name = "", object_rdf_type = NULL, object_rdf_prefix = "", progress_bar = TRUE){
       # define resource identifiers for subjects and objects:
       n_rows = nrow(data)
       if(isTRUE(progress_bar)) {
@@ -207,10 +207,13 @@ ResourceDescriptionFramework = R6::R6Class(
         else
           identifier(paste0(subject_column_label,data[i,subject_column_name]), prefix = subject_rdf_prefix)
 
-        the_object <- if(object_column_name == "")
+        the_object <- if(object_column_name == ""){
           literal(text_value = object_column_label)
-        else
-          identifier(paste0(object_column_label,data[i,object_column_name]), prefix = object_rdf_prefix)
+        } else if(object_rdf_prefix == "" && !is_null(object_rdf_type) ) {
+          literal(text_value = paste0(object_column_label,data[i,object_column_name]), xsd_type = object_rdf_type)
+        } else {
+            the_object <- identifier(paste0(object_column_label,data[i,object_column_name]), prefix = object_rdf_prefix)
+        }
 
         # build triples:
         phathe_triples$add(list(subject = the_subject, predicate = predicate, object = the_object))

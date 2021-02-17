@@ -4,7 +4,12 @@
 \alias{add_data}
 \title{Add Data to a Repository}
 \usage{
-add_data(rdf_data, access_options, data_format = "application/x-trig")
+add_data(
+  rdf_data,
+  access_options,
+  data_format = "application/x-trig",
+  encoding = "UTF-8"
+)
 }
 \arguments{
 \item{rdf_data}{character. RDF data containing the triples to be submitted.}
