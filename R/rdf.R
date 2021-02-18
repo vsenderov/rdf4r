@@ -209,7 +209,7 @@ ResourceDescriptionFramework = R6::R6Class(
 
         the_object <- if(object_column_name == ""){
           literal(text_value = object_column_label)
-        } else if(object_rdf_prefix == "" && !is_null(object_rdf_type) ) {
+        } else if(object_rdf_prefix == "" && !is.null(object_rdf_type) ) {
           literal(text_value = paste0(object_column_label,data[i,object_column_name]), xsd_type = object_rdf_type)
         } else {
             the_object <- identifier(paste0(object_column_label,data[i,object_column_name]), prefix = object_rdf_prefix)

@@ -31,6 +31,15 @@ xsd_date = identifier(
    prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
  )
 
+ #' XSD Double Type
+ #' @export
+ #' @family semantic elements
+ xsd_double = identifier(
+    id = "double",
+    prefix = c(xsd = "http://www.w3.org/2001/XMLSchema#")
+ )
+
+
 
 #' Has Label Property
 #' @name xsd_string
