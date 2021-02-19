@@ -290,12 +290,12 @@ submit_sparql_update = function(query, access_options) {
 #'
 #'
 #' @export
-add_data = function(rdf_data, access_options, data_format = "application/x-trig")
+add_data = function(rdf_data, access_options, data_format = "application/x-trig", encoding="UTF-8")
 {
   # Undocumented BUG in GraphDB needs us to have two slashes `//`
   endpoint = paste(access_options$server_url, "/repositories/",
                    access_options$repository, "/statements", sep = "")
-  httr::content(httr::POST(url = endpoint, access_options$authentication, httr::content_type(data_format), body = rdf_data), as = 'text')
+  httr::content(httr::POST(url = endpoint, access_options$authentication, httr::content_type(data_format), body = rdf_data), as = 'text', encoding = encoding)
 }
 
 
