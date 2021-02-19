@@ -253,7 +253,7 @@ submit_sparql = function(query, access_options, as_dataframe = TRUE)
 #' }
 #'
 #' @export
-submit_sparql_update = function(query, access_options) {
+submit_sparql_update = function(query, access_options, encoding = "UTF-8") {
   query = do.call(paste, as.list(query))
   # Undocumented BUG in GraphDB needs us to have two slashes `//`
   endpoint = paste(access_options$server_url, "/repositories/",
@@ -263,7 +263,7 @@ submit_sparql_update = function(query, access_options) {
     #httr::content_type("application/x-www-form-urlencoded"),
     access_options$authentication,
     body = list(update = query)
-  ), as = 'text')
+  ), as = 'text', encoding = encoding)
 }
 
 

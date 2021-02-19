@@ -128,5 +128,6 @@ add_trig_file_to_graphdb = function(graphdb_access_options,prefixes,trig_file){
   }
   add_data_to_graphdb = add_data_factory(access_options = graphdb_access_options, prefixes = prefixes)
   out <- add_data_to_graphdb(rdf_data = rdf_data)
+  out <- if(out == "") "ok" else out
   return(out)
 }
