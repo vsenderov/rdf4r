@@ -258,12 +258,14 @@ submit_sparql_update = function(query, access_options, encoding = "UTF-8") {
   # Undocumented BUG in GraphDB needs us to have two slashes `//`
   endpoint = paste(access_options$server_url, "/repositories/",
                    access_options$repository, "/statements", sep = "")
-  httr::content(httr::POST(
+  out <- httr::content(httr::POST(
     url = endpoint,
     #httr::content_type("application/x-www-form-urlencoded"),
     access_options$authentication,
     body = list(update = query)
   ), as = 'text', encoding = encoding)
+  out <- if(out=="") "ok" else out
+  return(out)
 }
 
 
