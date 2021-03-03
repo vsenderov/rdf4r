@@ -25,6 +25,7 @@ Other semantic elements:
 \code{\link{blank_node}},
 \code{\link{rdf_type}},
 \code{\link{semantic_elements}},
+\code{\link{xsd_boolean}},
 \code{\link{xsd_date}},
 \code{\link{xsd_double}},
 \code{\link{xsd_integer}}
@@ -33,6 +34,7 @@ Other semantic elements:
 \code{\link{blank_node}},
 \code{\link{rdf_type}},
 \code{\link{semantic_elements}},
+\code{\link{xsd_boolean}},
 \code{\link{xsd_date}},
 \code{\link{xsd_double}},
 \code{\link{xsd_integer}}

@@ -135,7 +135,9 @@ are stored.}
   object_column_name = "",
   object_rdf_type = NULL,
   object_rdf_prefix = "",
-  progress_bar = TRUE
+  progress_bar = TRUE,
+  blank_subject = FALSE,
+  blank_object = FALSE
 )}\if{html}{\out{</div>}}
 }
 
