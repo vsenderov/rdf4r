@@ -4,7 +4,7 @@
 \alias{submit_sparql_update}
 \title{Submit a SPARQL Query to a Triplestore (UPDATE)}
 \usage{
-submit_sparql_update(query, access_options)
+submit_sparql_update(query, access_options, encoding = "UTF-8")
 }
 \arguments{
 \item{query}{\code{character} the SPARQL UPDATE query. See Details.}

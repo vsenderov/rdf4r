@@ -16,5 +16,7 @@ logical
 Is the object an Triples List (RDF)?
 }
 \seealso{
-Other rdf: \code{\link{ResourceDescriptionFramework}}
+Other rdf: 
+\code{\link{ResourceDescriptionFramework}}
 }
+\concept{rdf}

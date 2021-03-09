@@ -55,6 +55,14 @@
 #'   \item \code{\link{semantic_elements}}: Predifined resource identifiers from widely-spread ontologies
 #' }
 
+
+#' @section Function factories to convert SPARQL queries, or data endpoints to R functions:
+#'
+#' \itemize{
+#'   \item \code{\link{add_trig_file_to_graphdb}}: Retrieves rdf data from a file and imports it to graphdb
+#' }
+#'
+
 #'
 #' @docType package
 #' @name rdf4r

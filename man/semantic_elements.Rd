@@ -7,7 +7,13 @@
 Predifined resource identifiers from widely-spread ontologies
 }
 \seealso{
-Other semantic elements: \code{\link{blank_node}},
-  \code{\link{rdf_type}}, \code{\link{xsd_date}},
-  \code{\link{xsd_integer}}, \code{\link{xsd_string}}
+Other semantic elements: 
+\code{\link{blank_node}},
+\code{\link{rdf_type}},
+\code{\link{xsd_boolean}},
+\code{\link{xsd_date}},
+\code{\link{xsd_double}},
+\code{\link{xsd_integer}},
+\code{\link{xsd_string}}
 }
+\concept{semantic elements}

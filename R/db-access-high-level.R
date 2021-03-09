@@ -108,3 +108,26 @@ add_data_factory = function(access_options, prefixes)
     add_data(do.call(paste, as.list(rdf_data)), access_options = access_options)
   }
 }
+
+#'
+#' The function `add_trig_file_to_graphdb` retrieves the rdf data from a trig file and inserts each line into an element of a list.
+#' Then, this list is imported to graphdb triplestore using rdfr4::add_factory() functtion.
+#'
+#' @param graphdb_access_options graphdb triplestore access options.
+#' @param prefixes named character
+#' @param trig_file file name of the rdf format containing context (named graph).
+#'
+#' @export
+add_trig_file_to_graphdb = function(graphdb_access_options,prefixes,trig_file){
+  if(missing(trig_file)){
+    return ("File missing")
+  } else if(!file.exists(trig_file)) {
+    return (paste0("File ",trig_file," not found."))
+  } else {
+    rdf_data <- scan(trig_file, what = "", sep = "\n")
+  }
+  add_data_to_graphdb = add_data_factory(access_options = graphdb_access_options, prefixes = prefixes)
+  out <- add_data_to_graphdb(rdf_data = rdf_data)
+  out <- if(out == "") "ok" else out
+  return(out)
+}

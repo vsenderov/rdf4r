@@ -16,6 +16,9 @@
 Outputs a literal in a default way
 }
 \seealso{
-Other literal functions: \code{\link{is.literal}},
-  \code{\link{literal}}, \code{\link{represent.literal}}
+Other literal functions: 
+\code{\link{is.literal}()},
+\code{\link{literal}()},
+\code{\link{represent.literal}()}
 }
+\concept{literal functions}
